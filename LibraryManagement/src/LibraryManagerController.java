@@ -67,7 +67,17 @@ public class LibraryManagerController {
 				return Menu.lib3Menu();
 			}
 			//TODO: keep adding if else for administrator and borrower
-			
+		case 4:
+			if(userInputSoFar.get(0).equals("1")){
+				if(userInputSoFar.get(2).equals("1")){
+					//Update details of the library
+					return Menu.lib3Option1BranchNameDialog(librarian.idOfBranchWorksFor(), librarian.nameOfBranchWorksFor());
+				}
+				else if(userInputSoFar.get(2).equals("1")){
+					//Add copies of Book to the Branch
+				}
+			}
+			//TODO: keep adding if else for administrator and borrower
 		default:
 			return null;
 		}
@@ -94,7 +104,7 @@ public class LibraryManagerController {
 			if(userInputSoFar.get(0).equals("1")){
 				valid = validateUserNumericInput(userInput, 2);
 				if (valid) {
-					lib1(userInput);
+					lib1InputHandler(userInput);
 				}
 				break;
 			}
@@ -112,7 +122,7 @@ public class LibraryManagerController {
 			{
 				valid = validateUserNumericInput(userInput, qm.getPrevAllBranchNamesAndLocationsQuery().get(0).size()+1);
 				if(valid){
-					lib2(userInput);
+					lib2InputHandler(userInput);
 				}
 			}
 			//TODO: keep adding else if for Administrator and for Borrower
@@ -122,11 +132,30 @@ public class LibraryManagerController {
 			{
 				valid = validateUserNumericInput(userInput, 3);
 				if(valid){
-					lib3(userInput);
+					lib3InputHandler(userInput);
 				}
 			}
 			//TODO: keep adding else if for Administrator and for Borrower
 			break;
+		case 4:
+			if(userInputSoFar.get(0).equals("1"))
+			{
+				if(userInputSoFar.get(2).equals("1")){
+					//Update details of the library
+					//TODO: check if any input should be valid (the librarian can use any name for the branch)
+					lib4InputHandler(userInput);
+					valid = true;
+					
+					
+					
+				}
+				else if(userInputSoFar.get(2).equals("2")){
+					//add copies of book to the Branch
+				}
+			}
+			//TODO: keep adding else if for Administrator and for Borrower
+			break;
+			
 		default:
 			break;
 		}
@@ -153,7 +182,7 @@ public class LibraryManagerController {
 	}
 	
 	//librarian action handlers
-	private void lib1(String userInput)
+	private void lib1InputHandler(String userInput)
 	{
 		if(userInput.equals("1")){
 			userInputSoFar.add(userInput);
@@ -162,8 +191,8 @@ public class LibraryManagerController {
 			userInputSoFar.clear();
 		}
 	}
-	
-	private void lib2(String userInput)
+
+	private void lib2InputHandler(String userInput)
 	{
 		ArrayList<ArrayList<String>> namesAndLocations = qm.getPrevAllBranchNamesAndLocationsQuery();
 		if(namesAndLocations.get(0).size()+1 == Integer.parseInt(userInput))
@@ -172,13 +201,13 @@ public class LibraryManagerController {
 		}
 		else
 		{
-			librarian = new Librarian(namesAndLocations.get(0).get(Integer.parseInt(userInput)-1), namesAndLocations.get(1).get(Integer.parseInt(userInput)-1));
+			librarian = new Librarian(namesAndLocations.get(0).get(Integer.parseInt(userInput)-1), namesAndLocations.get(1).get(Integer.parseInt(userInput)-1), namesAndLocations.get(2).get(Integer.parseInt(userInput)-1));
 			userInputSoFar.add(userInput);
-			
+
 		}
 	}
-	
-	private void lib3(String userInput)
+
+	private void lib3InputHandler(String userInput)
 	{
 		if(Integer.parseInt(userInput) == 3){
 			userInputSoFar.remove(userInputSoFar.size() - 1);//
@@ -194,9 +223,22 @@ public class LibraryManagerController {
 			//TODO: Update the details of the Library
 			userInputSoFar.add(userInput);
 		}
-			
+
+	}
+
+	private void lib4InputHandler(String userInput)
+	{
+		if(userInput.equals("quit")){
+			userInputSoFar.remove(userInputSoFar.size() - 1);
+		}
+		else{
+			//it can be either N/A or the new name
+			userInputSoFar.add(userInput);
+		}
+		
+		
 	}
 	
 	//borrower action handlers
-	
+
 }

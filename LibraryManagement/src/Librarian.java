@@ -1,12 +1,14 @@
+import java.util.ArrayList;
+
 
 public class Librarian {
 	private LibraryBranch libraryBranch;
 
 	public Librarian(){}
 	
-	public Librarian(String branchName, String branchLocation)
+	public Librarian(String branchName, String branchLocation, String branchId)
 	{
-		libraryBranch = new LibraryBranch(branchName, branchLocation);
+		libraryBranch = new LibraryBranch(branchName, branchLocation, branchId);
 	}
 	
 	public String nameOfBranchWorksFor()
@@ -18,5 +20,12 @@ public class Librarian {
 	{
 		return libraryBranch.getName();
 	}
+	
+	public String idOfBranchWorksFor()
+	{
+		return libraryBranch.getBranchId();
+	}
+	
+	
 	
 }
