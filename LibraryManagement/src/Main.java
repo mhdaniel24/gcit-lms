@@ -7,7 +7,7 @@ public class Main {
 		
 		//initializing variables
 		//TODO: Modify the initialization of the LibraryManagerController based on the new constructor
-		LibraryManagerController lmc = new LibraryManagerController();
+		LibraryManagerBrain lmc = new LibraryManagerBrain();
 		
 		//container for user input (result of readUserInput function)
 		String userInput;
