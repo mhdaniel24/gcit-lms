@@ -7,7 +7,7 @@ public class Main {
 		
 		//initializing variables
 		//TODO: Modify the initialization of the LibraryManagerController based on the new constructor
-		LibraryManagerBrain lmc = new LibraryManagerBrain();
+		LibraryManagerBrain lmb = new LibraryManagerBrain();
 		
 		//container for user input (result of readUserInput function)
 		String userInput;
@@ -17,15 +17,20 @@ public class Main {
 		boolean invalidInput = true;
 		
 		do {
+			String messageToShow = lmb.getMessageToShowNoSpectedInput();
+			if(!messageToShow.equals("")){
+				System.out.println(messageToShow);
+			}
+			
 			//LibraryManagerController initial Menu message
-			System.out.println(lmc.getMenu());
+			System.out.println(lmb.getMenu());
 			
 			//getting the user input and checking if it is valid based on the value returned by userIsA method
-			invalidInput = !lmc.userInputWas(readUserInput());
+			invalidInput = !lmb.userInputWas(readUserInput());
 			while(invalidInput){
 				System.out.println("That is not a valid input. Try again");
-				System.out.println(lmc.getMenu());
-				invalidInput = !lmc.userInputWas(readUserInput());
+				System.out.println(lmb.getMenu());
+				invalidInput = !lmb.userInputWas(readUserInput());
 			}
 			
 			//TODO: check if continue or stop use thecontin variable for that

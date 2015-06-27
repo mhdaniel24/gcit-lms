@@ -47,5 +47,21 @@ public class Menu {
 		return "Please enter new branch address or enter N/A for no change:";
 	}
 	
+	//TODO: Add the \n and the \t to all other menues according to the format in the document
+	public static String lib3Option2PickBookDialogMenu(ArrayList<Book> allBooksAvailable)
+	{
+		String menu = new String("Pick the Book you want to add copies of, to your branch:");
+		int i;
+		for(i = 0; i < allBooksAvailable.size(); i++){
+			menu = menu + "\n\t" + Integer.toString(i+1) + ") " + allBooksAvailable.get(i).getTitle();
+		}
+		menu = menu + "\n\t" + Integer.toString(i+1) + ") " + "Quit to cancel operation";
+		return menu;
+	}
+	public static String lib3Option2newNumberOfCopies()
+	{
+		return "Enter new number of copies: ";
+	}
+	
 	//borrower menues
 }

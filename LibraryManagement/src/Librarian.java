@@ -10,21 +10,12 @@ public class Librarian {
 	{
 		libraryBranch = new LibraryBranch(branchName, branchLocation, branchId);
 	}
-	
-	public String nameOfBranchWorksFor()
-	{
-		return libraryBranch.getName();
+
+	public LibraryBranch getLibraryBranch() {
+		return libraryBranch;
 	}
 	
-	public String locationOfBranchWorksFor()
-	{
-		return libraryBranch.getName();
-	}
 	
-	public String idOfBranchWorksFor()
-	{
-		return libraryBranch.getBranchId();
-	}
 	
 	
 	

@@ -14,6 +14,8 @@ public class QueryManager {
 	//TODO: Handle errors related to no database connection
 	//used to store a previous query to ensure that the order of the rows is the same
 	private ArrayList<ArrayList<String>> libraryBranchNameLocationId;
+	ArrayList<Book> books;
+	String numberOfCopies;
 	//TODO: get connection variables
 	Connection conn;
 	//TODO: remember to use a PreparedStatement
@@ -24,10 +26,24 @@ public class QueryManager {
 	{
 		//TODO: set connection
 		libraryBranchNameLocationId = new ArrayList<ArrayList<String>>();
+		books = new ArrayList<Book>();
 	}
 	
 
+	//TODO: it is void but it should return a boolean in case of connection error
+	public void updateNumberOfCopies(Book book, LibraryBranch branch, String newNumberOfCopies)
+	{
+		
+		if(numberOfCopies.equals("N")){
+			executeUpdateQuery("INSERT INTO tbl_book_copies VALUES(" + book.getBookId()+", "+branch.getBranchId() + ", " +newNumberOfCopies+ ")",new ArrayList<String>());
+			
+		} else{
+			executeUpdateQuery("Update tbl_book_copies SET noOfCopies = " + newNumberOfCopies + " WHERE bookId = " + book.getBookId() + " AND branchId = " + branch.getBranchId(), new ArrayList<String>());
+		}
+	}
+	
 	//returns name in the array in position 0 and returns locations in the array in position 1
+	//TODO: it should return branches instead of arraylists!!!!!!!!!!!!!!!!!!!!!!!!
 	public ArrayList<ArrayList<String>> getAllBranchNamesAndLocationsQuery()
 	{
 		ArrayList<String> columnsOfInterest = new ArrayList<String>();
@@ -37,7 +53,7 @@ public class QueryManager {
 
 		HashMap<String, ArrayList<String>> data =  executeSelectQuery("SELECT * FROM tbl_library_branch", columnsOfInterest, new ArrayList<String>());
 
-		libraryBranchNameLocationId.clear();
+		libraryBranchNameLocationId.clear();//TODO: CHange it to new to reinitialize it
 		libraryBranchNameLocationId.add(data.get("branchName"));
 		libraryBranchNameLocationId.add(data.get("branchAddress"));
 		libraryBranchNameLocationId.add(data.get("branchId"));
@@ -49,6 +65,58 @@ public class QueryManager {
 	public ArrayList<ArrayList<String>> getPrevAllBranchNamesAndLocationsQuery()
 	{
 		return libraryBranchNameLocationId;
+	}
+	
+	public ArrayList<Book> getPrevAllBooksQuery()
+	{
+		return books;
+	}
+	
+	public String getNumberOfCopiesOfBook(Book book, LibraryBranch branch)
+	{
+		ArrayList<String> columnsOfInterest = new ArrayList<String>();
+		//columnsOfInterest.add("bookId");
+		//columnsOfInterest.add("branchId");
+		columnsOfInterest.add("noOfCopies");
+		
+		ArrayList<String> queryVariables = new ArrayList<String>();
+		queryVariables.add(book.getBookId());
+		queryVariables.add(branch.getBranchId());
+		
+		HashMap<String, ArrayList<String>> data = executeSelectQuery("SELECT * FROM tbl_book_copies WHERE bookId = "+book.getBookId()+" AND branchId = " + branch.getBranchId(), columnsOfInterest, new ArrayList<String>());
+		
+		if(data.get("noOfCopies").isEmpty()){
+			numberOfCopies = "N";
+			return numberOfCopies;
+		}
+		else{
+			numberOfCopies = data.get("noOfCopies").get(0);
+			return numberOfCopies;
+		}
+	}
+	public String getPrevNumberOfCopies()
+	{
+		return numberOfCopies;
+	}
+	
+	public ArrayList<Book> getAllBooks()
+	{
+		ArrayList<String> columnsOfInterest = new ArrayList<String>();
+		columnsOfInterest.add("bookId");
+		columnsOfInterest.add("title");
+		columnsOfInterest.add("pubId");
+		HashMap<String, ArrayList<String>> data = executeSelectQuery("SELECT * FROM tbl_book", columnsOfInterest, new ArrayList<String>());
+		
+		books = new ArrayList<Book>();
+		ArrayList<String> bookIds = data.get("bookId");
+		ArrayList<String> titles = data.get("title");
+		ArrayList<String> pubIds = data.get("pubId");
+		
+		for(int i = 0; i< bookIds.size(); i++){
+			books.add(new Book(bookIds.get(i), titles.get(i), pubIds.get(i)));
+		}
+		
+		return books;
 	}
 	
 	//TODO: it is void now but it should return a boolean in case there is a database connection error
@@ -121,7 +189,7 @@ public class QueryManager {
 			
 			if(query.charAt(0) == 'S' || query.charAt(0) == 's'){
 				rs = pstmt.executeQuery(query);
-			}else if(query.charAt(0) == 'U' || query.charAt(0) == 'u'){
+			}else if(query.charAt(0) == 'U' || query.charAt(0) == 'u' || query.charAt(0) == 'I' || query.charAt(0) == 'i'){
 				pstmt.executeUpdate();
 			}
 			

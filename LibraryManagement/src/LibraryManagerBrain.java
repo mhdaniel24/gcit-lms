@@ -7,6 +7,7 @@ public class LibraryManagerBrain {
 	//TODO: make sure to reset the variable when user is done
 	private ArrayList<String> userInputSoFarArr;
 	private String userInputSoFarStr;
+	private String messageToShowNoSpectedInput;
 	
 	
 	
@@ -24,8 +25,15 @@ public class LibraryManagerBrain {
 		librarian = new Librarian();
 		administrator = new Administrator();
 		qm = new QueryManager();
+		messageToShowNoSpectedInput = new String("");
 	}
 	
+	public String getMessageToShowNoSpectedInput()
+	{
+		String toBeReturned = messageToShowNoSpectedInput;
+		messageToShowNoSpectedInput = new String("");
+		return toBeReturned;
+	}
 	//this is the public interface provided to client code to get the current menu.
 	//It returns the String that contains the menu to be displayed
 	//it uses the istance variable state of the object to decide which menu
@@ -55,10 +63,16 @@ public class LibraryManagerBrain {
 				return Menu.lib3Menu();
 			}
 			else if(userInputSoFarStr.subSequence(0, 2).equals(("11")) && userInputSoFarArr.size() == 4 && userInputSoFarArr.get(3).equals("1")){
-				return Menu.lib3Option1BranchNameDialog(librarian.idOfBranchWorksFor(), librarian.nameOfBranchWorksFor());
+				return Menu.lib3Option1BranchNameDialog(librarian.getLibraryBranch().getBranchId(), librarian.getLibraryBranch().getName());
 			}
 			else if(userInputSoFarStr.subSequence(0, 2).equals(("11")) && userInputSoFarArr.size() == 5 && userInputSoFarArr.get(3).equals("1")){
 				return Menu.lib3Option1BranchAddressDialog();
+			}
+			else if(userInputSoFarStr.subSequence(0, 2).equals(("11")) && userInputSoFarArr.size() == 4 && userInputSoFarArr.get(3).equals("2")){
+				return Menu.lib3Option2PickBookDialogMenu(qm.getAllBooks());
+			}
+			else if(userInputSoFarStr.subSequence(0, 2).equals(("11")) && userInputSoFarArr.size() == 5 && userInputSoFarArr.get(3).equals("2")){
+				return Menu.lib3Option2newNumberOfCopies();
 			}
 			//borrower options
 			
@@ -109,6 +123,18 @@ public class LibraryManagerBrain {
 			else if(userInputSoFarStr.subSequence(0, 2).equals(("11")) && userInputSoFarArr.size() == 5 && userInputSoFarArr.get(3).equals("1")){
 				lib3InputOption1Handler2(userInput);
 				valid = true;
+			}
+			else if(userInputSoFarStr.subSequence(0, 2).equals(("11")) && userInputSoFarArr.size() == 4 && userInputSoFarArr.get(3).equals("2")){
+				valid = validateUserNumericInput(userInput, qm.getPrevAllBooksQuery().size()+1);
+				if(valid){
+					lib3InputOption2Handler1(userInput);
+				}
+			}
+			else if(userInputSoFarStr.subSequence(0, 2).equals(("11")) && userInputSoFarArr.size() == 5 && userInputSoFarArr.get(3).equals("2")){
+				if(Integer.parseInt(userInput) >= 0){
+					valid = true;
+					lib3InputOption2Handler2(userInput);
+				}
 			}
 			//borrower options
 			
@@ -170,7 +196,6 @@ public class LibraryManagerBrain {
 			librarian = new Librarian(namesAndLocations.get(0).get(Integer.parseInt(userInput)-1), namesAndLocations.get(1).get(Integer.parseInt(userInput)-1), namesAndLocations.get(2).get(Integer.parseInt(userInput)-1));
 			userInputSoFarArr.add(userInput);
 			userInputSoFarStr = userInputSoFarStr + userInput;
-
 		}
 	}
 
@@ -222,25 +247,54 @@ public class LibraryManagerBrain {
 			//if both choices are not N/A make changes
 			if(!userInputSoFarArr.get(userInputSoFarArr.size() -1).equals("N/A") && !userInput.equals("N/A")){
 				//make changes
-				qm.updateBranchNameAndAddress(userInputSoFarArr.get(userInputSoFarArr.size() -1), userInput, librarian.idOfBranchWorksFor());
+				qm.updateBranchNameAndAddress(userInputSoFarArr.get(userInputSoFarArr.size() -1), userInput, librarian.getLibraryBranch().getBranchId());
 			}
 			else if(!userInput.equals("N/A")){
-				System.out.println("User Input = " + userInput + " size = " + userInput.length() + "+++++++++++++");
-				qm.updateBranchAddress(userInput, librarian.idOfBranchWorksFor());
+				qm.updateBranchAddress(userInput, librarian.getLibraryBranch().getBranchId());
 			}
 			else if(!userInputSoFarArr.get(userInputSoFarArr.size() -1).equals("N/A")){
-				qm.updateBranchName(userInputSoFarArr.get(userInputSoFarArr.size() -1), librarian.idOfBranchWorksFor());
+				qm.updateBranchName(userInputSoFarArr.get(userInputSoFarArr.size() -1), librarian.getLibraryBranch().getBranchId());
 			}
 			
 			//TODO: handle and display any error related to database connection
 			
 			userInputSoFarArr.remove(userInputSoFarArr.size() - 1);
 			userInputSoFarArr.remove(userInputSoFarArr.size() - 1);
-			rebuildUserInputString();
-			
+			messageToShowNoSpectedInput = "Successfully Updated";
+			rebuildUserInputString();	
 		}
+	}
+	
+	private void lib3InputOption2Handler1(String userInput)
+	{
+		if(userInput.equals(Integer.toString(qm.getPrevAllBooksQuery().size() + 1))){
+			userInputSoFarArr.remove(userInputSoFarArr.size() - 1);
+			rebuildUserInputString();
+		}
+		else{
+			//query to see the number of copies in the branch of the selected book
+			String numbOfCopies = qm.getNumberOfCopiesOfBook(qm.getPrevAllBooksQuery().get(Integer.parseInt(userInput)-1), librarian.getLibraryBranch());
+			
+			//this is the case when the record is not in the table
+			if(numbOfCopies.equals("N")){
+				numbOfCopies = "0";
+			}
+			
+			messageToShowNoSpectedInput = "Exesting number of copies is: " + numbOfCopies;
+			userInputSoFarArr.add(userInput);
+			userInputSoFarStr = userInputSoFarStr + userInput;
+		}
+	}
+	
+	private void lib3InputOption2Handler2(String userInput){
 		
+		//TODO: it should be checking for a boolean in case something went wrong
+		qm.updateNumberOfCopies(qm.getPrevAllBooksQuery().get(Integer.parseInt(userInputSoFarArr.get(userInputSoFarArr.size()-1))-1), librarian.getLibraryBranch(), userInput);
 		
+		userInputSoFarArr.remove(userInputSoFarArr.size() - 1);
+		userInputSoFarArr.remove(userInputSoFarArr.size() - 1);
+		messageToShowNoSpectedInput = "Successfully Updated";
+		rebuildUserInputString();
 	}
 	
 	//borrower action handlers
