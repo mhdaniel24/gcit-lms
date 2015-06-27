@@ -62,6 +62,11 @@ public class Menu {
 	{
 		return "Enter new number of copies: ";
 	}
+	//--------------------------------------------------------
 	
 	//borrower menues
+	public static String borro0ProvideCardNumberDialog()
+	{
+		return "Enter your Card Number";
+	}
 }

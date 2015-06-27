@@ -52,30 +52,38 @@ public class LibraryManagerBrain {
 		else if(userInputSoFarArr.size() >= 1){//TODO: eliminate the >=1 in the future just used now as a guide
 			
 			//librarian options
-			if(userInputSoFarStr.equals("1")){
-				return Menu.lib1Menu();
-			}
-			else if(userInputSoFarStr.equals("11")){
-				ArrayList<ArrayList<String>> branchNameAndLocation = qm.getAllBranchNamesAndLocationsQuery();
-				return Menu.lib2Menu(branchNameAndLocation.get(0), branchNameAndLocation.get(1));
-			}
-			else if(userInputSoFarStr.subSequence(0, 2).equals(("11")) && userInputSoFarArr.size() == 3){
-				return Menu.lib3Menu();
-			}
-			else if(userInputSoFarStr.subSequence(0, 2).equals(("11")) && userInputSoFarArr.size() == 4 && userInputSoFarArr.get(3).equals("1")){
-				return Menu.lib3Option1BranchNameDialog(librarian.getLibraryBranch().getBranchId(), librarian.getLibraryBranch().getName());
-			}
-			else if(userInputSoFarStr.subSequence(0, 2).equals(("11")) && userInputSoFarArr.size() == 5 && userInputSoFarArr.get(3).equals("1")){
-				return Menu.lib3Option1BranchAddressDialog();
-			}
-			else if(userInputSoFarStr.subSequence(0, 2).equals(("11")) && userInputSoFarArr.size() == 4 && userInputSoFarArr.get(3).equals("2")){
-				return Menu.lib3Option2PickBookDialogMenu(qm.getAllBooks());
-			}
-			else if(userInputSoFarStr.subSequence(0, 2).equals(("11")) && userInputSoFarArr.size() == 5 && userInputSoFarArr.get(3).equals("2")){
-				return Menu.lib3Option2newNumberOfCopies();
+			if(userInputSoFarArr.get(0).equals("1"))
+			{
+				if(userInputSoFarStr.equals("1")){
+					return Menu.lib1Menu();
+				}
+				else if(userInputSoFarStr.equals("11")){
+					ArrayList<ArrayList<String>> branchNameAndLocation = qm.getAllBranchNamesAndLocationsQuery();
+					return Menu.lib2Menu(branchNameAndLocation.get(0), branchNameAndLocation.get(1));
+				}
+				else if(userInputSoFarStr.subSequence(0, 2).equals(("11")) && userInputSoFarArr.size() == 3){
+					return Menu.lib3Menu();
+				}
+				else if(userInputSoFarStr.subSequence(0, 2).equals(("11")) && userInputSoFarArr.size() == 4 && userInputSoFarArr.get(3).equals("1")){
+					return Menu.lib3Option1BranchNameDialog(librarian.getLibraryBranch().getBranchId(), librarian.getLibraryBranch().getName());
+				}
+				else if(userInputSoFarStr.subSequence(0, 2).equals(("11")) && userInputSoFarArr.size() == 5 && userInputSoFarArr.get(3).equals("1")){
+					return Menu.lib3Option1BranchAddressDialog();
+				}
+				else if(userInputSoFarStr.subSequence(0, 2).equals(("11")) && userInputSoFarArr.size() == 4 && userInputSoFarArr.get(3).equals("2")){
+					return Menu.lib3Option2PickBookDialogMenu(qm.getAllBooks());
+				}
+				else if(userInputSoFarStr.subSequence(0, 2).equals(("11")) && userInputSoFarArr.size() == 5 && userInputSoFarArr.get(3).equals("2")){
+					return Menu.lib3Option2newNumberOfCopies();
+				}
 			}
 			//borrower options
-			
+			else if(userInputSoFarArr.get(0).equals("3"))
+			{
+				if(userInputSoFarStr.equals("3")){
+					return Menu.borro0ProvideCardNumberDialog();
+				}
+			}
 			//Administrator options
 		}
 		return null;
@@ -98,45 +106,59 @@ public class LibraryManagerBrain {
 		}
 		else if(userInputSoFarArr.size() >= 1){
 			//librarian options
-			if(userInputSoFarStr.equals("1")){
-				valid = validateUserNumericInput(userInput, 2);
-				if (valid) {
-					lib1InputHandler(userInput);
+			if(userInputSoFarArr.get(0).equals("1"))
+			{
+				if(userInputSoFarStr.equals("1")){
+					valid = validateUserNumericInput(userInput, 2);
+					if (valid) {
+						lib1InputHandler(userInput);
+					}
 				}
-			}
-			else if(userInputSoFarStr.equals("11")){
-				valid = validateUserNumericInput(userInput, qm.getPrevAllBranchNamesAndLocationsQuery().get(0).size()+1);
-				if(valid){
-					lib2InputHandler(userInput);
+				else if(userInputSoFarStr.equals("11")){
+					valid = validateUserNumericInput(userInput, qm.getPrevAllBranchNamesAndLocationsQuery().get(0).size()+1);
+					if(valid){
+						lib2InputHandler(userInput);
+					}
 				}
-			}
-			else if(userInputSoFarStr.subSequence(0, 2).equals(("11")) && userInputSoFarArr.size() == 3){
-				valid = validateUserNumericInput(userInput, 3);
-				if(valid){
-					lib3InputHandler(userInput);
+				else if(userInputSoFarStr.subSequence(0, 2).equals(("11")) && userInputSoFarArr.size() == 3){
+					valid = validateUserNumericInput(userInput, 3);
+					if(valid){
+						lib3InputHandler(userInput);
+					}
 				}
-			}
-			else if(userInputSoFarStr.subSequence(0, 2).equals(("11")) && userInputSoFarArr.size() == 4 && userInputSoFarArr.get(3).equals("1")){
-				lib3InputOption1Handler1(userInput);
-				valid = true;
-			}
-			else if(userInputSoFarStr.subSequence(0, 2).equals(("11")) && userInputSoFarArr.size() == 5 && userInputSoFarArr.get(3).equals("1")){
-				lib3InputOption1Handler2(userInput);
-				valid = true;
-			}
-			else if(userInputSoFarStr.subSequence(0, 2).equals(("11")) && userInputSoFarArr.size() == 4 && userInputSoFarArr.get(3).equals("2")){
-				valid = validateUserNumericInput(userInput, qm.getPrevAllBooksQuery().size()+1);
-				if(valid){
-					lib3InputOption2Handler1(userInput);
-				}
-			}
-			else if(userInputSoFarStr.subSequence(0, 2).equals(("11")) && userInputSoFarArr.size() == 5 && userInputSoFarArr.get(3).equals("2")){
-				if(Integer.parseInt(userInput) >= 0){
+				else if(userInputSoFarStr.subSequence(0, 2).equals(("11")) && userInputSoFarArr.size() == 4 && userInputSoFarArr.get(3).equals("1")){
+					lib3InputOption1Handler1(userInput);
 					valid = true;
-					lib3InputOption2Handler2(userInput);
+				}
+				else if(userInputSoFarStr.subSequence(0, 2).equals(("11")) && userInputSoFarArr.size() == 5 && userInputSoFarArr.get(3).equals("1")){
+					lib3InputOption1Handler2(userInput);
+					valid = true;
+				}
+				else if(userInputSoFarStr.subSequence(0, 2).equals(("11")) && userInputSoFarArr.size() == 4 && userInputSoFarArr.get(3).equals("2")){
+					valid = validateUserNumericInput(userInput, qm.getPrevAllBooksQuery().size()+1);
+					if(valid){
+						lib3InputOption2Handler1(userInput);
+					}
+				}
+				else if(userInputSoFarStr.subSequence(0, 2).equals(("11")) && userInputSoFarArr.size() == 5 && userInputSoFarArr.get(3).equals("2")){
+					if(Integer.parseInt(userInput) >= 0){
+						valid = true;
+						lib3InputOption2Handler2(userInput);
+					}
 				}
 			}
 			//borrower options
+			else if(userInputSoFarArr.get(0).equals("3"))
+			{
+				if(userInputSoFarStr.equals("3")){
+					valid = validateCardNumber(userInput);
+					if(valid){
+						borr0InputHandler(userInput); 
+					}
+
+				}
+			}
+			
 			
 			//Administrator options
 		}
@@ -298,5 +320,24 @@ public class LibraryManagerBrain {
 	}
 	
 	//borrower action handlers
-
+	public boolean validateCardNumber(String userInput)
+	{
+		//call query to get borrower or null
+		
+		try {
+			if (qm.getBorrowerWithCardNo(Integer.parseInt(userInput)) == null)
+				return false;
+			else
+				return true;
+		} catch (Exception e) {
+			//case in which the user inputs a string instead of a number
+			return false;
+		}
+	}
+	
+	public void borr0InputHandler(String userInput)
+	{
+		userInputSoFarArr.add(userInput);
+		userInputSoFarStr = userInputSoFarStr + userInput;
+	}
 }

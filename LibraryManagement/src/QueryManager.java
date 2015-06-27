@@ -11,11 +11,17 @@ import java.util.Scanner;
 
 public class QueryManager {
 
+	//Borrower Instance variables-----------
+	private Borrower borrower;
+	
+	//Librarian instance variables-------
 	//TODO: Handle errors related to no database connection
 	//used to store a previous query to ensure that the order of the rows is the same
 	private ArrayList<ArrayList<String>> libraryBranchNameLocationId;
 	ArrayList<Book> books;
 	String numberOfCopies;
+	
+	//General instance variables-------------
 	//TODO: get connection variables
 	Connection conn;
 	//TODO: remember to use a PreparedStatement
@@ -29,7 +35,29 @@ public class QueryManager {
 		books = new ArrayList<Book>();
 	}
 	
+	//--------------------------------Borrower Methods------------------------------------------
+	public Borrower getBorrowerWithCardNo(int cardNo)
+	{
+		ArrayList<String> columnsOfInterest = new ArrayList<String>();
+		columnsOfInterest.add("cardNo");
+		columnsOfInterest.add("name");
+		columnsOfInterest.add("address");
+		columnsOfInterest.add("phone");
+		
+		HashMap<String, ArrayList<String>> data =  executeSelectQuery("SELECT * FROM tbl_borrower WHERE cardNo = "+Integer.toString(cardNo), columnsOfInterest, new ArrayList<String>());
+		
+		borrower = new Borrower();
+		if(data.get("cardNo").size() == 0){
+			return null;
+		}
+		else{
+			borrower = new Borrower(data.get("cardNo").get(0), data.get("name").get(0), data.get("address").get(0), data.get("phone").get(0));
+			return borrower;
+		}
+	}
 
+	//--------------------------------Librarian Methods-----------------------------------------
+	
 	//TODO: it is void but it should return a boolean in case of connection error
 	public void updateNumberOfCopies(Book book, LibraryBranch branch, String newNumberOfCopies)
 	{
@@ -139,12 +167,14 @@ public class QueryManager {
 		queryVariables.add(id);
 		executeUpdateQuery("UPDATE tbl_library_branch SET branchName = ? WHERE branchId = ?", queryVariables);
 	}
+	
+	//--------------------------------Generic Methods-----------------------------
+	
 	private void executeUpdateQuery(String updateQuery, ArrayList<String> queryVariables)
 	{
 		executeQuery(updateQuery, queryVariables);
 		closeConnection();
 	}
-	
 	
 	//TODO: create a more general function that can handle any query not just selects that will use this one as a helper
 	//able to execute any select query and return the expected columns
@@ -174,6 +204,7 @@ public class QueryManager {
 		
 		return data;
 	}
+	
 	
 	//executes the query
 	//TODO: Remember use a prepared statement instead of statement!!!!!!!!!!!!!!
