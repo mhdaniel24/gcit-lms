@@ -48,7 +48,7 @@ public class Menu {
 	}
 	
 	//TODO: Add the \n and the \t to all other menues according to the format in the document
-	public static String lib3Option2PickBookDialogMenu(ArrayList<Book> allBooksAvailable)
+	public static String pickBookMenu(ArrayList<Book> allBooksAvailable)
 	{
 		String menu = new String("Pick the Book you want to add copies of, to your branch:");
 		int i;
@@ -68,5 +68,19 @@ public class Menu {
 	public static String borro0ProvideCardNumberDialog()
 	{
 		return "Enter your Card Number";
+	}
+	public static String borr1CheckReturnOrQuitMenu()
+	{
+		return "1) Check out a book\n2) Return a book\n3) Quit to previous";
+	}
+	public static String borr1Option1CheckOutBookMenu(ArrayList<LibraryBranch> branches){
+		String menu = "Pick the Branch you want to check out from:";
+		int i;
+		for(i = 0; i < branches.size(); i++){
+			menu = menu + "\n"+Integer.toString(i+1)+") " + branches.get(i).getName();
+		}
+		menu = menu + "\n"+Integer.toString(i+1)+") Quit to previous";
+		
+		return menu;	
 	}
 }

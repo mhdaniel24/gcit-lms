@@ -4,6 +4,7 @@ public class Borrower {
 	private String name;
 	private String address;
 	private String phone;
+	private LibraryBranch libraryBranch;
 	
 	public Borrower(){}
 	
@@ -12,6 +13,7 @@ public class Borrower {
 		this.name = name;
 		this.address = address;
 		this.phone = phone;
+		libraryBranch = new LibraryBranch();
 	}
 
 	public String getCardNo() {
@@ -44,6 +46,14 @@ public class Borrower {
 
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+
+	public LibraryBranch getLibraryBranch() {
+		return libraryBranch;
+	}
+
+	public void setLibraryBranch(LibraryBranch libraryBranch) {
+		this.libraryBranch = libraryBranch;
 	}
 	
 	

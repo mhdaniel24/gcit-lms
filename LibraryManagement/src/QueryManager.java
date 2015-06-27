@@ -17,9 +17,13 @@ public class QueryManager {
 	//Librarian instance variables-------
 	//TODO: Handle errors related to no database connection
 	//used to store a previous query to ensure that the order of the rows is the same
-	private ArrayList<ArrayList<String>> libraryBranchNameLocationId;
+	private ArrayList<ArrayList<String>> libraryBranchNameLocationId;//TODO: remember to delete this one
+	
 	ArrayList<Book> books;
 	String numberOfCopies;
+	
+	//Librarian and Borrower------------
+	ArrayList<LibraryBranch> allBranches;
 	
 	//General instance variables-------------
 	//TODO: get connection variables
@@ -33,6 +37,7 @@ public class QueryManager {
 		//TODO: set connection
 		libraryBranchNameLocationId = new ArrayList<ArrayList<String>>();
 		books = new ArrayList<Book>();
+		allBranches = new ArrayList<LibraryBranch>();
 	}
 	
 	//--------------------------------Borrower Methods------------------------------------------
@@ -55,6 +60,33 @@ public class QueryManager {
 			return borrower;
 		}
 	}
+	
+	public ArrayList<Book> getAllBooksInBranch(LibraryBranch b, int minNumbCopies)
+	{
+		String query = "SELECT bookId, title, pubId, noOfCopies FROM ((tbl_book NATURAL JOIN tbl_book_copies ) NATURAL JOIN tbl_library_branch) WHERE BranchId = "+b.getBranchId();
+		ArrayList<String> columnsOfInterest = new ArrayList<String>();
+		columnsOfInterest.add("bookId");
+		columnsOfInterest.add("title");
+		columnsOfInterest.add("pubId");
+		columnsOfInterest.add("noOfCopies");
+		
+		HashMap<String, ArrayList<String>> data =  executeSelectQuery(query, columnsOfInterest, new ArrayList<String>());
+		
+		books = new ArrayList<Book>();
+		ArrayList<String> bookIds = data.get("bookId");
+		ArrayList<String> titles = data.get("title");
+		ArrayList<String> pubIds = data.get("pubId");
+		ArrayList<String> numbOfCopies = data.get("noOfCopies");
+		
+		for(int i = 0; i< bookIds.size(); i++){
+			if(Integer.parseInt(numbOfCopies.get(i)) >= 1){
+				books.add(new Book(bookIds.get(i), titles.get(i), pubIds.get(i)));
+			}
+		}
+		
+		return books;
+	}
+	
 
 	//--------------------------------Librarian Methods-----------------------------------------
 	
@@ -72,6 +104,7 @@ public class QueryManager {
 	
 	//returns name in the array in position 0 and returns locations in the array in position 1
 	//TODO: it should return branches instead of arraylists!!!!!!!!!!!!!!!!!!!!!!!!
+	//TODO: remember to delete this function and use the new version getAllBranchesQuery()!!!!!!!!(fix LibraryManagerBrain Client code)
 	public ArrayList<ArrayList<String>> getAllBranchNamesAndLocationsQuery()
 	{
 		ArrayList<String> columnsOfInterest = new ArrayList<String>();
@@ -95,7 +128,7 @@ public class QueryManager {
 		return libraryBranchNameLocationId;
 	}
 	
-	public ArrayList<Book> getPrevAllBooksQuery()
+	public ArrayList<Book> getPrevBooksQuery()
 	{
 		return books;
 	}
@@ -125,6 +158,29 @@ public class QueryManager {
 	public String getPrevNumberOfCopies()
 	{
 		return numberOfCopies;
+	}
+	
+	public boolean doesLoanExist(Loan loan)
+	{
+		ArrayList<String> columnsOfInterest = new ArrayList<String>();
+		//columnsOfInterest.add("bookId");
+		//columnsOfInterest.add("branchId");
+		columnsOfInterest.add("bookId");
+		
+		
+		HashMap<String, ArrayList<String>> data = executeSelectQuery("SELECT * FROM tbl_book_loans WHERE bookId = "+loan.getBookId()+" AND branchId = " + loan.getBranchId() + " AND cardNo = " + loan.getCardNo(), columnsOfInterest, new ArrayList<String>());
+		
+		if(data.get("bookId").size() == 0){
+			return false;
+		}
+		else{
+			return true;
+		}
+	}
+	public void addNewLoan(Loan loan)
+	{
+		String query = "INSERT INTO tbl_book_loans VALUES ("+loan.getBookId() +", " + loan.getBranchId() + ", " + loan.getCardNo() + ", '" + loan.getDateOutAsString()+"', '" + loan.getDueDateAsString() +"', NULL)";
+		executeUpdateQuery(query, new ArrayList<String>());
 	}
 	
 	public ArrayList<Book> getAllBooks()
@@ -242,5 +298,32 @@ public class QueryManager {
 			// TODO: handle exception
 			System.out.println("Error clossing DB connection");
 		}
+	}
+	
+	//Used by both Librarian and Borrower
+	public ArrayList<LibraryBranch> getAllBranchesQuery()
+	{
+		ArrayList<String> columnsOfInterest = new ArrayList<String>();
+		columnsOfInterest.add("branchName");
+		columnsOfInterest.add("branchAddress");
+		columnsOfInterest.add("branchId");
+
+		HashMap<String, ArrayList<String>> data =  executeSelectQuery("SELECT * FROM tbl_library_branch", columnsOfInterest, new ArrayList<String>());
+
+		allBranches = new ArrayList<LibraryBranch>();
+		ArrayList<String> branchNames = data.get("branchName");
+		ArrayList<String> branchAddress = data.get("branchAddress");
+		ArrayList<String> branchIds = data.get("branchId");
+		
+		for(int i = 0; i< branchIds.size(); i++){
+			allBranches.add(new LibraryBranch(branchNames.get(i), branchAddress.get(i), branchIds.get(i)));
+		}
+
+		return allBranches;
+	}
+	//to make sure that the data is in the same order as printed TODO: delete the equivalent for the old version of this method
+	public ArrayList<LibraryBranch> getPrevAllBranchesQuery()
+	{
+		return allBranches;
 	}
 }
