@@ -41,6 +41,27 @@ public class QueryManager {
 	}
 	
 	//--------------------------------Borrower Methods------------------------------------------
+	public ArrayList<Book> getBooksBorrowedByInBranch(Borrower b)
+	{
+		String query = "SELECT * FROM ((tbl_book NATURAL JOIN tbl_book_loans) NATURAL JOIN tbl_borrower) WHERE cardNo = " +b.getCardNo() + " AND branchId = " + b.getLibraryBranch().getBranchId();
+		ArrayList<String> columnsOfInterest = new ArrayList<String>();
+		columnsOfInterest.add("bookId");
+		columnsOfInterest.add("title");
+		columnsOfInterest.add("pubId");
+		
+		HashMap<String, ArrayList<String>> data =  executeSelectQuery(query, columnsOfInterest,new ArrayList<String>());
+		
+		ArrayList<String> bookIds = data.get("bookId");
+		ArrayList<String> titles = data.get("title");
+		ArrayList<String> pubIds = data.get("pubId");
+		
+		books =new ArrayList<Book>();
+		for(int i = 0; i < bookIds.size(); i++){
+			books.add(new Book(bookIds.get(i), titles.get(i), pubIds.get(i)));
+		}
+		
+		return books;
+	}
 	public Borrower getBorrowerWithCardNo(int cardNo)
 	{
 		ArrayList<String> columnsOfInterest = new ArrayList<String>();
@@ -182,7 +203,11 @@ public class QueryManager {
 		String query = "INSERT INTO tbl_book_loans VALUES ("+loan.getBookId() +", " + loan.getBranchId() + ", " + loan.getCardNo() + ", '" + loan.getDateOutAsString()+"', '" + loan.getDueDateAsString() +"', NULL)";
 		executeUpdateQuery(query, new ArrayList<String>());
 	}
-	
+	public void deleteLoan(Loan loan)
+	{
+		String query = "DELETE FROM tbl_book_loans WHERE bookId = "+loan.getBookId() + " AND branchId = " + loan.getBranchId() +" AND cardNo = " + loan.getCardNo();
+		executeUpdateQuery(query, new ArrayList<String>());
+	}
 	public ArrayList<Book> getAllBooks()
 	{
 		ArrayList<String> columnsOfInterest = new ArrayList<String>();
@@ -276,7 +301,7 @@ public class QueryManager {
 			
 			if(query.charAt(0) == 'S' || query.charAt(0) == 's'){
 				rs = pstmt.executeQuery(query);
-			}else if(query.charAt(0) == 'U' || query.charAt(0) == 'u' || query.charAt(0) == 'I' || query.charAt(0) == 'i'){
+			}else if(query.charAt(0) == 'U' || query.charAt(0) == 'u' || query.charAt(0) == 'I' || query.charAt(0) == 'i' || query.charAt(0) == 'd' || query.charAt(0) == 'D'){
 				pstmt.executeUpdate();
 			}
 			
