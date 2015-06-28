@@ -41,11 +41,11 @@ public class LibraryManagerBrain {
 	//this function should be called before userInputWas()
 	public String getMenu()
 	{
-//		System.out.println("---------------------User Input So Far-------------------------");
-//		System.out.println("User Input Size = " + userInputSoFarArr.size());
-//		System.out.println("User input as a String =" + userInputSoFarStr);
-//		System.out.println("User input as an Array =" + userInputSoFarArr);
-//		System.out.println("---------------------------------------------------------------");
+		System.out.println("---------------------User Input So Far-------------------------");
+		System.out.println("User Input Size = " + userInputSoFarArr.size());
+		System.out.println("User input as a String =" + userInputSoFarStr);
+		System.out.println("User input as an Array =" + userInputSoFarArr);
+		System.out.println("---------------------------------------------------------------");
 		
 		if(userInputSoFarArr.size() == 0){
 			return Menu.welcomeWhoAreYouMenu();
@@ -105,7 +105,67 @@ public class LibraryManagerBrain {
 				}
 					
 			}
-			//Administrator options
+			else if(userInputSoFarArr.get(0).equals("2"))
+			{
+				//Administrator options
+				if(userInputSoFarStr.equals("2")){
+					return Menu.administratorMainMenu();
+				}else if(userInputSoFarStr.equals("21")){
+					//Add option
+					return Menu.administratorAddMenu();
+				}else if(userInputSoFarStr.equals("22")){
+					//Delete option
+					return Menu.administratorDeleteMenu();
+				}else if(userInputSoFarStr.equals("23")){
+					//Update option
+					return Menu.administratorUpdateMenu();
+				}else if(userInputSoFarStr.equals("24")){
+					//Over-ride Due Date for a Book Loan
+					//return Menu.AllLoansMenu("Which book loan's due date do you want to over-ride", qm.getAllLoans());
+					return "Not implemented yet. Missing qm.getAllLoans() Method";
+				}else if(userInputSoFarStr.equals("211")){
+					//add books
+				}else if(userInputSoFarStr.equals("212")){
+					//add authors
+				}else if(userInputSoFarStr.equals("213")){
+					//add publishers
+				}else if(userInputSoFarStr.equals("214")){
+					//add library branches
+				}else if(userInputSoFarStr.equals("215")){
+					//add borrowers
+				}else if(userInputSoFarStr.equals("221")){
+					//delete books
+					return Menu.allBookMenu("Which book do you want to delete:", qm.getAllBooks());
+				}else if(userInputSoFarStr.equals("222")){
+					//delete authors
+					return Menu.allAuthorsMenu("Which author do you want to delete:", qm.getAllAuthors());
+				}else if(userInputSoFarStr.equals("223")){
+					//delete publishers
+					return Menu.allPublisherMenu("Which publisher do you want to delete:", qm.getAllPublisher());
+				}else if(userInputSoFarStr.equals("224")){
+					//delete library branches
+					return Menu.allLibraryBranchesMenu("Which publisher do you want to delete:", qm.getAllBranchesQuery());
+				}else if(userInputSoFarStr.equals("225")){
+					//delete borrowers
+					return Menu.allBorrowersMenu("Which borrower do you want to delete:", qm.getAllBorrowers());
+				}else if(userInputSoFarStr.equals("231")){
+					//update books
+					return Menu.allBookMenu("Which book do you want to update:", qm.getAllBooks());
+				}else if(userInputSoFarStr.equals("232")){
+					//update authors
+					return Menu.allAuthorsMenu("Which author do you want to update:", qm.getAllAuthors());
+				}else if(userInputSoFarStr.equals("233")){
+					//update publishers
+					return Menu.allPublisherMenu("Which publisher do you want to update:", qm.getAllPublisher());
+				}else if(userInputSoFarStr.equals("234")){
+					//update library branches
+					return Menu.allLibraryBranchesMenu("Which publisher do you want to update:", qm.getAllBranchesQuery());
+				}else if(userInputSoFarStr.equals("235")){
+					//update borrowers
+					return Menu.allBorrowersMenu("Which borrower do you want to update:", qm.getAllBorrowers());
+				}
+				
+			}
 		}
 		return null;
 		
@@ -214,9 +274,90 @@ public class LibraryManagerBrain {
 					}
 				}
 			}
-			
-			
-			//Administrator options
+			else if(userInputSoFarArr.get(0).equals("2"))
+			{
+				//Administrator options
+				if(userInputSoFarStr.equals("2")){
+					valid = validateUserNumericInput(userInput, 5);
+					if(valid){
+						adminMainAddDeleteUpdateInputHandler(userInput, 5);
+					}
+				}else if(userInputSoFarStr.equals("21")){
+					//Add options
+					valid = validateUserNumericInput(userInput, 6);
+					if(valid){
+						adminMainAddDeleteUpdateInputHandler(userInput, 6);
+					}
+					
+				}else if(userInputSoFarStr.equals("22")){
+					//Delete options
+					valid = validateUserNumericInput(userInput, 6);
+					if(valid){
+						adminMainAddDeleteUpdateInputHandler(userInput, 6);
+					}
+					
+				}else if(userInputSoFarStr.equals("23")){
+					//Update options
+					valid = validateUserNumericInput(userInput, 6);
+					if(valid){
+						adminMainAddDeleteUpdateInputHandler(userInput, 6);
+					}
+					
+				}else if(userInputSoFarStr.equals("24")){
+					//Over-ride Due Date for a Book Loan
+					
+				}else if(userInputSoFarStr.equals("211")){
+					//add books
+				}else if(userInputSoFarStr.equals("212")){
+					//add authors
+				}else if(userInputSoFarStr.equals("213")){
+					//add publishers
+				}else if(userInputSoFarStr.equals("214")){
+					//add library branches
+				}else if(userInputSoFarStr.equals("215")){
+					//add borrowers
+				}else if(userInputSoFarStr.equals("221")){
+					//delete books
+					valid = validateUserNumericInput(userInput, qm.getPrevBooksQuery().size()+1);
+					if(valid){
+						deleteBook(userInput);
+					}
+				}else if(userInputSoFarStr.equals("222")){
+					//delete authors
+					valid = validateUserNumericInput(userInput, qm.getPrevAllAuthors().size()+1);
+					if(valid){
+						deleteAuthor(userInput);
+					}
+				}else if(userInputSoFarStr.equals("223")){
+					//delete publishers
+					valid = validateUserNumericInput(userInput, qm.getPrevAllPublisher().size()+1);
+					if(valid){
+						deletePublisher(userInput);
+					}
+				}else if(userInputSoFarStr.equals("224")){
+					//delete library branches
+					valid = validateUserNumericInput(userInput, qm.getPrevAllBranchesQuery().size()+1);
+					if(valid){
+						deleteLibraryBranch(userInput);
+					}
+				}else if(userInputSoFarStr.equals("225")){
+					//delete borrowers
+					valid = validateUserNumericInput(userInput, qm.getPrevAllBorrowers().size()+1);
+					if(valid){
+						deleteBorrower(userInput);
+					}
+				}else if(userInputSoFarStr.equals("231")){
+					//update books
+				}else if(userInputSoFarStr.equals("232")){
+					//update authors
+				}else if(userInputSoFarStr.equals("233")){
+					//update publishers
+				}else if(userInputSoFarStr.equals("234")){
+					//update library branches
+				}else if(userInputSoFarStr.equals("235")){
+					//update borrowers
+				}
+			}
 		}
 		return valid;
 	}
@@ -393,7 +534,7 @@ public class LibraryManagerBrain {
 	}
 	
 	//borrower action handlers
-	public boolean validateCardNumber(String userInput)
+	private boolean validateCardNumber(String userInput)
 	{
 		//call query to get borrower or null
 		
@@ -410,13 +551,13 @@ public class LibraryManagerBrain {
 		}
 	}
 	
-	public void borr0InputHandler(String userInput)
+	private void borr0InputHandler(String userInput)
 	{
 		userInputSoFarArr.add(userInput);
 		userInputSoFarStr = userInputSoFarStr + userInput;
 	}
 	
-	public void borr1InputHandler(String userInput)
+	private void borr1InputHandler(String userInput)
 	{
 		if(userInput.equals("3")){
 			userInputSoFarArr.remove(userInputSoFarArr.size() - 1);
@@ -429,7 +570,7 @@ public class LibraryManagerBrain {
 		}
 	}
 	
-	public void borr1Option1And2InputHandler1(String userInput)
+	private void borr1Option1And2InputHandler1(String userInput)
 	{	
 		if(userInput.equals(Integer.toString((qm.getPrevAllBranchesQuery().size()+1)))){
 			userInputSoFarArr.remove(userInputSoFarArr.size() - 1);
@@ -442,7 +583,7 @@ public class LibraryManagerBrain {
 		}
 	}
 	
-	public void borr1Option1And2InputHandler2(String userInput)
+	private void borr1Option1And2InputHandler2(String userInput)
 	{
 		int numbOfCopiesChange = 0;
 		if(userInputSoFarArr.get(2).equals("2")){
@@ -488,5 +629,75 @@ public class LibraryManagerBrain {
 	}
 	
 	//-----------------------------------------------Administrator----------------------------------------------------
-	
+	private void adminMainAddDeleteUpdateInputHandler(String userInput, int quitOption)
+	{
+		if(userInput.equals(Integer.toString(quitOption))){
+			userInputSoFarArr.remove(userInputSoFarArr.size()-1);
+			rebuildUserInputString();
+		}else{
+			userInputSoFarArr.add(userInput);
+			userInputSoFarStr = userInputSoFarStr + userInput;
+		}
+		
+	}
+	private void deleteBook(String userInput){
+		if(userInput.equals(Integer.toString(qm.getPrevBooksQuery().size()+1))){
+			userInputSoFarArr.remove(userInputSoFarArr.size()-1);
+			rebuildUserInputString();
+		}else{
+			qm.deleteBook(qm.getPrevBooksQuery().get(Integer.parseInt(userInput)-1));
+			userInputSoFarArr.remove(userInputSoFarArr.size()-1);
+			userInputSoFarArr.remove(userInputSoFarArr.size()-1);
+			rebuildUserInputString();
+			messageToShowNoSpectedInput = "Book deleted successfully";
+		}
+	}
+	private void deleteAuthor(String userInput){
+		if(userInput.equals(Integer.toString(qm.getPrevAllAuthors().size()+1))){
+			userInputSoFarArr.remove(userInputSoFarArr.size()-1);
+			rebuildUserInputString();
+		}else{
+			qm.deleteAuthor(qm.getPrevAllAuthors().get(Integer.parseInt(userInput)-1));
+			userInputSoFarArr.remove(userInputSoFarArr.size()-1);
+			userInputSoFarArr.remove(userInputSoFarArr.size()-1);
+			rebuildUserInputString();
+			messageToShowNoSpectedInput = "Author deleted successfully";
+		}
+	}
+	private void deletePublisher(String userInput){
+		if(userInput.equals(Integer.toString(qm.getPrevAllPublisher().size()+1))){
+			userInputSoFarArr.remove(userInputSoFarArr.size()-1);
+			rebuildUserInputString();
+		}else{
+			qm.deletePublisher(qm.getPrevAllPublisher().get(Integer.parseInt(userInput)-1));
+			userInputSoFarArr.remove(userInputSoFarArr.size()-1);
+			userInputSoFarArr.remove(userInputSoFarArr.size()-1);
+			rebuildUserInputString();
+			messageToShowNoSpectedInput = "Publisher deleted successfully";
+		}
+	}
+	private void deleteLibraryBranch(String userInput){
+		if(userInput.equals(Integer.toString(qm.getPrevAllBranchesQuery().size()+1))){
+			userInputSoFarArr.remove(userInputSoFarArr.size()-1);
+			rebuildUserInputString();
+		}else{
+			qm.deleteLibraryBranch(qm.getPrevAllBranchesQuery().get(Integer.parseInt(userInput)-1));
+			userInputSoFarArr.remove(userInputSoFarArr.size()-1);
+			userInputSoFarArr.remove(userInputSoFarArr.size()-1);
+			rebuildUserInputString();
+			messageToShowNoSpectedInput = "Library Branch deleted successfully";
+		}
+	}
+	private void deleteBorrower(String userInput){
+		if(userInput.equals(Integer.toString(qm.getPrevAllBorrowers().size()+1))){
+			userInputSoFarArr.remove(userInputSoFarArr.size()-1);
+			rebuildUserInputString();
+		}else{
+			qm.deleteBorrower(qm.getPrevAllBorrowers().get(Integer.parseInt(userInput)-1));
+			userInputSoFarArr.remove(userInputSoFarArr.size()-1);
+			userInputSoFarArr.remove(userInputSoFarArr.size()-1);
+			rebuildUserInputString();
+			messageToShowNoSpectedInput = "Borrower deleted successfully";
+		}
+	}
 }

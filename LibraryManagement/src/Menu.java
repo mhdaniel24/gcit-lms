@@ -95,6 +95,19 @@ public class Menu {
 	
 	//-----------------------Administrator--------------------
 	//It is already implemented for publisher
+	public static String administratorMainMenu()
+	{
+		return "What task would you like to perform?\n1) Add\n2) Delete\n3) Update\n4) Over-ride Due Date for a Book Loan\n5) Quit to previous";
+	}
+	public static String administratorAddMenu(){
+		return "What would you like to add:\n1) Books\n2) Authors\n3) Publishers\n4) Library Branches\n5) Borrowers\n6) Quit to previous";
+	}
+	public static String administratorDeleteMenu(){
+		return "What would you like to delete:\n1) Books\n2) Authors\n3) Publishers\n4) Library Branches\n5) Borrowers\n6) Quit to previous";
+	}
+	public static String administratorUpdateMenu(){
+		return "What would you like to update:\n1) Books\n2) Authors\n3) Publishers\n4) Library Branches\n5) Borrowers\n6) Quit to previous";
+	}
 	public static String allBookMenu(String beginingClause, ArrayList<Book> books)
 	{
 		String menu = beginingClause;
@@ -103,7 +116,8 @@ public class Menu {
 			menu = menu + "\n"+Integer.toString(i+1)+") "+books.get(i).getBookId() +", " + books.get(i).getTitle();
 		}
 		
-		return addQuitPart(menu, i);
+		menu = addQuitPart(menu, i);
+		return menu;
 	}
 	public static String allAuthorsMenu(String beginingClause, ArrayList<Author> authors)
 	{
@@ -141,7 +155,7 @@ public class Menu {
 		}
 		return addQuitPart(menu, i);
 	}
-	public static String StringAllLoansMenu(String beginingClause, ArrayList<Loan> loans)
+	public static String AllLoansMenu(String beginingClause, ArrayList<Loan> loans)
 	{
 		String menu = beginingClause;
 		int i;
@@ -152,7 +166,6 @@ public class Menu {
 	}
 	private static String addQuitPart(String menu, int i)
 	{
-		i++;
-		return menu + menu + "\n"+Integer.toString(i+1)+") Quit to previous";
+		return menu + "\n"+Integer.toString(i+1)+") Quit to previous";
 	}
 }

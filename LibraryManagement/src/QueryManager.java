@@ -29,6 +29,7 @@ public class QueryManager {
 	ArrayList<Author> authors;
 	ArrayList<Publisher> publishers;
 	ArrayList<Borrower> borrowers;
+	ArrayList<Loan> loans;
 	
 	
 	//General instance variables-------------
@@ -47,6 +48,7 @@ public class QueryManager {
 		authors = new ArrayList<Author>();
 		publishers = new ArrayList<Publisher>();
 		borrowers = new ArrayList<Borrower>();
+		loans = new ArrayList<Loan>();
 	}
 	
 	//--------------------------------Borrower Methods------------------------------------------
@@ -408,7 +410,7 @@ public class QueryManager {
 	//-------Delete Methods----------
 	public void deleteBook(Book b)
 	{
-		String query = "DELETE FROM tbl_book_author WHERE bookId = " + b.getBookId();
+		String query = "DELETE FROM tbl_book_authors WHERE bookId = " + b.getBookId();
 		System.out.println(query);
 		executeUpdateQuery(query, new ArrayList<String>());
 		
@@ -416,11 +418,15 @@ public class QueryManager {
 		System.out.println(query);
 		executeUpdateQuery(query, new ArrayList<String>());
 		
-		query = "DELETE FROM tbl_book_loans WHERE bookhId = " + b.getBookId();
+		query = "DELETE FROM tbl_book_loans WHERE bookId = " + b.getBookId();
 		System.out.println(query);
 		executeUpdateQuery(query, new ArrayList<String>());
 		
-		query = "DELETE FROM tbl_book_genres WHERE bookhId = " + b.getBookId();
+		query = "DELETE FROM tbl_book_genres WHERE bookId = " + b.getBookId();
+		System.out.println(query);
+		executeUpdateQuery(query, new ArrayList<String>());
+		
+		query = "DELETE FROM tbl_book WHERE bookId = " + b.getBookId();
 		System.out.println(query);
 		executeUpdateQuery(query, new ArrayList<String>());
 	}
@@ -429,7 +435,7 @@ public class QueryManager {
 		String query = "DELETE FROM tbl_book_authors WHERE authorId = " + a.getAuthorId();
 		System.out.println(query);
 		executeUpdateQuery(query, new ArrayList<String>());
-		query = "DELETE FROM tbl_authors WHERE authorId = " + a.getAuthorId();
+		query = "DELETE FROM tbl_author WHERE authorId = " + a.getAuthorId();
 		System.out.println(query);
 		executeUpdateQuery(query, new ArrayList<String>());
 	}
@@ -517,6 +523,16 @@ public class QueryManager {
 	//------Get All-----
 	//books is already implemented
 	//Library Branches is already implemented
+	public ArrayList<Loan> getAllLoans()
+	{
+		//TODO: Implement this function. It will require:(Remember to use the formats of the previous methods)
+		//1. Implement another constructor in Loans that accept Strings to build dates
+		return null;
+	}
+	public ArrayList<Loan> getPrevAllLoans()
+	{
+		return loans;
+	}
 	public ArrayList<Author> getAllAuthors()
 	{
 		ArrayList<String> columnsOfInterest = new ArrayList<String>();
