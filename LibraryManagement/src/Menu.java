@@ -92,4 +92,67 @@ public class Menu {
 		menu = menu + "\n"+Integer.toString(i+1)+") Quit to previous";
 		return menu;
 	}
+	
+	//-----------------------Administrator--------------------
+	//It is already implemented for publisher
+	public static String allBookMenu(String beginingClause, ArrayList<Book> books)
+	{
+		String menu = beginingClause;
+		int i;
+		for(i = 0; i < books.size(); i++){
+			menu = menu + "\n"+Integer.toString(i+1)+") "+books.get(i).getBookId() +", " + books.get(i).getTitle();
+		}
+		
+		return addQuitPart(menu, i);
+	}
+	public static String allAuthorsMenu(String beginingClause, ArrayList<Author> authors)
+	{
+		String menu = beginingClause;
+		int i;
+		for(i = 0; i < authors.size(); i++){
+			menu = menu + "\n"+Integer.toString(i+1)+") " +authors.get(i).getAuthorId()+", " +authors.get(i).getAuthorName();
+		}
+		return addQuitPart(menu, i);
+	}
+	public static String allPublisherMenu(String beginingClause, ArrayList<Publisher> publishers)
+	{
+		String menu = beginingClause;
+		int i;
+		for(i = 0; i < publishers.size(); i++){
+			menu = menu + "\n"+Integer.toString(i+1)+") "+publishers.get(i).getPublisherId() +", "+publishers.get(i).getPublisherName()+", " +publishers.get(i).getPublisherAddress() + ", " + publishers.get(i).getPublisherPhone();
+		}
+		return addQuitPart(menu, i);
+	}
+	public static String allLibraryBranchesMenu(String beginingClause, ArrayList<LibraryBranch> libraryBranches)
+	{
+		String menu = beginingClause;
+		int i;
+		for(i = 0; i < libraryBranches.size(); i++){
+			menu = menu + "\n"+Integer.toString(i+1)+") " + libraryBranches.get(i).getBranchId()+", "+libraryBranches.get(i).getName()+", " +libraryBranches.get(i).getLocation();
+		}
+		return addQuitPart(menu, i);
+	}
+	public static String allBorrowersMenu(String beginingClause, ArrayList<Borrower> borrowers)
+	{
+		String menu = beginingClause;
+		int i;
+		for(i = 0; i < borrowers.size(); i++){
+			menu = menu + "\n"+Integer.toString(i+1)+") " + borrowers.get(i).getCardNo()+", "+borrowers.get(i).getName()+", " +borrowers.get(i).getAddress() + ", " + borrowers.get(i).getPhone();
+		}
+		return addQuitPart(menu, i);
+	}
+	public static String StringAllLoansMenu(String beginingClause, ArrayList<Loan> loans)
+	{
+		String menu = beginingClause;
+		int i;
+		for(i = 0; i < loans.size(); i++){
+			menu = menu + "\n"+Integer.toString(i+1)+") " +loans.get(i).getBookId()+", " +loans.get(i).getBranchId() + ", " + loans.get(i).getCardNo() + ", " + loans.get(i).getDateOutAsString() + ", "+loans.get(i).getDueDateAsString() + ", " + loans.get(i).getDateInAsString();
+		}
+		return addQuitPart(menu, i);
+	}
+	private static String addQuitPart(String menu, int i)
+	{
+		i++;
+		return menu + menu + "\n"+Integer.toString(i+1)+") Quit to previous";
+	}
 }

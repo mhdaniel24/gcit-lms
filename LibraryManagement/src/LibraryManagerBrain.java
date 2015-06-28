@@ -12,7 +12,6 @@ public class LibraryManagerBrain {
 	private String messageToShowNoSpectedInput;
 	
 	
-	
 	private Borrower borrower;
 	private Librarian librarian;
 	private Administrator administrator;
@@ -163,8 +162,8 @@ public class LibraryManagerBrain {
 					}
 				}
 				else if(userInputSoFarStr.subSequence(0, 2).equals(("11")) && userInputSoFarArr.size() == 5 && userInputSoFarArr.get(3).equals("2")){
-					if(Integer.parseInt(userInput) >= 0){
-						valid = true;
+					valid = validateNewNumbOfCopies(userInput);
+					if(valid){
 						lib3InputOption2Handler2(userInput);
 					}
 				}
@@ -223,7 +222,20 @@ public class LibraryManagerBrain {
 	}
 	
 	//helpers
-	
+	private boolean validateNewNumbOfCopies(String userInput)
+	{
+		try {
+			//here
+			if(Integer.parseInt(userInput) >= 0){
+				return true;
+			}else{
+				return false;
+			}
+			
+		} catch (Exception e) {
+			return false;
+		}
+	}
 	//Validates if the user selected one of the possible choices avaliable by using validUpTo in the case of numeric input
 	//validUpTo = choices of the user
 	private boolean validateUserNumericInput(String userInput, int validUpTo)
@@ -326,13 +338,17 @@ public class LibraryManagerBrain {
 			//if both choices are not N/A make changes
 			if(!userInputSoFarArr.get(userInputSoFarArr.size() -1).equals("N/A") && !userInput.equals("N/A")){
 				//make changes
+				librarian.getLibraryBranch().setLocation(userInputSoFarArr.get(userInputSoFarArr.size() -1));
+				librarian.getLibraryBranch().setName(userInput);
 				qm.updateBranchNameAndAddress(userInputSoFarArr.get(userInputSoFarArr.size() -1), userInput, librarian.getLibraryBranch().getBranchId());
 			}
 			else if(!userInput.equals("N/A")){
 				qm.updateBranchAddress(userInput, librarian.getLibraryBranch().getBranchId());
+				librarian.getLibraryBranch().setName(userInput);
 			}
 			else if(!userInputSoFarArr.get(userInputSoFarArr.size() -1).equals("N/A")){
 				qm.updateBranchName(userInputSoFarArr.get(userInputSoFarArr.size() -1), librarian.getLibraryBranch().getBranchId());
+				librarian.getLibraryBranch().setLocation(userInputSoFarArr.get(userInputSoFarArr.size() -1));
 			}
 			
 			//TODO: handle and display any error related to database connection
@@ -470,5 +486,7 @@ public class LibraryManagerBrain {
 			
 		}
 	}
+	
+	//-----------------------------------------------Administrator----------------------------------------------------
 	
 }

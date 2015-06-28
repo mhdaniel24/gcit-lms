@@ -74,6 +74,15 @@ public class Loan {
 	{
 		return dateFormat.format(dateOut);
 	}
+	public String getDateInAsString()
+	{
+		if(dateIn == null){
+			return "NULL";
+		}else{
+			return dateFormat.format(dateIn);
+		}
+			
+	}
 	
 	
 }

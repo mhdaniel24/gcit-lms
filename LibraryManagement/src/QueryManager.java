@@ -351,4 +351,96 @@ public class QueryManager {
 	{
 		return allBranches;
 	}
+	
+	
+	
+	
+	
+	
+	//---------------------------Administrator---------------------
+	
+	//----Adding Methods-----
+	public boolean addBook(Book b)
+	{
+		return true;
+	}
+	public boolean addAuthor(Author a)
+	{
+		return true;
+	}
+	public boolean addPublisher(Publisher p)
+	{
+		return true;
+	}
+	public boolean addLibraryBranch(LibraryBranch lb)
+	{
+		return true;
+	}
+	public boolean addBorrower(Borrower b)
+	{
+		return true;
+	}
+	
+	//-------Delete Methods----------
+	public void deleteBook(Book b)
+	{
+	
+	}
+	public void deleteAuthor(Author a)
+	{
+		
+	}
+	public void deletePublisher(Publisher p)
+	{
+		
+	}
+	public void deleteLibraryBranch(LibraryBranch lb)
+	{
+		
+	}
+	public void deleteBorrower(Borrower b)
+	{
+		
+	}
+	//-----Update Methods-----
+	public void updateBook(Book b, Book newBook)
+	{
+	
+	}
+	public void updateAuthor(Author a, Author newAuthor)
+	{
+		
+	}
+	public void updatePublisher(Publisher p, Publisher newPublisher)
+	{
+		
+	}
+	public void updateLibraryBranch(LibraryBranch lb, LibraryBranch newLibraryBranch)
+	{
+		
+	}
+	public void updateBorrower(Borrower b, Borrower newBorrower)
+	{
+		
+	}
+	public void updateLoan(Loan l, Loan newLoan)
+	{
+		//to over-ride the due date of the loan 
+	}
+	//------Get All-----
+	//books is already implemented
+	//Library Branches is already implemented
+	public ArrayList<Author> getAllAuthors()
+	{
+		return null;
+	}
+	public ArrayList<Publisher> getAllPublisher()
+	{
+		return null;
+	}
+	public ArrayList<Borrower> getAllBorrowers()
+	{
+		return null;
+	}
+	
 }
