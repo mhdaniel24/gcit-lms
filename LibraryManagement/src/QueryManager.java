@@ -19,18 +19,24 @@ public class QueryManager {
 	//used to store a previous query to ensure that the order of the rows is the same
 	private ArrayList<ArrayList<String>> libraryBranchNameLocationId;//TODO: remember to delete this one
 	
-	ArrayList<Book> books;
-	String numberOfCopies;
+	private ArrayList<Book> books;
+	private String numberOfCopies;
 	
 	//Librarian and Borrower------------
-	ArrayList<LibraryBranch> allBranches;
+	private ArrayList<LibraryBranch> allBranches;
+	
+	//Administrator-----------
+	ArrayList<Author> authors;
+	ArrayList<Publisher> publishers;
+	ArrayList<Borrower> borrowers;
+	
 	
 	//General instance variables-------------
 	//TODO: get connection variables
-	Connection conn;
+	private Connection conn;
 	//TODO: remember to use a PreparedStatement
-	PreparedStatement pstmt;
-	ResultSet rs;
+	private PreparedStatement pstmt;
+	private ResultSet rs;
 	
 	public QueryManager()
 	{
@@ -38,6 +44,9 @@ public class QueryManager {
 		libraryBranchNameLocationId = new ArrayList<ArrayList<String>>();
 		books = new ArrayList<Book>();
 		allBranches = new ArrayList<LibraryBranch>();
+		authors = new ArrayList<Author>();
+		publishers = new ArrayList<Publisher>();
+		borrowers = new ArrayList<Borrower>();
 	}
 	
 	//--------------------------------Borrower Methods------------------------------------------
@@ -360,87 +369,227 @@ public class QueryManager {
 	//---------------------------Administrator---------------------
 	
 	//----Adding Methods-----
-	public boolean addBook(Book b)
+	public void addBook(Book b)
 	{
-		return true;
+		String query = "INSERT INTO tbl_book (title, pubId) VALUES(" + b.getTitle() + ", " + b.getPubId() + ")";
+		//TODO: delete the line bellow
+		System.out.println(query);
+		executeUpdateQuery(query, new ArrayList<String>());
 	}
-	public boolean addAuthor(Author a)
+	public void addAuthor(Author a)
 	{
-		return true;
+		String query = "INSERT INTO tbl_author (authorName) VALUES(" + a.getAuthorName() + ")";
+		//TODO: delete the line bellow
+		System.out.println(query);
+		executeUpdateQuery(query, new ArrayList<String>());
 	}
-	public boolean addPublisher(Publisher p)
+	public void addPublisher(Publisher p)
 	{
-		return true;
+		String query = "INSERT INTO tbl_publisher (publisherName, publisherAddress, publisherPhone) VALUES(" + p.getPublisherName() + ", " + p.getPublisherAddress() + ", " + p.getPublisherPhone()+ ")";
+		//TODO: delete the line bellow
+		System.out.println(query);
+		executeUpdateQuery(query, new ArrayList<String>());
 	}
-	public boolean addLibraryBranch(LibraryBranch lb)
+	public void addLibraryBranch(LibraryBranch lb)
 	{
-		return true;
+		String query = "INSERT INTO tbl_library_branch (branchName, branchAddress) VALUES(" + lb.getName() + ", " + lb.getLocation() +")";
+		//TODO: delete the line bellow
+		System.out.println(query);
+		executeUpdateQuery(query, new ArrayList<String>());
 	}
-	public boolean addBorrower(Borrower b)
+	public void addBorrower(Borrower b)
 	{
-		return true;
+		String query = "INSERT INTO tbl_borrower (name, address, phone) VALUES(" + b.getName() + ", " + b.getAddress() +", "+b.getPhone() +")";
+		//TODO: delete the line bellow
+		System.out.println(query);
+		executeUpdateQuery(query, new ArrayList<String>());
 	}
 	
 	//-------Delete Methods----------
 	public void deleteBook(Book b)
 	{
-	
+		String query = "DELETE FROM tbl_book_author WHERE bookId = " + b.getBookId();
+		System.out.println(query);
+		executeUpdateQuery(query, new ArrayList<String>());
+		
+		query = "DELETE FROM tbl_book_copies WHERE bookId = " + b.getBookId();
+		System.out.println(query);
+		executeUpdateQuery(query, new ArrayList<String>());
+		
+		query = "DELETE FROM tbl_book_loans WHERE bookhId = " + b.getBookId();
+		System.out.println(query);
+		executeUpdateQuery(query, new ArrayList<String>());
+		
+		query = "DELETE FROM tbl_book_genres WHERE bookhId = " + b.getBookId();
+		System.out.println(query);
+		executeUpdateQuery(query, new ArrayList<String>());
 	}
 	public void deleteAuthor(Author a)
 	{
-		
+		String query = "DELETE FROM tbl_book_authors WHERE authorId = " + a.getAuthorId();
+		System.out.println(query);
+		executeUpdateQuery(query, new ArrayList<String>());
+		query = "DELETE FROM tbl_authors WHERE authorId = " + a.getAuthorId();
+		System.out.println(query);
+		executeUpdateQuery(query, new ArrayList<String>());
 	}
 	public void deletePublisher(Publisher p)
 	{
+		//also delete related books or leave the foreing key in books null and allow administrator to change it latter
+		//I will choose to delete all because if the publisher is deleted it makes no sence to have that copy of the book borrowed for example. the administrator can latter add a new copy of the book that will come up in the future with a new publisher
+		ArrayList<Book> allBooks = getAllBooks();
+		for(Book book : allBooks){
+			deleteBook(book);
+		}
+		String query = "DELETE FROM tbl_publisher WHERE publisherId = " + p.getPublisherId();
+		System.out.println(query);
+		executeUpdateQuery(query, new ArrayList<String>());
 		
 	}
 	public void deleteLibraryBranch(LibraryBranch lb)
 	{
+		String query = "DELETE FROM tbl_book_loans WHERE branchId = " + lb.getBranchId();
+		System.out.println(query);
+		executeUpdateQuery(query, new ArrayList<String>());
 		
+		query = "DELETE FROM tbl_book_copies WHERE branchId = " + lb.getBranchId();
+		System.out.println(query);
+		executeUpdateQuery(query, new ArrayList<String>());
+		
+		query = "DELETE FROM tbl_library_branch WHERE branchId = " + lb.getBranchId();
+		System.out.println(query);
+		executeUpdateQuery(query, new ArrayList<String>());
 	}
 	public void deleteBorrower(Borrower b)
 	{
+		String query = "DELETE FROM tbl_book_loans WHERE cardNo = " + b.getCardNo();
+		System.out.println(query);
+		executeUpdateQuery(query, new ArrayList<String>());
 		
+		query = "DELETE FROM tbl_borrower WHERE cardNo = " + b.getCardNo();
+		System.out.println(query);
+		executeUpdateQuery(query, new ArrayList<String>());
 	}
 	//-----Update Methods-----
 	public void updateBook(Book b, Book newBook)
 	{
-	
+		String query = "Update tbl_book SET title = " + newBook.getTitle() + ", " + "pubId = " + newBook.getPubId() + " WHERE " +"bookId = " + b.getBookId();
+		//TODO: delete this line bellow
+		System.out.println(query);
+		executeUpdateQuery(query, new ArrayList<String>());
 	}
 	public void updateAuthor(Author a, Author newAuthor)
 	{
-		
+		String query = "Update tbl_author SET authorName = " + newAuthor.getAuthorName() + " WHERE " + "authorId = " + a.getAuthorId();
+		//TODO: delete this line bellow
+		System.out.println(query);
+		executeUpdateQuery(query, new ArrayList<String>());
 	}
 	public void updatePublisher(Publisher p, Publisher newPublisher)
 	{
-		
+		String query = "UPDATE tbl_publisher SET publisherName = " + newPublisher.getPublisherName() + ", publisherAddress = " + newPublisher.getPublisherAddress() + ", publisherPhone = " + newPublisher.getPublisherPhone() + " WHERE " + " publisherId = " + p.getPublisherId();
+		//TODO: delete this line bellow
+		System.out.println(query);
+		executeUpdateQuery(query, new ArrayList<String>());
 	}
 	public void updateLibraryBranch(LibraryBranch lb, LibraryBranch newLibraryBranch)
 	{
-		
+		String query = "UPDATE tbl_library_branch SET branchName = " + newLibraryBranch.getName() + ", branchAddress = " + newLibraryBranch.getLocation() + " WHERE branchId = " + lb.getBranchId(); 
+		//TODO: delete this line bellow
+		System.out.println(query);
+		executeUpdateQuery(query, new ArrayList<String>());
 	}
 	public void updateBorrower(Borrower b, Borrower newBorrower)
 	{
-		
+		String query = "UPDATE tbl_borrower SET name = " + newBorrower.getName() + ", address = " + newBorrower.getAddress() + ", phone = " + newBorrower.getPhone() + " WHERE cardNo = " + b.getCardNo();  
+		//TODO: delete this line bellow
+		System.out.println(query);
+		executeUpdateQuery(query, new ArrayList<String>());
 	}
 	public void updateLoan(Loan l, Loan newLoan)
 	{
-		//to over-ride the due date of the loan 
+		//to over-ride the due date of the loan
+		String query = "UPDATE tbl_book_loans SET dateOut = " + newLoan.getDateOutAsString() + ", dueDate = " + newLoan.getDueDateAsString() + ", dateIn = " + newLoan.getDateInAsString() + " WHERE bookId = " + l.getBookId() + " AND branchId = " + l.getBranchId() + " AND cardNo = " + l.getCardNo(); 
+		//TODO: delete this line bellow
+		System.out.println(query);
+		executeUpdateQuery(query, new ArrayList<String>());
 	}
 	//------Get All-----
 	//books is already implemented
 	//Library Branches is already implemented
 	public ArrayList<Author> getAllAuthors()
 	{
-		return null;
+		ArrayList<String> columnsOfInterest = new ArrayList<String>();
+		columnsOfInterest.add("authorId");
+		columnsOfInterest.add("authorName");
+
+		HashMap<String, ArrayList<String>> data =  executeSelectQuery("SELECT * FROM tbl_author", columnsOfInterest, new ArrayList<String>());
+
+		authors = new ArrayList<Author>();
+		ArrayList<String> authorIds = data.get("authorId");
+		ArrayList<String> authorNames = data.get("authorName");
+		
+		for(int i = 0; i< authorIds.size(); i++){
+			authors.add(new Author(authorIds.get(i), authorNames.get(i)));
+		}
+
+		return authors;
+	}
+	public ArrayList<Author> getPrevAllAuthors()
+	{
+		return authors;
 	}
 	public ArrayList<Publisher> getAllPublisher()
 	{
-		return null;
+		ArrayList<String> columnsOfInterest = new ArrayList<String>();
+		columnsOfInterest.add("publisherId");
+		columnsOfInterest.add("publisherName");
+		columnsOfInterest.add("publisherAddress");
+		columnsOfInterest.add("publisherPhone");
+
+		HashMap<String, ArrayList<String>> data =  executeSelectQuery("SELECT * FROM tbl_publisher", columnsOfInterest, new ArrayList<String>());
+
+		publishers = new ArrayList<Publisher>();
+		ArrayList<String> publisherIds = data.get("publisherId");
+		ArrayList<String> publisherNames = data.get("publisherName");
+		ArrayList<String> publisherAddresses = data.get("publisherAddress");
+		ArrayList<String> publisherPhones = data.get("publisherPhone");
+		
+		for(int i = 0; i< publisherIds.size(); i++){
+			publishers.add(new Publisher(publisherIds.get(i),publisherNames.get(i), publisherAddresses.get(i), publisherPhones.get(i)));
+		}
+
+		return publishers;
+	}
+	public ArrayList<Publisher> getPrevAllPublisher()
+	{
+		return publishers;
 	}
 	public ArrayList<Borrower> getAllBorrowers()
 	{
-		return null;
+		ArrayList<String> columnsOfInterest = new ArrayList<String>();
+		columnsOfInterest.add("cardNo");
+		columnsOfInterest.add("name");
+		columnsOfInterest.add("address");
+		columnsOfInterest.add("phone");
+
+		HashMap<String, ArrayList<String>> data =  executeSelectQuery("SELECT * FROM tbl_borrower", columnsOfInterest, new ArrayList<String>());
+
+		borrowers = new ArrayList<Borrower>();
+		ArrayList<String> cardNos = data.get("cardNo");
+		ArrayList<String> names = data.get("name");
+		ArrayList<String> addresses = data.get("address");
+		ArrayList<String> phones = data.get("phone");
+		
+		for(int i = 0; i< cardNos.size(); i++){
+			borrowers.add(new Borrower(cardNos.get(i), names.get(i), addresses.get(i), phones.get(i)));
+		}
+
+		return borrowers;
+	}
+	public ArrayList<Borrower> getPrevAllBorrowers()
+	{
+		return borrowers;
 	}
 	
 }
