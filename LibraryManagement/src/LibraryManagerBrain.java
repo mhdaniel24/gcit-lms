@@ -124,7 +124,7 @@ public class LibraryManagerBrain {
 					return Menu.AllLoansMenu("Which book loan's due date do you want to over-ride", qm.getAllLoans());
 				}else if(userInputSoFarStr.substring(0, 2).equals("24") && userInputSoFarArr.size() == 3){
 					Loan l = qm.getPrevAllLoans().get(Integer.parseInt(userInputSoFarArr.get(userInputSoFarArr.size()-1))-1);
-					return "You have chosen to update a book loan of a book with id " + l.getBookId() + " from branch with id " + l.getBranchId() + " with borrower's card number." + l.getCardNo() + "\nThe current duedate is " +l.getDueDateAsString()+"\nEnter the new duedate following the format yyyy-MM-dd HH:mm:ss.\nYou can omit HH:mm:ss if the hours, minutes and seconds will remain the same";
+					return "You have chosen to update a book loan of a book with id " + l.getBookId() + " from branch with id " + l.getBranchId() + " with borrower's card number." + l.getCardNo() + "\nThe current due date is " +l.getDueDateAsString()+"\nEnter the new due date following the format yyyy-MM-dd HH:mm:ss.\nYou can omit HH:mm:ss if the hours, minutes and seconds will remain the same";
 				}
 				else if(userInputSoFarStr.equals("211")){
 					//add books
@@ -598,7 +598,7 @@ public class LibraryManagerBrain {
 				numbOfCopies = "0";
 			}
 			
-			messageToShowNoSpectedInput = "Exesting number of copies is: " + numbOfCopies;
+			messageToShowNoSpectedInput = "Existing number of copies is: " + numbOfCopies;
 			userInputSoFarArr.add(userInput);
 			userInputSoFarStr = userInputSoFarStr + userInput;
 		}
