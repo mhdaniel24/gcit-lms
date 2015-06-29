@@ -479,9 +479,16 @@ public class QueryManager {
 		executeUpdateQuery(query, new ArrayList<String>());
 	}
 	//-----Update Methods-----
-	public void updateBook(Book b, Book newBook)
+	public void updateBookTitle(Book b, Book newBook)
 	{
 		String query = "Update tbl_book SET title = '" + newBook.getTitle() +  "' WHERE bookId = " + b.getBookId();
+		//TODO: delete this line bellow
+		//System.out.println(query);
+		executeUpdateQuery(query, new ArrayList<String>());
+	}
+	public void updateBookPublisher(Book b, Book newBook)
+	{
+		String query = "Update tbl_book SET pubId = " + newBook.getPubId() +  " WHERE bookId = " + b.getBookId();
 		//TODO: delete this line bellow
 		//System.out.println(query);
 		executeUpdateQuery(query, new ArrayList<String>());
@@ -629,6 +636,29 @@ public class QueryManager {
 	public ArrayList<Borrower> getPrevAllBorrowers()
 	{
 		return borrowers;
+	}
+	public void insertBookAuthor(BookAuthors ba){
+		String query = "INSERT INTO tbl_book_authors VALUES(" + ba.getBookId() + ", " + ba.getAuthorId() +")";
+		//System.out.println(query + " +++++++++++++++");
+		executeUpdateQuery(query, new ArrayList<String>());
+	}
+	public ArrayList<BookAuthors> getAllBookAuthor(){
+		ArrayList<String> columnsOfInterest = new ArrayList<String>();
+		columnsOfInterest.add("bookId");
+		columnsOfInterest.add("authorId");
+
+		HashMap<String, ArrayList<String>> data =  executeSelectQuery("SELECT * FROM tbl_book_authors", columnsOfInterest, new ArrayList<String>());
+
+		ArrayList<BookAuthors> ba = new ArrayList<BookAuthors>();
+		ArrayList<String> bookIds = data.get("bookId");
+		ArrayList<String> authorIds = data.get("authorId");
+		
+		
+		for(int i = 0; i< bookIds.size(); i++){
+			ba.add(new BookAuthors(bookIds.get(i), authorIds.get(i)));
+		}
+
+		return ba;
 	}
 //	public void deleteBookAndAuthor(Book b, Author a){
 //		deleteAuthor(a);

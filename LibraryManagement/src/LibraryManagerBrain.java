@@ -174,11 +174,11 @@ public class LibraryManagerBrain {
 				}else if(userInputSoFarStr.substring(0, 3).equals("231") && userInputSoFarStr.length() == 4){
 					//update books 2
 					Book book = qm.getPrevBooksQuery().get(Integer.parseInt(userInputSoFarArr.get(userInputSoFarArr.size()-1))-1);
-					return "You have chosen to update book with id " + book.getBookId() + " and name " + book.getTitle() + " and publisher id " + book.getPubId() + "\nEnter the new name for the book";
+					return "You have chosen to update book with id " + book.getBookId() + " and name " + book.getTitle() + " and publisher id " + book.getPubId() + "\nEnter the new name for the book, the new author's id and the new publisher's id separated by ',' with no spaces.\nType N/A in for the publisher's id or the author's id if you dot want to update them";
 				}else if(userInputSoFarStr.substring(0, 3).equals("232") && userInputSoFarStr.length() == 4){
 					//update authors 2
 					Author author = qm.getPrevAllAuthors().get(Integer.parseInt(userInputSoFarArr.get(userInputSoFarArr.size()-1))-1);
-					return "You have chosen to update author with id " + author.getAuthorId() + " and name " + author.getAuthorName() +  "\nEnter a new name for the author";
+					return "You have chosen to update author with id " + author.getAuthorId() + " and name " + author.getAuthorName() +  "\nEnter a new name for the author and the id for the new book he has written separated by ',' with no spaces. If you dont want to add a new book to the author type N/A";
 				}else if(userInputSoFarStr.substring(0, 3).equals("233") && userInputSoFarStr.length() == 4){
 					//update publishers 2
 					Publisher publisher = qm.getPrevAllPublisher().get(Integer.parseInt(userInputSoFarArr.get(userInputSoFarArr.size()-1))-1);
@@ -829,8 +829,78 @@ public class LibraryManagerBrain {
 	}
 	//---------------------------------------------------------------------second round update-----------------------
 	private boolean updateBook2(String userInput, Book book){
-		Book newBook = new Book(book.getBookId(), userInput, book.getPubId());
-		qm.updateBook(book, newBook);
+		String[] splited = userInput.split(",");
+		
+		if(splited.length != 3){
+			return false;
+		}
+		System.out.println(splited[0] +" "+splited[1]+" "+splited[2] + "+++++++++++++++++++");
+		if(!splited[1].equals("N/A")){
+			//System.out.println("INSIDE 1++++++++++++");
+			//to insert the author mapping
+			boolean alreadyExist = false;
+			ArrayList<BookAuthors> allBookAuthors = qm.getAllBookAuthor();
+			for(BookAuthors ba : allBookAuthors){
+				if(ba.getAuthorId().equals(splited[1]) && ba.getBookId().equals(book.getBookId())){
+					messageToShowNoSpectedInput = "The book and author match already existed";
+					alreadyExist = true;
+					break;
+				}
+			}
+			if(!alreadyExist){
+				
+					try {
+						Integer.parseInt(splited[1]);
+						alreadyExist = false;
+						ArrayList<Author> allAuthors = qm.getAllAuthors();
+						for(Author a: allAuthors){
+							if(a.getAuthorId().equals(splited[1])){
+								alreadyExist = true;
+								break;
+							}
+						}
+						if(alreadyExist){
+							BookAuthors ba = new BookAuthors(book.getBookId(), splited[1]);
+							qm.insertBookAuthor(ba);
+						}else{
+							messageToShowNoSpectedInput = "The author id you entered does not match any author";
+							return true;
+						}
+					} catch (Exception e) {
+						return false;
+					}
+				}
+			}
+			
+			
+		
+		
+		if(!splited[2].equals("N/A")){
+			//System.out.println("INSIDE 2++++++++++++");
+			try{
+				Integer.parseInt(splited[2]);
+				ArrayList<Publisher> allPublishers = qm.getAllPublisher();
+				boolean alreadyExists = false;
+				for(Publisher p:allPublishers){
+					if(p.getPublisherId().equals(splited[2])){
+						alreadyExists = true;
+					}
+				}
+				if(alreadyExists){
+					//update publisher
+					Book newBook = new Book(book.getBookId(), book.getTitle(), splited[2]);
+					qm.updateBookPublisher(book, newBook);
+				}else{
+					messageToShowNoSpectedInput = "The publisher id you selected does not match any publisher";
+					return true;
+				}
+			}catch(Exception e){
+				return false;
+			}
+		}
+		
+		Book newBook = new Book(book.getBookId(), splited[0], book.getPubId());
+		qm.updateBookTitle(book, newBook);
 		userInputSoFarArr.remove(userInputSoFarArr.size() - 1);
 		userInputSoFarArr.remove(userInputSoFarArr.size() - 1);
 		rebuildUserInputString();
@@ -838,7 +908,47 @@ public class LibraryManagerBrain {
 		return true;
 	}
 	private boolean updateAuthor2(String userInput, Author author){
-		Author newAuthor = new Author(author.getAuthorId(), userInput);
+		String[] splited = userInput.split(",");
+		if(splited.length != 2){
+			return false;
+		}
+		
+		if(!splited[1].equals("N/A")){
+			try{
+				Integer.parseInt(splited[1]);
+				boolean alreadyExist = false;
+				ArrayList<Book> allBooks = qm.getAllBooks();
+				for(Book b: allBooks){
+					if(b.getBookId().equals(splited[1])){
+						alreadyExist = true;
+						break;
+					}
+				}
+				if(alreadyExist){
+					alreadyExist = false;
+					ArrayList<BookAuthors> bas = qm.getAllBookAuthor();
+					for(BookAuthors ba:bas){
+						if(ba.getAuthorId().equals(author.getAuthorId()) && ba.getBookId().equals(splited[1])){
+							alreadyExist = true;
+							messageToShowNoSpectedInput = "The book and author match already existed";
+							break;
+						}
+					}
+					if(!alreadyExist){
+						BookAuthors ba = new BookAuthors(author.getAuthorId(), splited[1]);
+						qm.insertBookAuthor(ba);
+					}
+					
+				}else{
+					messageToShowNoSpectedInput = "The book id you entered does not match any book";
+					return true;
+				}
+			}catch(Exception e){
+				return false;
+			}
+		}
+		
+		Author newAuthor = new Author(author.getAuthorId(), splited[0]);
 		qm.updateAuthor(author, newAuthor);
 		userInputSoFarArr.remove(userInputSoFarArr.size() - 1);
 		userInputSoFarArr.remove(userInputSoFarArr.size() - 1);
