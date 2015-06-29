@@ -1,6 +1,7 @@
 import java.util.Calendar;
 import java.util.Date;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 
@@ -29,7 +30,22 @@ public class Loan {
 		dateIn = null;
 		//dateFormat.format(dateIn);
 	}
-
+	public Loan(String bookId, String branchId, String cardNo, String dateOut, String dueDate){
+		this.bookId = bookId;
+		this.branchId = branchId;
+		this.cardNo = cardNo;
+		this.dateIn = null;//dont understand the use of dateIn yet
+		dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		
+		try {
+			
+			this.dateOut = dateFormat.parse(dateOut);
+			this.dueDate = dateFormat.parse(dueDate);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public String getBookId() {
 		return bookId;
 	}

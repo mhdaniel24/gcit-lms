@@ -158,14 +158,36 @@ public class Menu {
 	public static String AllLoansMenu(String beginingClause, ArrayList<Loan> loans)
 	{
 		String menu = beginingClause;
+		System.out.println("Size of loans Array = " + loans.size());
 		int i;
 		for(i = 0; i < loans.size(); i++){
-			menu = menu + "\n"+Integer.toString(i+1)+") " +loans.get(i).getBookId()+", " +loans.get(i).getBranchId() + ", " + loans.get(i).getCardNo() + ", " + loans.get(i).getDateOutAsString() + ", "+loans.get(i).getDueDateAsString() + ", " + loans.get(i).getDateInAsString();
+			menu = menu + "\n"+Integer.toString(i+1)+") " +loans.get(i).getBookId()+", " +loans.get(i).getBranchId() + ", " + loans.get(i).getCardNo() + ", " +loans.get(i).getDueDateAsString();
 		}
 		return addQuitPart(menu, i);
 	}
 	private static String addQuitPart(String menu, int i)
 	{
 		return menu + "\n"+Integer.toString(i+1)+") Quit to previous";
+	}
+	
+	public static String insertBookMenu()
+	{
+		return "Insert a new book by typing the book's title, publisher's id separated by ',' with no spaces.";
+	}
+	public static String insertAuthorMenu()
+	{
+		return "Insert a new author by typing the author's name";
+	}
+	public static String insertPublisherMenu()
+	{
+		return "Insert a new publisher by typing the publisher's name, publisher's address, publisher's phone separated by ',' with no spaces.";
+	}
+	public static String insertBorrowerMenu()
+	{
+		return "Insert a new borrower by typing his/her name, address, phone number separated by ',' with no spaces.";
+	}
+	public static String insertLibraryBranchMenu()
+	{
+		return "Insert a new library branch by typing the branch name and the branch address separated by ',' with no spaces.";
 	}
 }
