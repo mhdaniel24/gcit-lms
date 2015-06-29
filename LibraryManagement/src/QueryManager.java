@@ -679,7 +679,7 @@ public class QueryManager {
 		//System.out.println("---------------- " + genre_ids.size());
 		
 		for(int i = 0; i< genre_ids.size(); i++){
-			genres.add(new Genre(genre_ids.get(i), genere_names.get(i)));
+			genres.add(new Genre(genere_names.get(i), genre_ids.get(i)));
 		}
 
 		return genres;

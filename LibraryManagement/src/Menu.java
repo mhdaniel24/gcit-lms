@@ -158,7 +158,7 @@ public class Menu {
 	public static String AllLoansMenu(String beginingClause, ArrayList<Loan> loans)
 	{
 		String menu = beginingClause;
-		System.out.println("Size of loans Array = " + loans.size());
+		//System.out.println("Size of loans Array = " + loans.size());
 		int i;
 		for(i = 0; i < loans.size(); i++){
 			menu = menu + "\n"+Integer.toString(i+1)+") " +loans.get(i).getBookId()+", " +loans.get(i).getBranchId() + ", " + loans.get(i).getCardNo() + ", " +loans.get(i).getDueDateAsString();
