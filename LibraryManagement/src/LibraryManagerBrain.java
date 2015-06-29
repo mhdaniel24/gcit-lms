@@ -974,7 +974,8 @@ public class LibraryManagerBrain {
 						}
 					}
 					if(!alreadyExist){
-						BookAuthors ba = new BookAuthors(author.getAuthorId(), splited[1]);
+						//BookAuthors ba = new BookAuthors(author.getAuthorId(), splited[1]);
+						BookAuthors ba = new BookAuthors(splited[1], author.getAuthorId());
 						qm.insertBookAuthor(ba);
 					}
 					
