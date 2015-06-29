@@ -171,23 +171,23 @@ public class LibraryManagerBrain {
 				}else if(userInputSoFarStr.equals("235")){
 					//update borrowers 1
 					return Menu.allBorrowersMenu("Which borrower do you want to update:", qm.getAllBorrowers());
-				}else if(userInputSoFarStr.substring(0, 3).equals("231") && userInputSoFarStr.length() == 4){
+				}else if(userInputSoFarStr.substring(0, 3).equals("231") && userInputSoFarArr.size() == 4){
 					//update books 2
 					Book book = qm.getPrevBooksQuery().get(Integer.parseInt(userInputSoFarArr.get(userInputSoFarArr.size()-1))-1);
-					return "You have chosen to update book with id " + book.getBookId() + " and name " + book.getTitle() + " and publisher id " + book.getPubId() + "\nEnter the new name for the book, the new author's id and the new publisher's id separated by ',' with no spaces.\nType N/A in for the publisher's id or the author's id if you dot want to update them";
-				}else if(userInputSoFarStr.substring(0, 3).equals("232") && userInputSoFarStr.length() == 4){
+					return "You have chosen to update book with id " + book.getBookId() + " and name " + book.getTitle() + " and publisher id " + book.getPubId() + "\nEnter the new name for the book, the new author's id, the new publisher's id, and the new genre separated by ',' with no spaces.\nType N/A in for the publisher's id or the author's id if you dot want to update them";
+				}else if(userInputSoFarStr.substring(0, 3).equals("232") && userInputSoFarArr.size() == 4){
 					//update authors 2
 					Author author = qm.getPrevAllAuthors().get(Integer.parseInt(userInputSoFarArr.get(userInputSoFarArr.size()-1))-1);
 					return "You have chosen to update author with id " + author.getAuthorId() + " and name " + author.getAuthorName() +  "\nEnter a new name for the author and the id for the new book he has written separated by ',' with no spaces. If you dont want to add a new book to the author type N/A";
-				}else if(userInputSoFarStr.substring(0, 3).equals("233") && userInputSoFarStr.length() == 4){
+				}else if(userInputSoFarStr.substring(0, 3).equals("233") && userInputSoFarArr.size() == 4){
 					//update publishers 2
 					Publisher publisher = qm.getPrevAllPublisher().get(Integer.parseInt(userInputSoFarArr.get(userInputSoFarArr.size()-1))-1);
 					return "You have chosen to update publisher with id " + publisher.getPublisherId() + ", name " + publisher.getPublisherName() + ", address " + publisher.getPublisherAddress() + ", and phone "+ publisher.getPublisherPhone() + "\nEnter the new name address and phone number separated by ',' with no spaces";
-				}else if(userInputSoFarStr.substring(0, 3).equals("234") && userInputSoFarStr.length() == 4){
+				}else if(userInputSoFarStr.substring(0, 3).equals("234") && userInputSoFarArr.size() == 4){
 					//update library branches 2
 					LibraryBranch branch = qm.getPrevAllBranchesQuery().get(Integer.parseInt(userInputSoFarArr.get(userInputSoFarArr.size()-1))-1);
 					return "you have chosen to update the branch with branchId " + branch.getBranchId() + ", name "+branch.getName() + ", and address " + branch.getLocation() + "\nEnter the new name and address separated  by ',' with no spaces";
-				}else if(userInputSoFarStr.substring(0, 3).equals("235") && userInputSoFarStr.length() == 4){
+				}else if(userInputSoFarStr.substring(0, 3).equals("235") && userInputSoFarArr.size() == 4){
 					//update borrowers 2
 					Borrower borrower = qm.getPrevAllBorrowers().get(Integer.parseInt(userInputSoFarArr.get(userInputSoFarArr.size()-1))-1);
 					return "you have chosen to update the borrower with card number " + borrower.getCardNo() + ", name "+borrower.getName() + ", address " + borrower.getAddress() + ", and phone number " + borrower.getPhone() + "\nEnter the new name, address and phone separated  by ',' with no spaces";
@@ -414,26 +414,26 @@ public class LibraryManagerBrain {
 					if(valid){
 						updateBorrower1(userInput);
 					}
-				}else if(userInputSoFarStr.substring(0, 3).equals("231") && userInputSoFarStr.length() == 4){
+				}else if(userInputSoFarStr.substring(0, 3).equals("231") && userInputSoFarArr.size() == 4){
 					//update books 2
 					Book book = qm.getPrevBooksQuery().get(Integer.parseInt(userInputSoFarArr.get(userInputSoFarArr.size()-1))-1);
 					valid = updateBook2(userInput, book);
 					
-				}else if(userInputSoFarStr.substring(0, 3).equals("232") && userInputSoFarStr.length() == 4){
+				}else if(userInputSoFarStr.substring(0, 3).equals("232") && userInputSoFarArr.size() == 4){
 					//update authors 2
 					Author author = qm.getPrevAllAuthors().get(Integer.parseInt(userInputSoFarArr.get(userInputSoFarArr.size()-1))-1);
 					valid = updateAuthor2(userInput, author);
 					
-				}else if(userInputSoFarStr.substring(0, 3).equals("233") && userInputSoFarStr.length() == 4){
+				}else if(userInputSoFarStr.substring(0, 3).equals("233") && userInputSoFarArr.size() == 4){
 					//update publishers 2
 					Publisher publisher = qm.getPrevAllPublisher().get(Integer.parseInt(userInputSoFarArr.get(userInputSoFarArr.size()-1))-1);
 					valid = updatePublisher2(userInput, publisher);
-				}else if(userInputSoFarStr.substring(0, 3).equals("234") && userInputSoFarStr.length() == 4){
+				}else if(userInputSoFarStr.substring(0, 3).equals("234") && userInputSoFarArr.size() == 4){
 					//update library branches 2
 					LibraryBranch branch = qm.getPrevAllBranchesQuery().get(Integer.parseInt(userInputSoFarArr.get(userInputSoFarArr.size()-1))-1);
 					valid = updateBranch2(userInput, branch);
 					
-				}else if(userInputSoFarStr.substring(0, 3).equals("235") && userInputSoFarStr.length() == 4){
+				}else if(userInputSoFarStr.substring(0, 3).equals("235") && userInputSoFarArr.size() == 4){
 					//update borrowers 2
 					Borrower borrower = qm.getPrevAllBorrowers().get(Integer.parseInt(userInputSoFarArr.get(userInputSoFarArr.size()-1))-1);
 					valid = updateBorrower2(userInput, borrower);
@@ -831,10 +831,10 @@ public class LibraryManagerBrain {
 	private boolean updateBook2(String userInput, Book book){
 		String[] splited = userInput.split(",");
 		
-		if(splited.length != 3){
+		if(splited.length != 4){
 			return false;
 		}
-		System.out.println(splited[0] +" "+splited[1]+" "+splited[2] + "+++++++++++++++++++");
+		//System.out.println(splited[0] +" "+splited[1]+" "+splited[2] + " " + splited[3]+ "+++++++++++++++++++");
 		if(!splited[1].equals("N/A")){
 			//System.out.println("INSIDE 1++++++++++++");
 			//to insert the author mapping
@@ -897,6 +897,45 @@ public class LibraryManagerBrain {
 			}catch(Exception e){
 				return false;
 			}
+		}
+		
+		if(!splited[3].equals("N/A")){
+			try{
+				Integer.parseInt(splited[3]);
+				boolean alreadyExist = false;
+				ArrayList<Genre> allGenres = qm.getAllGenres();
+				//System.out.println("SIZE = " + allGenres.size());
+				for(Genre g : allGenres){
+					//System.out.println("genere id = "+g.getGenere_id() + " genere name = " + g.getGenere_name() );
+					if(g.getGenere_id().equals(splited[3])){
+						alreadyExist = true;
+						break;
+					}
+				}
+				if(alreadyExist){
+					alreadyExist = false;
+					ArrayList<BookGenres> bgs = qm.getAllBookGenres();
+					for(BookGenres bg : bgs){
+						if(bg.getBookId().equals(book.getBookId()) && bg.getGenreId().equals(splited[3])){
+							alreadyExist = true;
+							break;
+						}
+					}
+					if(alreadyExist){
+						messageToShowNoSpectedInput = "The book and genre match already exist";
+					}else{
+						BookGenres bg = new BookGenres(book.getBookId(), splited[3]);
+						qm.insertBookGenre(bg);
+					}
+				}else{
+					messageToShowNoSpectedInput = "The genre id you selected does not match any genre";
+					return true;
+				}
+				
+			}catch(Exception e){
+				return false;
+			}
+			
 		}
 		
 		Book newBook = new Book(book.getBookId(), splited[0], book.getPubId());

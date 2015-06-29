@@ -2,7 +2,7 @@
 public class BookAuthors {
 	String authorId;
 	String bookId;
-	public BookAuthors(String authorId, String bookId) {
+	public BookAuthors(String bookId, String authorId) {
 		this.authorId = authorId;
 		this.bookId = bookId;
 	}

@@ -660,6 +660,50 @@ public class QueryManager {
 
 		return ba;
 	}
+	public void insertBookGenre(BookGenres bg){
+		String query = "INSERT INTO tbl_book_genres VALUES(" + bg.getGenreId() + ", " + bg.getBookId() +")";
+		//System.out.println(query + " +++++++++++++++");
+		executeUpdateQuery(query, new ArrayList<String>());
+	}
+	public ArrayList<Genre> getAllGenres(){
+		ArrayList<String> columnsOfInterest = new ArrayList<String>();
+		columnsOfInterest.add("genre_id");
+		columnsOfInterest.add("genre_name");
+
+		HashMap<String, ArrayList<String>> data =  executeSelectQuery("SELECT * FROM tbl_genre", columnsOfInterest, new ArrayList<String>());
+
+		//System.out.println("UUUUUUUU " + data.size());
+		ArrayList<Genre> genres = new ArrayList<Genre>();
+		ArrayList<String> genre_ids = data.get("genre_id");
+		ArrayList<String> genere_names = data.get("genre_name");
+		//System.out.println("---------------- " + genre_ids.size());
+		
+		for(int i = 0; i< genre_ids.size(); i++){
+			genres.add(new Genre(genre_ids.get(i), genere_names.get(i)));
+		}
+
+		return genres;
+	}
+	public ArrayList<BookGenres> getAllBookGenres(){
+		ArrayList<String> columnsOfInterest = new ArrayList<String>();
+		columnsOfInterest.add("genre_id");
+		columnsOfInterest.add("bookId");
+
+		HashMap<String, ArrayList<String>> data =  executeSelectQuery("SELECT * FROM tbl_book_genres", columnsOfInterest, new ArrayList<String>());
+
+		ArrayList<BookGenres> bookGenres = new ArrayList<BookGenres>();
+		ArrayList<String> genre_ids = data.get("genre_id");
+		ArrayList<String> bookIds = data.get("bookId");
+		
+		
+		for(int i = 0; i< genre_ids.size(); i++){
+			bookGenres.add(new BookGenres(bookIds.get(i), genre_ids.get(i)));
+		}
+
+		return bookGenres;
+	}
+	
+	
 //	public void deleteBookAndAuthor(Book b, Author a){
 //		deleteAuthor(a);
 //		deleteBook(b);

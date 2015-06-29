@@ -3,7 +3,7 @@ public class Genre {
 	private String genere_id;
 	private String genere_name;
 	
-	public Genre(String genere_id, String genere_name) {
+	public Genre(String genere_name, String genere_id) {
 		this.genere_id = genere_id;
 		this.genere_name = genere_name;
 	}
