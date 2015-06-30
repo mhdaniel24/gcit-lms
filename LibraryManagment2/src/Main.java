@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 //asking for id
@@ -5,6 +6,18 @@ import java.util.Scanner;
 public class Main {
 
 	public static void main(String[] args) {
+		QueryManager qm = new QueryManager();
+		qm.getAllAuthors();
+		qm.getAllBorrowers();
+		qm.getAllBranches();
+		qm.getAllLoans();
+		qm.getAllPublisher();
+		ArrayList<Book> books = qm.getAllBooks();
+		System.out.println(books.size());
+		for(Book b: books){
+			System.out.println("BookId " + b.getBookId() + " Title " + b.getTitle() + " PubId " + b.getPubId());
+		}
+		
 		
 		//initializing variables
 		//TODO: Modify the initialization of the LibraryManagerController based on the new constructor
