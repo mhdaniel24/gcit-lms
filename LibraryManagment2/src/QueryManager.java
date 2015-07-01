@@ -17,6 +17,13 @@ public class QueryManager {
 	//----------------------------------Insert----------------------------------
 		public void inserNewLoan(Loan loan)
 		{
+			ArrayList<String> variables = new ArrayList<String>();
+			variables.add(loan.getBookId());
+			variables.add(loan.getBranchId());
+			variables.add(loan.getCardNo());
+			variables.add(loan.getDateOutAsString());
+			variables.add(loan.getDueDateAsString());
+			
 			String query = "INSERT INTO tbl_book_loans VALUES ("+loan.getBookId() +", " + loan.getBranchId() + ", " + loan.getCardNo() + ", '" + loan.getDateOutAsString()+"', '" + loan.getDueDateAsString() +"', NULL)";
 			executeUpdateQuery(query, new ArrayList<String>());
 		}

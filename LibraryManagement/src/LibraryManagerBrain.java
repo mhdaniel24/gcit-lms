@@ -11,7 +11,6 @@ public class LibraryManagerBrain {
 	private String userInputSoFarStr;
 	private String messageToShowNoSpectedInput;
 	
-	
 	private Borrower borrower;
 	private Librarian librarian;
 	private Administrator administrator;
@@ -688,7 +687,11 @@ public class LibraryManagerBrain {
 				messageToShowNoSpectedInput = "You already borrowed a copy of " + qm.getPrevBooksQuery().get(Integer.parseInt(userInput)-1).getTitle() + " in library branch " + borrower.getLibraryBranch().getName();
 			}else{
 				//TODO: reduce the available number of copies
-				int newNumbCopies = Integer.parseInt(qm.getNumberOfCopiesOfBook(qm.getPrevBooksQuery().get(Integer.parseInt(userInput)-1), borrower.getLibraryBranch())) + numbOfCopiesChange;
+				String numb = qm.getNumberOfCopiesOfBook(qm.getPrevBooksQuery().get(Integer.parseInt(userInput)-1), borrower.getLibraryBranch());
+				if(numb.equals("N")){
+					numb = "0";
+				}
+				int newNumbCopies = Integer.parseInt(numb) + numbOfCopiesChange;
 				qm.updateNumberOfCopies(qm.getPrevBooksQuery().get(Integer.parseInt(userInput)-1), borrower.getLibraryBranch(), Integer.toString(newNumbCopies));
 				
 				//TODO: Add entry to book_loans

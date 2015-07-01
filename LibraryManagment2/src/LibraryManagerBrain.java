@@ -20,7 +20,9 @@ public class LibraryManagerBrain {
 
 	public String getMenu() {
 		if(userInputSoFar.size() == 0){
-			//return ""
+			return "Welcome to the GCIT Library Management System. Which category of a user are you\n1) Librarian\n"
+					+ "2) Administrator\n"
+					+ "3) Borrower";
 		}
 		return null;
 	}
