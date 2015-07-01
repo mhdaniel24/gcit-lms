@@ -6,6 +6,11 @@ public class Main {
 
 	public static void main(String[] args) {
 		
+		QueryManager qm = new QueryManager();
+		Branch b = new Branch("kjh", "Borders", "Address12345678");
+		qm.insertLibraryBranch(b);
+		
+		
 		//initializing variables
 		//TODO: Modify the initialization of the LibraryManagerController based on the new constructor
 		LibraryManagerBrain lmb = new LibraryManagerBrain();
