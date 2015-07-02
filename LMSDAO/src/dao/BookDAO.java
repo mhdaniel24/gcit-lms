@@ -8,76 +8,55 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import domain.Author;
 import domain.Book;
 
-public class BookDAO {
-	String driver = "com.mysql.jdbc.Driver";
-	String connection = "jdbc:mysql://localhost:3306/library";
-	String user = "root";
-	String pass = "root";
-	
-	public void create(Book book) throws Exception{
-		Connection conn = getConnection();
-		
-		String insert = "insert into tbl_author (title) values(?)";
-		PreparedStatement stmt = conn.prepareStatement(insert);
-		stmt.setString(1, book.getTitle());
-		stmt.executeUpdate();
+public class BookDAO extends BaseDAO {
+
+	public void create(Book book) throws Exception {
+		save("insert into tbl_book (title,pubId) values(?,?)",
+				new Object[] { book.getTitle(), book.getPublisher() });
+	}
+
+	public void update(Book book) throws Exception {
+		save("update tbl_book set bookTitle = ?, pubId = ? where bookId = ?",
+				new Object[] { book.getTitle(), book.getPublisher() });
 
 	}
 
-	public void update(Author author) throws Exception{
-		Connection conn = getConnection();
-		
-		String update = "update tbl_author set authorName = ? where authorId = ?";
-		PreparedStatement stmt = conn.prepareStatement(update);
-		stmt.setString(1, author.getAuthorName());
-		stmt.setInt(2, author.getAuthorId());
-		stmt.executeUpdate();
+	public void delete(Book book) throws Exception {
+		save("delete from tbl_book where bookId = ?",
+				new Object[] { book.getBookId() });
 	}
 
-	public void delete(Author author) throws Exception{
-		Connection conn = getConnection();
+	public List<Book> readAll() throws Exception{
+		return (List<Book>) read("select * from tbl_book", null);
 		
-		String delete = "delete from tbl_author where authorId = ?";
-		PreparedStatement stmt = conn.prepareStatement(delete);
-		stmt.setInt(1, author.getAuthorId());
-		stmt.executeUpdate();
 	}
 
-	public List<Author> readAll() throws Exception {
-		List<Author> authors =  new ArrayList<Author>(); 
-		Connection conn = getConnection();
-		String getAllQuery = "SELECT * from tbl_author";
-		PreparedStatement stmt = conn.prepareStatement(getAllQuery);
-		ResultSet rs = stmt.executeQuery();
-		
-		while(rs.next())
-		{
-			Author temp = new Author();
-			temp.setAuthorId(rs.getInt("authorId"));
-			temp.setAuthorName(rs.getString("authorName"));
-			authors.add(temp);
+	public Book readOne(int bookId) throws Exception {
+		List<Book> books = (List<Book>) read("select * from tbl_book", new Object[] {bookId});
+		if(books!=null && books.size()>0){
+			return books.get(0);
 		}
-		return authors;
-
-	}
-	//TODO: Returns one does it need any data?
-	public Author readOne() throws Exception{
-		Author author = new Author();
-		Connection conn = getConnection();
-		String getAllQuery = "SELECT * from tbl_author WHERE authorId = ?";
-		PreparedStatement stmt = conn.prepareStatement(getAllQuery);
-		//stmt.setInteger(1, );
-		ResultSet rs = stmt.executeQuery();
-		
 		return null;
 	}
-	
-	private Connection getConnection() throws ClassNotFoundException,
-			SQLException {
-		Class.forName(driver);
-		Connection conn = DriverManager.getConnection(connection, user, pass);
-		return conn;
+
+	@Override
+	public List extractData(ResultSet rs) throws Exception {
+		List<Book> books =  new ArrayList<Book>();
+		
+		while(rs.next()){
+			Book b = new Book();
+			b.setBookId(rs.getInt("bookId"));
+			b.setTitle(rs.getString("title"));
+			//TODO: missing *Publisher *Genres *Authors
+			
+			books.add(b);
+		}
+		return books;
 	}
+	
+	
+
 }
