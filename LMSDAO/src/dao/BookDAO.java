@@ -11,6 +11,7 @@ import java.util.List;
 import domain.Author;
 import domain.Book;
 
+//TODO: Leave this one for last because it depends on many others and it is also the most complicated one
 public class BookDAO extends BaseDAO {
 
 	public void create(Book book) throws Exception {
