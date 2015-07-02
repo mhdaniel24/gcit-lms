@@ -14,17 +14,17 @@ public class BookAuthorsDAO extends BaseDAO{
 				new Object[] { bookAuthors.getBookId(), bookAuthors.getAuthorId() });
 	}
 
-	public void updateAuthor(BookAuthors bookAuthors) throws Exception {
-		save("update tbl_book_authors set bookId = ? where authorId = ?",
-				new Object[] { bookAuthors.getBookId(), bookAuthors.getAuthorId() });
-
-	}
-
-	public void updateBook(BookAuthors bookAuthors) throws Exception {
-		save("update tbl_book_authors set authorId = ? where bookId = ?",
-				new Object[] { bookAuthors.getAuthorId(), bookAuthors.getBookId() });
-
-	}
+//	public void updateAuthor(BookAuthors bookAuthors) throws Exception {
+//		save("update tbl_book_authors set bookId = ? where authorId = ?",
+//				new Object[] { bookAuthors.getBookId(), bookAuthors.getAuthorId() });
+//
+//	}
+//
+//	public void updateBook(BookAuthors bookAuthors) throws Exception {
+//		save("update tbl_book_authors set authorId = ? where bookId = ?",
+//				new Object[] { bookAuthors.getAuthorId(), bookAuthors.getBookId() });
+//
+//	}
 
 	
 	public void delete(BookAuthors bookAuthors) throws Exception {
