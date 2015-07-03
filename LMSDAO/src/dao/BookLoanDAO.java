@@ -34,8 +34,8 @@ public class BookLoanDAO extends BaseDAO{
 				new Object[] { author.getAuthorId() });
 	}
 
-	public List<Author> readAll() throws Exception{
-		return (List<Author>) read("select * from tbl_author", null);
+	public List<BookLoan> readAll() throws Exception{
+		return (List<BookLoan>) read("select * from tbl_book_loan", null);
 		
 	}
 

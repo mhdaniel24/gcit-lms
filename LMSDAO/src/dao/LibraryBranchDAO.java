@@ -75,6 +75,7 @@ public class LibraryBranchDAO extends BaseDAO{
 		List<LibraryBranch> libraryBranches = new ArrayList<LibraryBranch>();
 		BookDAO bdao = new BookDAO(getConnection());
 		BookCopiesDAO bcdao = new BookCopiesDAO(getConnection());
+		BookLoanDAO bldao = new BookLoanDAO(getConnection());
 		
 		while(rs.next()){
 			HashMap<Book, Integer> bookCopies = new HashMap<Book, Integer>();
@@ -82,7 +83,7 @@ public class LibraryBranchDAO extends BaseDAO{
 			lb.setBranchId(rs.getInt("branchId"));
 			lb.setBranchName(rs.getString("branchName"));
 			lb.setBranchAddress(rs.getString("branchAddress"));
-			
+			lb.setLoans(bldao.readFirstLevel("select * from tbl_book_loans where branchId = ?", new Object[] {rs.getInt("branchId")}));
 			
 			@SuppressWarnings("unchecked")
 			List<BookCopies> bcs = (List<BookCopies>) bcdao.readFirstLevel("select * from tbl_book_copies where branchId = ?"
@@ -90,7 +91,7 @@ public class LibraryBranchDAO extends BaseDAO{
 			for(BookCopies bc: bcs){
 				bookCopies.put(bdao.readOne(bc.getBookId()), bc.getNoOfCopies());
 			}
-			
+			lb.setBookCopies(bookCopies);
 			libraryBranches.add(lb);
 		}
 		
