@@ -327,7 +327,7 @@ public class QueryManager {
 	private void closeConnection()
 	{
 		try {
-			rs.close();
+			//rs.close();
 			pstmt.close();
 			conn.close();
 		} catch (Exception e2) {

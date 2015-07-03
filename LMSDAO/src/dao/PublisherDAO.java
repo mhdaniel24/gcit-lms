@@ -1,5 +1,6 @@
 package dao;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,24 +9,29 @@ import domain.Author;
 import domain.Publisher;
 
 public class PublisherDAO extends BaseDAO{
+	public PublisherDAO(Connection conn) throws Exception {
+		super(conn);
+		// TODO Auto-generated constructor stub
+	}
+
 	public void create(Publisher publisher) throws Exception {
-		save("insert into tbl_publisher (publisherName, publisherAddress, publisherPhone) values(?,?,?)",
+		save("insert into tbl_publisher (publisherName, publisherAddress, publisherPhone) values(?, ?, ?)",
 				new Object[] { publisher.getPublisherName(), publisher.getPublisherAddress(), publisher.getPublisherPhone() });
 	}
 
 	public void update(Publisher publisher) throws Exception {
-		save("update tbl_publisher set publisherName = ?,  publisherAddress = ?, publisherPhone = ? where publisherId = ?",
-				new Object[] { publisher.getPublisherName(), publisher.getPublisherAddress(), publisher.getPublisherPhone(), publisher.getPublisherId() });
+		save("update tbl_publisher set publisherName = ?, publisherAddress=?, publisherPhone=? where publisherId = ?",
+				new Object[] { publisher.getPublisherName(),  publisher.getPublisherAddress(), publisher.getPublisherPhone(), publisher.getPublisherId() });
 
 	}
 
-	public void delete(Publisher publisher) throws Exception {
-		save("delete from tbl_publisher where publisherId = ?",
-				new Object[] { publisher.getPublisherId() });
+	public void delete(Author author) throws Exception {
+		save("delete from tbl_author where authorId = ?",
+				new Object[] { author.getAuthorName() });
 	}
 
-	public List<Publisher> readAll() throws Exception{
-		return (List<Publisher>) read("select * from tbl_publisher", null);
+	public List<Author> readAll() throws Exception{
+		return (List<Author>) read("select * from tbl_author", null);
 		
 	}
 
@@ -39,16 +45,21 @@ public class PublisherDAO extends BaseDAO{
 
 	@Override
 	public List extractData(ResultSet rs) throws Exception {
-		List<Publisher> publishers =  new ArrayList<Publisher>();
+		List<Author> authors =  new ArrayList<Author>();
 		
 		while(rs.next()){
-			Publisher p = new Publisher();
-			p.setPublisherId(rs.getInt("publisherId"));
-			p.setPublisherAddress(rs.getString("publisherAddress"));
-			p.setPublisherName(rs.getString("publisherName"));
+			Author a = new Author();
+			a.setAuthorId(rs.getInt("authorId"));
+			a.setAuthorName(rs.getString("authorName"));
 			
-			publishers.add(p);
+			authors.add(a);
 		}
-		return publishers;
+		return authors;
+	}
+
+	@Override
+	public List extractDataFirstLevel(ResultSet rs) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
