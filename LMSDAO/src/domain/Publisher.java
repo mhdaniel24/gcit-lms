@@ -1,10 +1,14 @@
 package domain;
 
+import java.util.List;
+
 public class Publisher {
 	private int publisherId;
 	private String publisherName;
 	private String publisherAddress;
 	private String publisherPhone;
+	
+	private List<Book> books;
 	/**
 	 * @return the publisherId
 	 */
@@ -52,6 +56,18 @@ public class Publisher {
 	 */
 	public void setPublisherPhone(String publisherPhone) {
 		this.publisherPhone = publisherPhone;
+	}
+	/**
+	 * @return the books
+	 */
+	public List<Book> getBooks() {
+		return books;
+	}
+	/**
+	 * @param books the books to set
+	 */
+	public void setBooks(List<Book> books) {
+		this.books = books;
 	}
 	
 }

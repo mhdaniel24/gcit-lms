@@ -16,9 +16,9 @@ public class AuthorDAO extends BaseDAO {
 
 	public AuthorDAO(Connection conn) throws Exception {
 		super(conn);
-		// TODO Auto-generated constructor stub
 	}
 
+	//BookDAO is already adding all its authors should author also deal with adding all its books?
 	public void create(Author author) throws Exception {
 		save("insert into tbl_author (authorName) values(?)",
 				new Object[] { author.getAuthorName() });
@@ -60,7 +60,7 @@ public class AuthorDAO extends BaseDAO {
 			@SuppressWarnings("unchecked")
 			List<Book> books = (List<Book>) bDao.readFirstLevel("select * from tbl_books where bookId In"
 					+ "(select bookId from tbl_book_authors where authorId=?)", new Object[] {rs.getInt("authorId")});
-			//TODO: a.setBooks(books);
+			a.setBooks(books);
 			authors.add(a);
 		}
 		return authors;
@@ -69,7 +69,7 @@ public class AuthorDAO extends BaseDAO {
 	@Override
 	public List<Author> extractDataFirstLevel(ResultSet rs) throws Exception {
 		List<Author> authors =  new ArrayList<Author>();
-		BookDAO bDao = new BookDAO(getConnection());
+		//BookDAO bDao = new BookDAO(getConnection());
 		
 		while(rs.next()){
 			Author a = new Author();

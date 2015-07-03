@@ -1,10 +1,15 @@
 package domain;
 
+import java.util.HashMap;
+import java.util.List;
+
 public class LibraryBranch {
 	private int branchId;
 	private String branchName;
 	private String branchAddress;
 	
+	private HashMap<Book, Integer> bookCopies;
+	private List<BookLoan> loans;
 	/**
 	 * @return the branchId
 	 */
@@ -40,6 +45,18 @@ public class LibraryBranch {
 	 */
 	public void setBranchAddress(String branchAddress) {
 		this.branchAddress = branchAddress;
+	}
+	/**
+	 * @return the bookCopies
+	 */
+	public HashMap<Book, Integer> getBookCopies() {
+		return bookCopies;
+	}
+	/**
+	 * @param bookCopies the bookCopies to set
+	 */
+	public void setBookCopies(HashMap<Book, Integer> bookCopies) {
+		this.bookCopies = bookCopies;
 	}
 	
 	

@@ -1,10 +1,14 @@
 package domain;
 
+import java.util.List;
+
 public class Borrower {
 	private int cardNo;
 	private String name;
 	private String address;
 	private String phone;
+	
+	private List<BookLoan> bookLoans;
 	/**
 	 * @return the cardNo
 	 */
@@ -53,6 +57,19 @@ public class Borrower {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
+	/**
+	 * @return the bookLoans
+	 */
+	public List<BookLoan> getBookLoans() {
+		return bookLoans;
+	}
+	/**
+	 * @param bookLoans the bookLoans to set
+	 */
+	public void setBookLoans(List<BookLoan> bookLoans) {
+		this.bookLoans = bookLoans;
+	}
+	
 	
 	
 }

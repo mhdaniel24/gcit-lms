@@ -10,15 +10,28 @@ import java.util.List;
 
 import domain.Author;
 import domain.Book;
+import domain.Genre;
 
 //TODO: Leave this one for last because it depends on many others and it is also the most complicated one
 public class BookDAO extends BaseDAO {
 
 	public BookDAO(Connection conn) throws Exception {
 		super(conn);
-		// TODO Auto-generated constructor stub
 	}
 
+	//TODO: Should we also allow the publisher to be updated?
+	public void update(Book book) throws Exception {
+		save("update tbl_book set title = ? where bookId = ?",
+				new Object[] { book.getTitle(), book.getBookId() });
+
+	}
+
+	//TODO: should we use the database cascade (I assume yes)
+	public void delete(Book book) throws Exception {
+		save("delete from tbl_book where bookId = ?",
+				new Object[] { book.getBookId() });
+	}
+	
 	public void create(Book book) throws Exception {
 		int bookId = saveWithID("insert into tbl_book (title) values(?)",
 				new Object[] { book.getTitle()});
@@ -44,7 +57,8 @@ public class BookDAO extends BaseDAO {
 		List<Book> books = new ArrayList<Book>();
 		PublisherDAO pdao = new PublisherDAO(getConnection());
 		AuthorDAO aDao = new AuthorDAO(getConnection());
-		//GenreDAO gD
+		GenreDAO gDao = new GenreDAO(getConnection());
+		
 		while(rs.next()){
 			Book b = new Book();
 			b.setBookId(rs.getInt("bookId"));
@@ -54,6 +68,11 @@ public class BookDAO extends BaseDAO {
 			List<Author> authors = (List<Author>) aDao.readFirstLevel("select * from tbl_author where authorId In"
 					+ "(select authorId from tbl_book_authors where bookId=?)", new Object[] {rs.getInt("bookId")});
 			b.setAuthors(authors);
+			@SuppressWarnings("unchecked")
+			List<Genre> genres = (List<Genre>) gDao.readFirstLevel("select * from tbl_genre where genre_id In"
+					+ "(select genre_id from tbl_book_genres where bookId=?)", new Object[]{rs.getInt("bookId")});
+			b.setGenres(genres);
+			
 			books.add(b);
 		}
 		
@@ -63,8 +82,8 @@ public class BookDAO extends BaseDAO {
 	@Override
 	public List<Book> extractDataFirstLevel(ResultSet rs) throws Exception {
 		List<Book> books = new ArrayList<Book>();
-		PublisherDAO pdao = new PublisherDAO(getConnection());
-		AuthorDAO aDao = new AuthorDAO(getConnection());
+		//PublisherDAO pdao = new PublisherDAO(getConnection());
+		//AuthorDAO aDao = new AuthorDAO(getConnection());
 		//GenreDAO gD
 		while(rs.next()){
 			Book b = new Book();

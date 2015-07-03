@@ -1,11 +1,20 @@
 package dao;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+
+import domain.Book;
 import domain.Genre;
 
 public class GenreDAO extends BaseDAO{
+	
+	
+	public GenreDAO(Connection conn) throws Exception {
+		super(conn);
+	}
+
 	public void create(Genre genre) throws Exception {
 		save("insert into tbl_genre (genre_name) values(?)",
 				new Object[] { genre.getGenreName() });
@@ -34,8 +43,29 @@ public class GenreDAO extends BaseDAO{
 		return null;
 	}
 
+
 	@Override
 	public List extractData(ResultSet rs) throws Exception {
+		List<Genre> genres = new ArrayList<Genre>();
+		BookDAO bDao = new BookDAO(getConnection());
+		
+		while(rs.next()){
+			Genre g = new Genre();
+			g.setGenreId(rs.getInt("genre_id"));
+			g.setGenreName(rs.getString("genre_name"));
+			@SuppressWarnings("unchecked")
+			List<Book> books = (List<Book>) bDao.readFirstLevel("select * from tbl_books where bookId In"
+					+ "(select bookId from tbl_book_genres where genre_id=?)", new Object[] {rs.getInt("genre_id")});
+			g.setBooks(books);
+			
+			genres.add(g);
+		}
+		
+		return genres;
+	}
+	
+	@Override
+	public List extractDataFirstLevel(ResultSet rs) throws Exception {
 		List<Genre> genres =  new ArrayList<Genre>();
 		
 		while(rs.next()){

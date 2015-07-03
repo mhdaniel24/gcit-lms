@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import domain.Author;
+import domain.Book;
 import domain.Publisher;
 
 public class PublisherDAO extends BaseDAO{
@@ -14,6 +15,7 @@ public class PublisherDAO extends BaseDAO{
 		// TODO Auto-generated constructor stub
 	}
 
+	//book is already adding a publisher
 	public void create(Publisher publisher) throws Exception {
 		save("insert into tbl_publisher (publisherName, publisherAddress, publisherPhone) values(?, ?, ?)",
 				new Object[] { publisher.getPublisherName(), publisher.getPublisherAddress(), publisher.getPublisherPhone() });
@@ -25,13 +27,14 @@ public class PublisherDAO extends BaseDAO{
 
 	}
 
-	public void delete(Author author) throws Exception {
-		save("delete from tbl_author where authorId = ?",
-				new Object[] { author.getAuthorName() });
+	//do I have to set the book's pubId field = NULL or would that also happen with the cascade db
+	public void delete(Publisher publisher) throws Exception {
+		save("delete from tbl_publisher where publisherId = ?",
+				new Object[] { publisher.getPublisherId() });
 	}
 
-	public List<Author> readAll() throws Exception{
-		return (List<Author>) read("select * from tbl_author", null);
+	public List<Publisher> readAll() throws Exception{
+		return (List<Publisher>) read("select * from tbl_publisher", null);
 		
 	}
 
@@ -45,21 +48,40 @@ public class PublisherDAO extends BaseDAO{
 
 	@Override
 	public List extractData(ResultSet rs) throws Exception {
-		List<Author> authors =  new ArrayList<Author>();
+		List<Publisher> publishers =  new ArrayList<Publisher>();
 		
 		while(rs.next()){
-			Author a = new Author();
-			a.setAuthorId(rs.getInt("authorId"));
-			a.setAuthorName(rs.getString("authorName"));
+			BookDAO bDao = new BookDAO(getConnection());
+			Publisher p = new Publisher();
+			p.setPublisherId(rs.getInt("publisherId"));
+			p.setPublisherAddress(rs.getString("publisherAddress"));
+			p.setPublisherName(rs.getString("publisherName"));
+			p.setPublisherPhone(rs.getString("publisherPhone"));
 			
-			authors.add(a);
+			@SuppressWarnings("unchecked")
+			List<Book> books = (List<Book>) bDao.readFirstLevel("select * from tbl_books where bookId = ?"
+					, new Object[] {rs.getInt("publisherId")});
+			
+			p.setBooks(books);
+			publishers.add(p);
 		}
-		return authors;
+		return publishers;
 	}
 
 	@Override
 	public List extractDataFirstLevel(ResultSet rs) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		List<Publisher> publishers =  new ArrayList<Publisher>();
+		//BookDAO bDao = new BookDAO(getConnection());
+		
+		while(rs.next()){
+			Publisher p = new Publisher();
+			p.setPublisherId(rs.getInt("publisherId"));
+			p.setPublisherAddress(rs.getString("publisherAddress"));
+			p.setPublisherName(rs.getString("publisherName"));
+			p.setPublisherPhone(rs.getString("publisherPhone"));
+			
+			publishers.add(p);
+		}
+		return publishers;
 	}
 }
