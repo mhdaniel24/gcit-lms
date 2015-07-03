@@ -11,6 +11,18 @@ public class LibraryBranch {
 	private HashMap<Book, Integer> bookCopies;
 	private List<BookLoan> loans;
 	/**
+	 * @return the loans
+	 */
+	public List<BookLoan> getLoans() {
+		return loans;
+	}
+	/**
+	 * @param loans the loans to set
+	 */
+	public void setLoans(List<BookLoan> loans) {
+		this.loans = loans;
+	}
+	/**
 	 * @return the branchId
 	 */
 	public int getBranchId() {

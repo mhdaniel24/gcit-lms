@@ -52,6 +52,14 @@ public class BookDAO extends BaseDAO {
 		
 	}
 	
+	public Book readOne(int bookId) throws Exception {
+		List<Book> books = (List<Book>) read("select * from tbl_book where bookId = ?", new Object[] {bookId});
+		if(books!=null && books.size()>0){
+			return books.get(0);
+		}
+		return null;
+	}
+	
 	@Override
 	public List<Book> extractData(ResultSet rs) throws Exception {
 		List<Book> books = new ArrayList<Book>();
