@@ -4,19 +4,19 @@ import org.xml.sax.InputSource;
 
 
 public class LibraryManagerBrain {
-	
+
 	//used to control the menu and what to do with the provided input
 	//TODO: make sure to reset the variable when user is done
 	private ArrayList<String> userInputSoFarArr;
 	private String userInputSoFarStr;
 	private String messageToShowNoSpectedInput;
-	
+
 	private Borrower borrower;
 	private Librarian librarian;
 	private Administrator administrator;
-	
+
 	QueryManager qm;
-	
+
 	public LibraryManagerBrain()
 	{
 		userInputSoFarArr = new ArrayList<String>();
@@ -27,7 +27,7 @@ public class LibraryManagerBrain {
 		qm = new QueryManager();
 		messageToShowNoSpectedInput = new String("");
 	}
-	
+
 	public String getMessageToShowNoSpectedInput()
 	{
 		String toBeReturned = messageToShowNoSpectedInput;
@@ -40,17 +40,17 @@ public class LibraryManagerBrain {
 	//this function should be called before userInputWas()
 	public String getMenu()
 	{
-//		System.out.println("---------------------User Input So Far-------------------------");
-//		System.out.println("User Input Size = " + userInputSoFarArr.size());
-//		System.out.println("User input as a String =" + userInputSoFarStr);
-//		System.out.println("User input as an Array =" + userInputSoFarArr);
-//		System.out.println("---------------------------------------------------------------");
-		
+		//		System.out.println("---------------------User Input So Far-------------------------");
+		//		System.out.println("User Input Size = " + userInputSoFarArr.size());
+		//		System.out.println("User input as a String =" + userInputSoFarStr);
+		//		System.out.println("User input as an Array =" + userInputSoFarArr);
+		//		System.out.println("---------------------------------------------------------------");
+
 		if(userInputSoFarArr.size() == 0){
 			return Menu.welcomeWhoAreYouMenu();
 		}
 		else if(userInputSoFarArr.size() >= 1){//TODO: eliminate the >=1 in the future just used now as a guide
-			
+
 			//librarian options
 			if(userInputSoFarArr.get(0).equals("1"))
 			{
@@ -96,13 +96,13 @@ public class LibraryManagerBrain {
 				else if(userInputSoFarArr.size() == 3 && userInputSoFarArr.get(2).equals("2")){
 					//return a book
 					return Menu.borr1Option2CheckOutBookMenu(qm.getAllBranchesQuery());
-					
+
 				}
 				else if(userInputSoFarArr.size() == 4 && userInputSoFarArr.get(2).equals("2")){
 					//get the correct query
 					return Menu.pickBookMenu(qm.getBooksBorrowedByInBranch(borrower), "Pick the book you want to return:");
 				}
-					
+
 			}
 			else if(userInputSoFarArr.get(0).equals("2"))
 			{
@@ -191,14 +191,14 @@ public class LibraryManagerBrain {
 					Borrower borrower = qm.getPrevAllBorrowers().get(Integer.parseInt(userInputSoFarArr.get(userInputSoFarArr.size()-1))-1);
 					return "you have chosen to update the borrower with card number " + borrower.getCardNo() + ", name "+borrower.getName() + ", address " + borrower.getAddress() + ", and phone number " + borrower.getPhone() + "\nEnter the new name, address and phone separated  by ',' with no spaces";
 				}
-				
+
 			}
 		}
 		return null;
-		
-		
+
+
 	}
-	
+
 	//this is the public interface provided to the user to provide the user input
 	//it updates the state variable if the input is valid
 	public boolean userInputWas(String userInput)
@@ -315,26 +315,26 @@ public class LibraryManagerBrain {
 					if(valid){
 						adminMainAddDeleteUpdateInputHandler(userInput, 6);
 					}
-					
+
 				}else if(userInputSoFarStr.equals("22")){
 					//Delete options
 					valid = validateUserNumericInput(userInput, 6);
 					if(valid){
 						adminMainAddDeleteUpdateInputHandler(userInput, 6);
 					}
-					
+
 				}else if(userInputSoFarStr.equals("23")){
 					//Update options
 					valid = validateUserNumericInput(userInput, 6);
 					if(valid){
 						adminMainAddDeleteUpdateInputHandler(userInput, 6);
 					}
-					
+
 				}else if(userInputSoFarStr.equals("24")){
 					//Over-ride Due Date for a Book Loan
 					valid = validateUserNumericInput(userInput, qm.getPrevAllLoans().size()+1);
 					changeDueDate1(userInput);
-					
+
 				}else if(userInputSoFarStr.substring(0, 2).equals("24") && userInputSoFarArr.size() == 3){
 					valid = changeDueDate2(userInput);
 				}
@@ -417,12 +417,12 @@ public class LibraryManagerBrain {
 					//update books 2
 					Book book = qm.getPrevBooksQuery().get(Integer.parseInt(userInputSoFarArr.get(userInputSoFarArr.size()-1))-1);
 					valid = updateBook2(userInput, book);
-					
+
 				}else if(userInputSoFarStr.substring(0, 3).equals("232") && userInputSoFarArr.size() == 4){
 					//update authors 2
 					Author author = qm.getPrevAllAuthors().get(Integer.parseInt(userInputSoFarArr.get(userInputSoFarArr.size()-1))-1);
 					valid = updateAuthor2(userInput, author);
-					
+
 				}else if(userInputSoFarStr.substring(0, 3).equals("233") && userInputSoFarArr.size() == 4){
 					//update publishers 2
 					Publisher publisher = qm.getPrevAllPublisher().get(Integer.parseInt(userInputSoFarArr.get(userInputSoFarArr.size()-1))-1);
@@ -431,18 +431,18 @@ public class LibraryManagerBrain {
 					//update library branches 2
 					LibraryBranch branch = qm.getPrevAllBranchesQuery().get(Integer.parseInt(userInputSoFarArr.get(userInputSoFarArr.size()-1))-1);
 					valid = updateBranch2(userInput, branch);
-					
+
 				}else if(userInputSoFarStr.substring(0, 3).equals("235") && userInputSoFarArr.size() == 4){
 					//update borrowers 2
 					Borrower borrower = qm.getPrevAllBorrowers().get(Integer.parseInt(userInputSoFarArr.get(userInputSoFarArr.size()-1))-1);
 					valid = updateBorrower2(userInput, borrower);
-					
+
 				}
 			}
 		}
 		return valid;
 	}
-	
+
 	//helpers
 	private boolean validateNewNumbOfCopies(String userInput)
 	{
@@ -453,7 +453,7 @@ public class LibraryManagerBrain {
 			}else{
 				return false;
 			}
-			
+
 		} catch (Exception e) {
 			return false;
 		}
@@ -472,7 +472,7 @@ public class LibraryManagerBrain {
 		}
 		return valid;
 	}
-	
+
 	private void rebuildUserInputString()
 	{
 		userInputSoFarStr = new String();
@@ -482,7 +482,7 @@ public class LibraryManagerBrain {
 		}
 	}
 	//-------------------------end of helpers-----------------------
-	
+
 	//librarian action handlers
 	private void lib1InputHandler(String userInput)
 	{
@@ -545,10 +545,10 @@ public class LibraryManagerBrain {
 			userInputSoFarArr.add(userInput);
 			userInputSoFarStr = userInputSoFarStr + userInput;
 		}
-		
-		
+
+
 	}
-	
+
 	private void lib3InputOption1Handler2(String userInput)
 	{
 		if(userInput.equals("quit")){
@@ -572,16 +572,16 @@ public class LibraryManagerBrain {
 				qm.updateBranchName(userInputSoFarArr.get(userInputSoFarArr.size() -1), librarian.getLibraryBranch().getBranchId());
 				librarian.getLibraryBranch().setLocation(userInputSoFarArr.get(userInputSoFarArr.size() -1));
 			}
-			
+
 			//TODO: handle and display any error related to database connection
-			
+
 			userInputSoFarArr.remove(userInputSoFarArr.size() - 1);
 			userInputSoFarArr.remove(userInputSoFarArr.size() - 1);
 			messageToShowNoSpectedInput = "Successfully Updated";
 			rebuildUserInputString();	
 		}
 	}
-	
+
 	private void lib3InputOption2Handler1(String userInput)
 	{
 		if(userInput.equals(Integer.toString(qm.getPrevBooksQuery().size() + 1))){
@@ -591,34 +591,34 @@ public class LibraryManagerBrain {
 		else{
 			//query to see the number of copies in the branch of the selected book
 			String numbOfCopies = qm.getNumberOfCopiesOfBook(qm.getPrevBooksQuery().get(Integer.parseInt(userInput)-1), librarian.getLibraryBranch());
-			
+
 			//this is the case when the record is not in the table
 			if(numbOfCopies.equals("N")){
 				numbOfCopies = "0";
 			}
-			
+
 			messageToShowNoSpectedInput = "Existing number of copies is: " + numbOfCopies;
 			userInputSoFarArr.add(userInput);
 			userInputSoFarStr = userInputSoFarStr + userInput;
 		}
 	}
-	
+
 	private void lib3InputOption2Handler2(String userInput){
-		
+
 		//TODO: it should be checking for a boolean in case something went wrong
 		qm.updateNumberOfCopies(qm.getPrevBooksQuery().get(Integer.parseInt(userInputSoFarArr.get(userInputSoFarArr.size()-1))-1), librarian.getLibraryBranch(), userInput);
-		
+
 		userInputSoFarArr.remove(userInputSoFarArr.size() - 1);
 		userInputSoFarArr.remove(userInputSoFarArr.size() - 1);
 		messageToShowNoSpectedInput = "Successfully Updated";
 		rebuildUserInputString();
 	}
-	
+
 	//borrower action handlers
 	private boolean validateCardNumber(String userInput)
 	{
 		//call query to get borrower or null
-		
+
 		try {
 			borrower = qm.getBorrowerWithCardNo(Integer.parseInt(userInput));
 			if (borrower == null){
@@ -631,13 +631,13 @@ public class LibraryManagerBrain {
 			return false;
 		}
 	}
-	
+
 	private void borr0InputHandler(String userInput)
 	{
 		userInputSoFarArr.add(userInput);
 		userInputSoFarStr = userInputSoFarStr + userInput;
 	}
-	
+
 	private void borr1InputHandler(String userInput)
 	{
 		if(userInput.equals("3")){
@@ -650,7 +650,7 @@ public class LibraryManagerBrain {
 			userInputSoFarStr = userInputSoFarStr + userInput; 
 		}
 	}
-	
+
 	private void borr1Option1And2InputHandler1(String userInput)
 	{	
 		if(userInput.equals(Integer.toString((qm.getPrevAllBranchesQuery().size()+1)))){
@@ -663,7 +663,7 @@ public class LibraryManagerBrain {
 			borrower.setLibraryBranch(qm.getPrevAllBranchesQuery().get(Integer.parseInt(userInput) - 1));
 		}
 	}
-	
+
 	private void borr1Option1And2InputHandler2(String userInput)
 	{
 		int numbOfCopiesChange = 0;
@@ -673,7 +673,7 @@ public class LibraryManagerBrain {
 		else if(userInputSoFarArr.get(2).equals("1")){
 			numbOfCopiesChange = -1;
 		}
-		
+
 		if(userInput.equals(Integer.toString((qm.getPrevBooksQuery().size()+1)))){
 			userInputSoFarArr.remove(userInputSoFarArr.size() - 1);
 			userInputSoFarArr.remove(userInputSoFarArr.size() - 1);
@@ -693,7 +693,7 @@ public class LibraryManagerBrain {
 				}
 				int newNumbCopies = Integer.parseInt(numb) + numbOfCopiesChange;
 				qm.updateNumberOfCopies(qm.getPrevBooksQuery().get(Integer.parseInt(userInput)-1), borrower.getLibraryBranch(), Integer.toString(newNumbCopies));
-				
+
 				//TODO: Add entry to book_loans
 				if(userInputSoFarArr.get(2).equals("1")){
 					qm.addNewLoan(loan);
@@ -707,12 +707,12 @@ public class LibraryManagerBrain {
 				userInputSoFarArr.remove(userInputSoFarArr.size() - 1);
 				userInputSoFarArr.remove(userInputSoFarArr.size() - 1);
 				rebuildUserInputString();
-				
+
 			}
-			
+
 		}
 	}
-	
+
 	//-----------------------------------------------Administrator----------------------------------------------------
 	private void adminMainAddDeleteUpdateInputHandler(String userInput, int quitOption)
 	{
@@ -723,7 +723,7 @@ public class LibraryManagerBrain {
 			userInputSoFarArr.add(userInput);
 			userInputSoFarStr = userInputSoFarStr + userInput;
 		}
-		
+
 	}
 	private void deleteBook(String userInput){
 		if(userInput.equals(Integer.toString(qm.getPrevBooksQuery().size()+1))){
@@ -833,7 +833,7 @@ public class LibraryManagerBrain {
 	//---------------------------------------------------------------------second round update-----------------------
 	private boolean updateBook2(String userInput, Book book){
 		String[] splited = userInput.split(",");
-		
+
 		if(splited.length != 4){
 			return false;
 		}
@@ -851,33 +851,33 @@ public class LibraryManagerBrain {
 				}
 			}
 			if(!alreadyExist){
-				
-					try {
-						Integer.parseInt(splited[1]);
-						alreadyExist = false;
-						ArrayList<Author> allAuthors = qm.getAllAuthors();
-						for(Author a: allAuthors){
-							if(a.getAuthorId().equals(splited[1])){
-								alreadyExist = true;
-								break;
-							}
+
+				try {
+					Integer.parseInt(splited[1]);
+					alreadyExist = false;
+					ArrayList<Author> allAuthors = qm.getAllAuthors();
+					for(Author a: allAuthors){
+						if(a.getAuthorId().equals(splited[1])){
+							alreadyExist = true;
+							break;
 						}
-						if(alreadyExist){
-							BookAuthors ba = new BookAuthors(book.getBookId(), splited[1]);
-							qm.insertBookAuthor(ba);
-						}else{
-							messageToShowNoSpectedInput = "The author id you entered does not match any author";
-							return true;
-						}
-					} catch (Exception e) {
-						return false;
 					}
+					if(alreadyExist){
+						BookAuthors ba = new BookAuthors(book.getBookId(), splited[1]);
+						qm.insertBookAuthor(ba);
+					}else{
+						messageToShowNoSpectedInput = "The author id you entered does not match any author";
+						return true;
+					}
+				} catch (Exception e) {
+					return false;
 				}
 			}
-			
-			
-		
-		
+		}
+
+
+
+
 		if(!splited[2].equals("N/A")){
 			//System.out.println("INSIDE 2++++++++++++");
 			try{
@@ -901,7 +901,7 @@ public class LibraryManagerBrain {
 				return false;
 			}
 		}
-		
+
 		if(!splited[3].equals("N/A")){
 			try{
 				Integer.parseInt(splited[3]);
@@ -934,13 +934,13 @@ public class LibraryManagerBrain {
 					messageToShowNoSpectedInput = "The genre id you selected does not match any genre";
 					return true;
 				}
-				
+
 			}catch(Exception e){
 				return false;
 			}
-			
+
 		}
-		
+
 		Book newBook = new Book(book.getBookId(), splited[0], book.getPubId());
 		qm.updateBookTitle(book, newBook);
 		userInputSoFarArr.remove(userInputSoFarArr.size() - 1);
@@ -954,7 +954,7 @@ public class LibraryManagerBrain {
 		if(splited.length != 2){
 			return false;
 		}
-		
+
 		if(!splited[1].equals("N/A")){
 			try{
 				Integer.parseInt(splited[1]);
@@ -981,7 +981,7 @@ public class LibraryManagerBrain {
 						BookAuthors ba = new BookAuthors(splited[1], author.getAuthorId());
 						qm.insertBookAuthor(ba);
 					}
-					
+
 				}else{
 					messageToShowNoSpectedInput = "The book id you entered does not match any book";
 					return true;
@@ -990,7 +990,7 @@ public class LibraryManagerBrain {
 				return false;
 			}
 		}
-		
+
 		Author newAuthor = new Author(author.getAuthorId(), splited[0]);
 		qm.updateAuthor(author, newAuthor);
 		userInputSoFarArr.remove(userInputSoFarArr.size() - 1);
@@ -1017,7 +1017,7 @@ public class LibraryManagerBrain {
 		if(splited.length != 2){
 			return false;
 		}
-		
+
 		LibraryBranch newLibraryBranch = new LibraryBranch(splited[0], splited[1], branch.getBranchId());
 		qm.updateLibraryBranch(branch, newLibraryBranch);
 		userInputSoFarArr.remove(userInputSoFarArr.size() - 1);
@@ -1042,7 +1042,7 @@ public class LibraryManagerBrain {
 	private boolean insertBook(String userInput)
 	{
 		String[] splited = userInput.split(",");
-		
+
 		if(splited.length != 2){
 			return false;
 		}
@@ -1052,7 +1052,7 @@ public class LibraryManagerBrain {
 			// TODO: handle exception
 			return false;
 		}
-		
+
 		boolean flag = false;
 		ArrayList<Publisher> ps = qm.getAllPublisher();
 		for(Publisher p:ps){
@@ -1061,12 +1061,12 @@ public class LibraryManagerBrain {
 				break;
 			}
 		}
-		
+
 		if(!flag){
 			messageToShowNoSpectedInput = "There exist no publisher with publisher id " + splited[1];
 			return true;
 		}
-			
+
 		Book b = new Book("", splited[0], splited[1]);
 		qm.addBook(b);
 		userInputSoFarArr.remove(userInputSoFarArr.size() - 1);
@@ -1089,10 +1089,10 @@ public class LibraryManagerBrain {
 		if(splited.length != 3){
 			return false;
 		}
-		
+
 		Publisher p = new Publisher("", splited[0], splited[1], splited[2]);
 		qm.addPublisher(p);
-		
+
 		userInputSoFarArr.remove(userInputSoFarArr.size() - 1);
 		rebuildUserInputString();
 		messageToShowNoSpectedInput = "Publisher was added succesfully";
@@ -1104,11 +1104,11 @@ public class LibraryManagerBrain {
 		if(splited.length != 2){
 			return false;
 		}
-		
+
 		LibraryBranch lb = new LibraryBranch(splited[0], splited[1], "");
-		
+
 		qm.addLibraryBranch(lb);
-		
+
 		userInputSoFarArr.remove(userInputSoFarArr.size() - 1);
 		rebuildUserInputString();
 		messageToShowNoSpectedInput = "Branch was added succesfully";
@@ -1120,17 +1120,17 @@ public class LibraryManagerBrain {
 		if(splited.length != 3){
 			return false;
 		}
-		
+
 		Borrower b = new Borrower("", splited[0], splited[1], splited[2]);
 		qm.addBorrower(b);
-		
+
 		userInputSoFarArr.remove(userInputSoFarArr.size() - 1);
 		rebuildUserInputString();
 		messageToShowNoSpectedInput = "Borrower was added succesfully";
 		return true;
 	}
 	private void changeDueDate1(String userInput){
-		
+
 		if(userInput.equals(Integer.toString(qm.getPrevAllLoans().size() + 1))){
 			userInputSoFarArr.remove(userInputSoFarArr.size() - 1);
 			rebuildUserInputString();
@@ -1140,7 +1140,7 @@ public class LibraryManagerBrain {
 		}
 	}
 	private boolean changeDueDate2(String userInput){
-		
+
 		//TODO: Remember to check the validity of the input before
 		Loan l = qm.getPrevAllLoans().get(Integer.parseInt(userInputSoFarArr.get(userInputSoFarArr.size()-1))-1);
 		String[] dateAndTime = userInput.split(" ");
@@ -1149,21 +1149,21 @@ public class LibraryManagerBrain {
 				return false;
 			if(!validateTime(dateAndTime[1]))
 				return false;
-		
+
 		}
-		
+
 		if(dateAndTime.length == 1){
-			
+
 			if(!validateDate(dateAndTime[0]))
 				return false;
 			userInput = userInput +" " +l.getDueDateAsString().split(" ")[1];
 		}
-		
-		
-		
+
+
+
 		Loan newLoan = new Loan(l.getBookId(), l.getBranchId(), l.getCardNo(), l.getDateOutAsString(), userInput);
 		qm.updateLoan(l, newLoan);
-		
+
 		userInputSoFarArr.remove(userInputSoFarArr.size() - 1);
 		userInputSoFarArr.remove(userInputSoFarArr.size() - 1);
 		rebuildUserInputString();
@@ -1199,5 +1199,5 @@ public class LibraryManagerBrain {
 			return false;
 		}
 	}
-	
+
 }

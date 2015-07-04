@@ -3,25 +3,25 @@ import java.util.Iterator;
 
 
 public class Menu {
-	
+
 	private Menu(){}
-	
+
 	//it returns the initial menu
 	public static String welcomeWhoAreYouMenu()
 	{
 		return "Welcome to the GCIT Library Management System. Which category of a user are you\n1) Librarian\n2) Administrator\n3) Borrower";
 	}
-	
-	
+
+
 	//librarian menues
 	public static String lib1Menu()
 	{
 		return "1) Enter Branch you manage\n2) Quite to previous";
 	}
-	
+
 	public static String lib2Menu(ArrayList<String> branchNames, ArrayList<String> branchLocations)
 	{
-		
+
 		String menu = "";
 		int i;
 		for(i = 0; i < branchNames.size(); i++)
@@ -31,13 +31,13 @@ public class Menu {
 		menu = menu + Integer.toString(i+1) + ") " + "Quit to previous";
 		return menu;
 	}
-	
+
 	public static String lib3Menu()
 	{
 		return "1) Update the details of the Library\n2) Add copies of Book to the Branch\n3) Quit to previous";
-		
+
 	}
-	
+
 	public static String lib3Option1BranchNameDialog(String branchId, String branchName)
 	{
 		return "You have chosen to update the Branch with Branch Id: " + branchId + " and Branch Name: " + branchName + ".\nEnter ‘quit’ at any prompt to cancel operation.\nPlease enter new branch name or enter N/A for no change:"; 
@@ -46,7 +46,7 @@ public class Menu {
 	{
 		return "Please enter new branch address or enter N/A for no change:";
 	}
-	
+
 	//TODO: Add the \n and the \t to all other menues according to the format in the document
 	public static String pickBookMenu(ArrayList<Book> allBooksAvailable, String message)
 	{
@@ -63,7 +63,7 @@ public class Menu {
 		return "Enter new number of copies: ";
 	}
 	//--------------------------------------------------------
-	
+
 	//borrower menues
 	public static String borro0ProvideCardNumberDialog()
 	{
@@ -92,7 +92,7 @@ public class Menu {
 		menu = menu + "\n"+Integer.toString(i+1)+") Quit to previous";
 		return menu;
 	}
-	
+
 	//-----------------------Administrator--------------------
 	//It is already implemented for publisher
 	public static String administratorMainMenu()
@@ -115,7 +115,7 @@ public class Menu {
 		for(i = 0; i < books.size(); i++){
 			menu = menu + "\n"+Integer.toString(i+1)+") "+books.get(i).getBookId() +", " + books.get(i).getTitle();
 		}
-		
+
 		menu = addQuitPart(menu, i);
 		return menu;
 	}
@@ -169,7 +169,7 @@ public class Menu {
 	{
 		return menu + "\n"+Integer.toString(i+1)+") Quit to previous";
 	}
-	
+
 	public static String insertBookMenu()
 	{
 		return "Insert a new book by typing the book's title, publisher's id separated by ',' with no spaces.";

@@ -26,9 +26,9 @@ public class Book {
 	public void setPubId(String pubId) {
 		this.pubId = pubId;
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 }

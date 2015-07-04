@@ -13,32 +13,32 @@ public class QueryManager {
 
 	//Borrower Instance variables-----------
 	private Borrower borrower;
-	
+
 	//Librarian instance variables-------
 	//TODO: Handle errors related to no database connection
 	//used to store a previous query to ensure that the order of the rows is the same
 	private ArrayList<ArrayList<String>> libraryBranchNameLocationId;//TODO: remember to delete this one
-	
+
 	private ArrayList<Book> books;
 	private String numberOfCopies;
-	
+
 	//Librarian and Borrower------------
 	private ArrayList<LibraryBranch> allBranches;
-	
+
 	//Administrator-----------
 	ArrayList<Author> authors;
 	ArrayList<Publisher> publishers;
 	ArrayList<Borrower> borrowers;
 	ArrayList<Loan> loans;
-	
-	
+
+
 	//General instance variables-------------
 	//TODO: get connection variables
 	private Connection conn;
 	//TODO: remember to use a PreparedStatement
 	private PreparedStatement pstmt;
 	private ResultSet rs;
-	
+
 	public QueryManager()
 	{
 		//TODO: set connection
@@ -50,7 +50,7 @@ public class QueryManager {
 		borrowers = new ArrayList<Borrower>();
 		loans = new ArrayList<Loan>();
 	}
-	
+
 	//--------------------------------Borrower Methods------------------------------------------
 	public ArrayList<Book> getBooksBorrowedByInBranch(Borrower b)
 	{
@@ -59,18 +59,18 @@ public class QueryManager {
 		columnsOfInterest.add("bookId");
 		columnsOfInterest.add("title");
 		columnsOfInterest.add("pubId");
-		
+
 		HashMap<String, ArrayList<String>> data =  executeSelectQuery(query, columnsOfInterest,new ArrayList<String>());
-		
+
 		ArrayList<String> bookIds = data.get("bookId");
 		ArrayList<String> titles = data.get("title");
 		ArrayList<String> pubIds = data.get("pubId");
-		
+
 		books =new ArrayList<Book>();
 		for(int i = 0; i < bookIds.size(); i++){
 			books.add(new Book(bookIds.get(i), titles.get(i), pubIds.get(i)));
 		}
-		
+
 		return books;
 	}
 	public Borrower getBorrowerWithCardNo(int cardNo)
@@ -80,9 +80,9 @@ public class QueryManager {
 		columnsOfInterest.add("name");
 		columnsOfInterest.add("address");
 		columnsOfInterest.add("phone");
-		
+
 		HashMap<String, ArrayList<String>> data =  executeSelectQuery("SELECT * FROM tbl_borrower WHERE cardNo = "+Integer.toString(cardNo), columnsOfInterest, new ArrayList<String>());
-		
+
 		borrower = new Borrower();
 		if(data.get("cardNo").size() == 0){
 			return null;
@@ -92,7 +92,7 @@ public class QueryManager {
 			return borrower;
 		}
 	}
-	
+
 	public ArrayList<Book> getAllBooksInBranch(LibraryBranch b, int minNumbCopies)
 	{
 		String query = "SELECT bookId, title, pubId, noOfCopies FROM ((tbl_book NATURAL JOIN tbl_book_copies ) NATURAL JOIN tbl_library_branch) WHERE BranchId = "+b.getBranchId();
@@ -101,39 +101,39 @@ public class QueryManager {
 		columnsOfInterest.add("title");
 		columnsOfInterest.add("pubId");
 		columnsOfInterest.add("noOfCopies");
-		
+
 		HashMap<String, ArrayList<String>> data =  executeSelectQuery(query, columnsOfInterest, new ArrayList<String>());
-		
+
 		books = new ArrayList<Book>();
 		ArrayList<String> bookIds = data.get("bookId");
 		ArrayList<String> titles = data.get("title");
 		ArrayList<String> pubIds = data.get("pubId");
 		ArrayList<String> numbOfCopies = data.get("noOfCopies");
-		
+
 		for(int i = 0; i< bookIds.size(); i++){
 			if(Integer.parseInt(numbOfCopies.get(i)) >= 1){
 				books.add(new Book(bookIds.get(i), titles.get(i), pubIds.get(i)));
 			}
 		}
-		
+
 		return books;
 	}
-	
+
 
 	//--------------------------------Librarian Methods-----------------------------------------
-	
+
 	//TODO: it is void but it should return a boolean in case of connection error
 	public void updateNumberOfCopies(Book book, LibraryBranch branch, String newNumberOfCopies)
 	{
-		
+
 		if(numberOfCopies.equals("N")){
 			executeUpdateQuery("INSERT INTO tbl_book_copies VALUES(" + book.getBookId()+", "+branch.getBranchId() + ", " +newNumberOfCopies+ ")",new ArrayList<String>());
-			
+
 		} else{
 			executeUpdateQuery("Update tbl_book_copies SET noOfCopies = " + newNumberOfCopies + " WHERE bookId = " + book.getBookId() + " AND branchId = " + branch.getBranchId(), new ArrayList<String>());
 		}
 	}
-	
+
 	//returns name in the array in position 0 and returns locations in the array in position 1
 	//TODO: it should return branches instead of arraylists!!!!!!!!!!!!!!!!!!!!!!!!
 	//TODO: remember to delete this function and use the new version getAllBranchesQuery()!!!!!!!!(fix LibraryManagerBrain Client code)
@@ -153,31 +153,31 @@ public class QueryManager {
 
 		return libraryBranchNameLocationId;
 	}
-	
+
 	//in order to get the data in the same order
 	public ArrayList<ArrayList<String>> getPrevAllBranchNamesAndLocationsQuery()
 	{
 		return libraryBranchNameLocationId;
 	}
-	
+
 	public ArrayList<Book> getPrevBooksQuery()
 	{
 		return books;
 	}
-	
+
 	public String getNumberOfCopiesOfBook(Book book, LibraryBranch branch)
 	{
 		ArrayList<String> columnsOfInterest = new ArrayList<String>();
 		//columnsOfInterest.add("bookId");
 		//columnsOfInterest.add("branchId");
 		columnsOfInterest.add("noOfCopies");
-		
+
 		ArrayList<String> queryVariables = new ArrayList<String>();
 		queryVariables.add(book.getBookId());
 		queryVariables.add(branch.getBranchId());
-		
+
 		HashMap<String, ArrayList<String>> data = executeSelectQuery("SELECT * FROM tbl_book_copies WHERE bookId = "+book.getBookId()+" AND branchId = " + branch.getBranchId(), columnsOfInterest, new ArrayList<String>());
-		
+
 		if(data.get("noOfCopies").isEmpty()){
 			numberOfCopies = "N";
 			return numberOfCopies;
@@ -191,17 +191,17 @@ public class QueryManager {
 	{
 		return numberOfCopies;
 	}
-	
+
 	public boolean doesLoanExist(Loan loan)
 	{
 		ArrayList<String> columnsOfInterest = new ArrayList<String>();
 		//columnsOfInterest.add("bookId");
 		//columnsOfInterest.add("branchId");
 		columnsOfInterest.add("bookId");
-		
-		
+
+
 		HashMap<String, ArrayList<String>> data = executeSelectQuery("SELECT * FROM tbl_book_loans WHERE bookId = "+loan.getBookId()+" AND branchId = " + loan.getBranchId() + " AND cardNo = " + loan.getCardNo(), columnsOfInterest, new ArrayList<String>());
-		
+
 		if(data.get("bookId").size() == 0){
 			return false;
 		}
@@ -226,19 +226,19 @@ public class QueryManager {
 		columnsOfInterest.add("title");
 		columnsOfInterest.add("pubId");
 		HashMap<String, ArrayList<String>> data = executeSelectQuery("SELECT * FROM tbl_book", columnsOfInterest, new ArrayList<String>());
-		
+
 		books = new ArrayList<Book>();
 		ArrayList<String> bookIds = data.get("bookId");
 		ArrayList<String> titles = data.get("title");
 		ArrayList<String> pubIds = data.get("pubId");
-		
+
 		for(int i = 0; i< bookIds.size(); i++){
 			books.add(new Book(bookIds.get(i), titles.get(i), pubIds.get(i)));
 		}
-		
+
 		return books;
 	}
-	
+
 	//TODO: it is void now but it should return a boolean in case there is a database connection error
 	public void updateBranchNameAndAddress(String name, String address, String id)
 	{		
@@ -259,15 +259,15 @@ public class QueryManager {
 		queryVariables.add(id);
 		executeUpdateQuery("UPDATE tbl_library_branch SET branchName = ? WHERE branchId = ?", queryVariables);
 	}
-	
+
 	//--------------------------------Generic Methods-----------------------------
-	
+
 	private void executeUpdateQuery(String updateQuery, ArrayList<String> queryVariables)
 	{
 		executeQuery(updateQuery, queryVariables);
 		closeConnection();
 	}
-	
+
 	//TODO: create a more general function that can handle any query not just selects that will use this one as a helper
 	//able to execute any select query and return the expected columns
 	//TODO: avoid reapiting the entire structure of a query every time I do one (latter get entire functionality first)
@@ -277,27 +277,27 @@ public class QueryManager {
 		for(String element: columnsOfInterest){
 			data.put(element, new ArrayList<String>());
 		}
-		
+
 		executeQuery(selectQuery, queryVariables);
-		
+
 		try {
 			while(rs.next())
 			{
 				for(String element : columnsOfInterest){
 					data.get(element).add(rs.getString(element));
 				}
-				
+
 			}
 		} catch (SQLException e) {
 			//System.out.println("Error reading the ResultSet");
 		}finally{
 			closeConnection();
 		}
-		
+
 		return data;
 	}
-	
-	
+
+
 	//executes the query
 	//TODO: Remember use a prepared statement instead of statement!!!!!!!!!!!!!!
 	private void executeQuery(String query, ArrayList<String> queryVariables)
@@ -305,24 +305,24 @@ public class QueryManager {
 		try {
 			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/library", "root", "");
 			pstmt = conn.prepareStatement(query);
-			
+
 			for(int i = 0; i < queryVariables.size(); i++){
 				pstmt.setString(i+1, queryVariables.get(i));
 			}
-			
+
 			if(query.charAt(0) == 'S' || query.charAt(0) == 's'){
 				rs = pstmt.executeQuery(query);
 			}else if(query.charAt(0) == 'U' || query.charAt(0) == 'u' || query.charAt(0) == 'I' || query.charAt(0) == 'i' || query.charAt(0) == 'd' || query.charAt(0) == 'D'){
 				pstmt.executeUpdate();
 			}
-			
-			
+
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 	//closes the connection
 	private void closeConnection()
 	{
@@ -335,7 +335,7 @@ public class QueryManager {
 			System.out.println("Error clossing DB connection");
 		}
 	}
-	
+
 	//Used by both Librarian and Borrower
 	public ArrayList<LibraryBranch> getAllBranchesQuery()
 	{
@@ -350,7 +350,7 @@ public class QueryManager {
 		ArrayList<String> branchNames = data.get("branchName");
 		ArrayList<String> branchAddress = data.get("branchAddress");
 		ArrayList<String> branchIds = data.get("branchId");
-		
+
 		for(int i = 0; i< branchIds.size(); i++){
 			allBranches.add(new LibraryBranch(branchNames.get(i), branchAddress.get(i), branchIds.get(i)));
 		}
@@ -362,14 +362,14 @@ public class QueryManager {
 	{
 		return allBranches;
 	}
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 	//---------------------------Administrator---------------------
-	
+
 	//----Adding Methods-----
 	public void addBook(Book b)
 	{
@@ -406,26 +406,26 @@ public class QueryManager {
 		//System.out.println(query);
 		executeUpdateQuery(query, new ArrayList<String>());
 	}
-	
+
 	//-------Delete Methods----------
 	public void deleteBook(Book b)
 	{
 		String query = "DELETE FROM tbl_book_authors WHERE bookId = " + b.getBookId();
 		//System.out.println(query);
 		executeUpdateQuery(query, new ArrayList<String>());
-		
+
 		query = "DELETE FROM tbl_book_copies WHERE bookId = " + b.getBookId();
 		//System.out.println(query);
 		executeUpdateQuery(query, new ArrayList<String>());
-		
+
 		query = "DELETE FROM tbl_book_loans WHERE bookId = " + b.getBookId();
 		//System.out.println(query);
 		executeUpdateQuery(query, new ArrayList<String>());
-		
+
 		query = "DELETE FROM tbl_book_genres WHERE bookId = " + b.getBookId();
 		//System.out.println(query);
 		executeUpdateQuery(query, new ArrayList<String>());
-		
+
 		query = "DELETE FROM tbl_book WHERE bookId = " + b.getBookId();
 		//System.out.println(query);
 		executeUpdateQuery(query, new ArrayList<String>());
@@ -452,18 +452,18 @@ public class QueryManager {
 		String query = "DELETE FROM tbl_publisher WHERE publisherId = " + p.getPublisherId();
 		//System.out.println(query);
 		executeUpdateQuery(query, new ArrayList<String>());
-		
+
 	}
 	public void deleteLibraryBranch(LibraryBranch lb)
 	{
 		String query = "DELETE FROM tbl_book_loans WHERE branchId = " + lb.getBranchId();
 		//System.out.println(query);
 		executeUpdateQuery(query, new ArrayList<String>());
-		
+
 		query = "DELETE FROM tbl_book_copies WHERE branchId = " + lb.getBranchId();
 		//System.out.println(query);
 		executeUpdateQuery(query, new ArrayList<String>());
-		
+
 		query = "DELETE FROM tbl_library_branch WHERE branchId = " + lb.getBranchId();
 		//System.out.println(query);
 		executeUpdateQuery(query, new ArrayList<String>());
@@ -473,7 +473,7 @@ public class QueryManager {
 		String query = "DELETE FROM tbl_book_loans WHERE cardNo = " + b.getCardNo();
 		//System.out.println(query);
 		executeUpdateQuery(query, new ArrayList<String>());
-		
+
 		query = "DELETE FROM tbl_borrower WHERE cardNo = " + b.getCardNo();
 		//System.out.println(query);
 		executeUpdateQuery(query, new ArrayList<String>());
@@ -574,7 +574,7 @@ public class QueryManager {
 		authors = new ArrayList<Author>();
 		ArrayList<String> authorIds = data.get("authorId");
 		ArrayList<String> authorNames = data.get("authorName");
-		
+
 		for(int i = 0; i< authorIds.size(); i++){
 			authors.add(new Author(authorIds.get(i), authorNames.get(i)));
 		}
@@ -600,7 +600,7 @@ public class QueryManager {
 		ArrayList<String> publisherNames = data.get("publisherName");
 		ArrayList<String> publisherAddresses = data.get("publisherAddress");
 		ArrayList<String> publisherPhones = data.get("publisherPhone");
-		
+
 		for(int i = 0; i< publisherIds.size(); i++){
 			publishers.add(new Publisher(publisherIds.get(i),publisherNames.get(i), publisherAddresses.get(i), publisherPhones.get(i)));
 		}
@@ -626,7 +626,7 @@ public class QueryManager {
 		ArrayList<String> names = data.get("name");
 		ArrayList<String> addresses = data.get("address");
 		ArrayList<String> phones = data.get("phone");
-		
+
 		for(int i = 0; i< cardNos.size(); i++){
 			borrowers.add(new Borrower(cardNos.get(i), names.get(i), addresses.get(i), phones.get(i)));
 		}
@@ -652,8 +652,8 @@ public class QueryManager {
 		ArrayList<BookAuthors> ba = new ArrayList<BookAuthors>();
 		ArrayList<String> bookIds = data.get("bookId");
 		ArrayList<String> authorIds = data.get("authorId");
-		
-		
+
+
 		for(int i = 0; i< bookIds.size(); i++){
 			ba.add(new BookAuthors(bookIds.get(i), authorIds.get(i)));
 		}
@@ -677,7 +677,7 @@ public class QueryManager {
 		ArrayList<String> genre_ids = data.get("genre_id");
 		ArrayList<String> genere_names = data.get("genre_name");
 		//System.out.println("---------------- " + genre_ids.size());
-		
+
 		for(int i = 0; i< genre_ids.size(); i++){
 			genres.add(new Genre(genere_names.get(i), genre_ids.get(i)));
 		}
@@ -694,18 +694,18 @@ public class QueryManager {
 		ArrayList<BookGenres> bookGenres = new ArrayList<BookGenres>();
 		ArrayList<String> genre_ids = data.get("genre_id");
 		ArrayList<String> bookIds = data.get("bookId");
-		
-		
+
+
 		for(int i = 0; i< genre_ids.size(); i++){
 			bookGenres.add(new BookGenres(bookIds.get(i), genre_ids.get(i)));
 		}
 
 		return bookGenres;
 	}
-	
-	
-//	public void deleteBookAndAuthor(Book b, Author a){
-//		deleteAuthor(a);
-//		deleteBook(b);
-//	}
+
+
+	//	public void deleteBookAndAuthor(Book b, Author a){
+	//		deleteAuthor(a);
+	//		deleteBook(b);
+	//	}
 }
