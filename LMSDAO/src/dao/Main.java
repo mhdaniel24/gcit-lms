@@ -15,12 +15,43 @@ import domain.Borrower;
 import domain.LibraryBranch;
 import service.ConnectionUtil;
 
+///////////////////////////////////////////////////////////////
+//			THIS CLASS IS JUST FOR TESTING					//
+/////////////////////////////////////////////////////////////
 public class Main {
 
 	public static void main(String[] args) {
 		printAllAuthors();
 		printAllBorrowers();
 		printAllBranches();
+		printAllPublishers();
+	}
+	
+	public static void printAllPublishers(){
+		//TODO: Implement the print all publisher
+		ConnectionUtil c = new ConnectionUtil();
+		Connection conn;
+		try {
+			conn = c.createConnection();
+			LibraryBranchDAO librarybranch = new LibraryBranchDAO(conn);
+			
+			List<LibraryBranch> libraryBorrowers = librarybranch.readAll();
+			for(LibraryBranch b: libraryBorrowers){
+				System.out.println("branch id = " + b.getBranchId() + " branchName = " + b.getBranchName() + " branchAddress = "+ 
+						b.getBranchAddress());
+				
+				HashMap<Book, Integer> map = b.getBookCopies();
+				
+				for(Entry<Book, Integer> entry : map.entrySet()){
+				    System.out.println("\tbookTitle = " + entry.getKey().getTitle() +" numb Copies = "+ entry.getValue());
+				}
+			}
+			System.out.println("-----------------------------------------------------------------------------------");
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public static void printAllBranches(){

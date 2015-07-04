@@ -12,13 +12,16 @@ import domain.Publisher;
 public class PublisherDAO extends BaseDAO{
 	public PublisherDAO(Connection conn) throws Exception {
 		super(conn);
-		// TODO Auto-generated constructor stub
 	}
 
-	//book is already adding a publisher
 	public void create(Publisher publisher) throws Exception {
 		save("insert into tbl_publisher (publisherName, publisherAddress, publisherPhone) values(?, ?, ?)",
 				new Object[] { publisher.getPublisherName(), publisher.getPublisherAddress(), publisher.getPublisherPhone() });
+		//TODO: add the books that belong to it
+		for(Book b: publisher.getBooks()){
+			save("update tbl_book set pubId = ? wher bookId = ?", 
+				new Object[]{publisher.getPublisherId(), b.getBookId()});
+		}
 	}
 
 	public void update(Publisher publisher) throws Exception {

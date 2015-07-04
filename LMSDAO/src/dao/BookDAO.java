@@ -26,7 +26,6 @@ public class BookDAO extends BaseDAO {
 
 	}
 
-	//TODO: should we use the database cascade (I assume yes)
 	public void delete(Book book) throws Exception {
 		save("delete from tbl_book where bookId = ?",
 				new Object[] { book.getBookId() });
@@ -45,6 +44,8 @@ public class BookDAO extends BaseDAO {
 			save("insert into tbl_book_genres (bookId, genre_id) values (?,?)", 
 				new Object[]{bookId, g.getGenreId()});
 		}
+		
+		//TODO: should I also create the publisher or add the publisher id in this method or that will happen in update?
 	}
 	
 	public List<Book> readAll() throws Exception{
