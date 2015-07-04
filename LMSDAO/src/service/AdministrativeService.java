@@ -7,169 +7,171 @@ import java.util.List;
 import dao.AuthorDAO;
 import dao.BookDAO;
 import dao.GenreDAO;
+import dao.LibraryBranchDAO;
 import dao.PublisherDAO;
 import domain.Author;
 import domain.Book;
 import domain.Genre;
+import domain.LibraryBranch;
 import domain.Publisher;
 
 public class AdministrativeService {
 
 	//-----------------------------Author---------------------------------------
-	public void createAuthor(Author author) throws Exception {
-		checkAuthorAnd(author, "create");
-	}
+//	public void createAuthor(Author author) throws Exception {
+//		checkAuthorAnd(author, "create");
+//	}
+//
+//	public void deleteAuthor(Author author) throws Exception{
+//		checkAuthorAnd(author, "delete");
+//	}
+//
+//	public void updateAuthor(Author author) throws Exception{
+//		checkAuthorAnd(author, "update");
+//	}
+//
+//	private void checkAuthorAnd(Author author, String action) throws Exception, SQLException {
+//		ConnectionUtil c = new ConnectionUtil();
+//		Connection conn = c.createConnection();
+//		try {
+//			if (author == null || author.getAuthorName() == null
+//					|| author.getAuthorName().length() == 0
+//					|| author.getAuthorName().length() > 45) {
+//				throw new Exception(
+//						"Author Name cannot be empty or more than 45 Chars");
+//			} else {
+//				AuthorDAO adao = new AuthorDAO(conn);
+//				if(action.equals("create")){
+//					adao.create(author);
+//				}else if(action.equals("update")){
+//					adao.update(author);
+//				}else if(action.equals("delete")){
+//					adao.delete(author);
+//				}
+//
+//				conn.commit();
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			conn.rollback();
+//		} finally {
+//			conn.close();
+//		}
+//	}
+//
+//	public List<Author> readAllAuthors() throws Exception {
+//		ConnectionUtil c = new ConnectionUtil();
+//		Connection conn = c.createConnection();
+//
+//		try {
+//			AuthorDAO adao = new AuthorDAO(conn);
+//			List<Author> allAuthors = adao.readAll();
+//			conn.commit();//not sure if needed
+//			return allAuthors;
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			conn.rollback();//not sure if needed
+//			return null;
+//		} finally {
+//			conn.close();
+//		}
+//	}
+//
+//	public Author readOneAuthor(int authorId) throws Exception {
+//		ConnectionUtil c = new ConnectionUtil();
+//		Connection conn = c.createConnection();
+//
+//		try {
+//			AuthorDAO adao = new AuthorDAO(conn);
+//			Author author = adao.readOne(authorId);
+//			conn.commit();//not sure if needed
+//			return author;
+//		} catch (Exception e) {//not a valid bookId
+//			e.printStackTrace();
+//			conn.rollback();//not sure if needed
+//			return null;
+//		} finally {
+//			conn.close();
+//		}
+//	}
 
-	public void deleteAuthor(Author author) throws Exception{
-		checkAuthorAnd(author, "delete");
-	}
 
-	public void updateAuthor(Author author) throws Exception{
-		checkAuthorAnd(author, "update");
-	}
-
-	private void checkAuthorAnd(Author author, String action) throws Exception, SQLException {
-		ConnectionUtil c = new ConnectionUtil();
-		Connection conn = c.createConnection();
-		try {
-			if (author == null || author.getAuthorName() == null
-					|| author.getAuthorName().length() == 0
-					|| author.getAuthorName().length() > 45) {
-				throw new Exception(
-						"Author Name cannot be empty or more than 45 Chars");
-			} else {
-				AuthorDAO adao = new AuthorDAO(conn);
-				if(action.equals("create")){
-					adao.create(author);
-				}else if(action.equals("update")){
-					adao.update(author);
-				}else if(action.equals("delete")){
-					adao.delete(author);
-				}
-
-				conn.commit();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			conn.rollback();
-		} finally {
-			conn.close();
-		}
-	}
-
-	public List<Author> readAllAuthors() throws Exception {
-		ConnectionUtil c = new ConnectionUtil();
-		Connection conn = c.createConnection();
-
-		try {
-			AuthorDAO adao = new AuthorDAO(conn);
-			List<Author> allAuthors = adao.readAll();
-			conn.commit();//not sure if needed
-			return allAuthors;
-		} catch (Exception e) {
-			e.printStackTrace();
-			conn.rollback();//not sure if needed
-			return null;
-		} finally {
-			conn.close();
-		}
-	}
-
-	public Author readOneAuthor(int authorId) throws Exception {
-		ConnectionUtil c = new ConnectionUtil();
-		Connection conn = c.createConnection();
-
-		try {
-			AuthorDAO adao = new AuthorDAO(conn);
-			Author author = adao.readOne(authorId);
-			conn.commit();//not sure if needed
-			return author;
-		} catch (Exception e) {//not a valid bookId
-			e.printStackTrace();
-			conn.rollback();//not sure if needed
-			return null;
-		} finally {
-			conn.close();
-		}
-	}
-
-
-	//--------------------------------------Genre(although it is never mentioned in the requirements it is needed for a book)------------------------------------//
-	public void createGenre(Genre genre) throws Exception {
-		checkGenreAnd(genre, "create");
-	}
-
-	public void updateGenre(Genre genre) throws Exception {
-		checkGenreAnd(genre, "update");
-	}
-
-	public void deleteGenre(Genre genre) throws Exception {
-		checkGenreAnd(genre, "delete");
-	}
-
-	private void checkGenreAnd(Genre genre, String action) throws Exception, SQLException {
-		ConnectionUtil c = new ConnectionUtil();
-		Connection conn = c.createConnection();
-		try {
-			if (genre == null || genre.getGenreName() == null
-					|| genre.getGenreName().length() == 0
-					|| genre.getGenreName().length() > 45) {
-				throw new Exception(
-						"Genre Name cannot be empty or more than 45 Chars");
-			} else {
-				GenreDAO gdao = new GenreDAO(conn);
-				if(action.equals("create")){
-					gdao.create(genre);
-				}else if(action.equals("update")){
-					gdao.update(genre);
-				}else if(action.equals("delete")){
-					gdao.delete(genre);
-				}
-				conn.commit();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			conn.rollback();
-		} finally {
-			conn.close();
-		}
-	}
-
-	public List<Genre> readAllGenres() throws Exception {
-		ConnectionUtil c = new ConnectionUtil();
-		Connection conn = c.createConnection();
-
-		try {
-			GenreDAO gdao = new GenreDAO(conn);
-			List<Genre> allGenres = gdao.readAll();
-			conn.commit();//not sure if needed
-			return allGenres;
-		} catch (Exception e) {
-			e.printStackTrace();
-			conn.rollback();//not sure if needed
-			return null;
-		} finally {
-			conn.close();
-		}
-	}
-
-	public Genre readOneGenre(int genreId) throws Exception {
-		ConnectionUtil c = new ConnectionUtil();
-		Connection conn = c.createConnection();
-
-		try {
-			GenreDAO gdao = new GenreDAO(conn);
-			Genre genre = gdao.readOne(genreId);
-			conn.commit();//not sure if needed
-			return genre;
-		} catch (Exception e) {//not a valid bookId
-			e.printStackTrace();
-			conn.rollback();//not sure if needed
-			return null;
-		} finally {
-			conn.close();
-		}
-	}
+	//--------------------------------------Genre------------------------------------//
+//	public void createGenre(Genre genre) throws Exception {
+//		checkGenreAnd(genre, "create");
+//	}
+//
+//	public void updateGenre(Genre genre) throws Exception {
+//		checkGenreAnd(genre, "update");
+//	}
+//
+//	public void deleteGenre(Genre genre) throws Exception {
+//		checkGenreAnd(genre, "delete");
+//	}
+//
+//	private void checkGenreAnd(Genre genre, String action) throws Exception, SQLException {
+//		ConnectionUtil c = new ConnectionUtil();
+//		Connection conn = c.createConnection();
+//		try {
+//			if (genre == null || genre.getGenreName() == null
+//					|| genre.getGenreName().length() == 0
+//					|| genre.getGenreName().length() > 45) {
+//				throw new Exception(
+//						"Genre Name cannot be empty or more than 45 Chars");
+//			} else {
+//				GenreDAO gdao = new GenreDAO(conn);
+//				if(action.equals("create")){
+//					gdao.create(genre);
+//				}else if(action.equals("update")){
+//					gdao.update(genre);
+//				}else if(action.equals("delete")){
+//					gdao.delete(genre);
+//				}
+//				conn.commit();
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			conn.rollback();
+//		} finally {
+//			conn.close();
+//		}
+//	}
+//
+//	public List<Genre> readAllGenres() throws Exception {
+//		ConnectionUtil c = new ConnectionUtil();
+//		Connection conn = c.createConnection();
+//
+//		try {
+//			GenreDAO gdao = new GenreDAO(conn);
+//			List<Genre> allGenres = gdao.readAll();
+//			conn.commit();//not sure if needed
+//			return allGenres;
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			conn.rollback();//not sure if needed
+//			return null;
+//		} finally {
+//			conn.close();
+//		}
+//	}
+//
+//	public Genre readOneGenre(int genreId) throws Exception {
+//		ConnectionUtil c = new ConnectionUtil();
+//		Connection conn = c.createConnection();
+//
+//		try {
+//			GenreDAO gdao = new GenreDAO(conn);
+//			Genre genre = gdao.readOne(genreId);
+//			conn.commit();//not sure if needed
+//			return genre;
+//		} catch (Exception e) {//not a valid bookId
+//			e.printStackTrace();
+//			conn.rollback();//not sure if needed
+//			return null;
+//		} finally {
+//			conn.close();
+//		}
+//	}
 
 
 	//---------------------------------------Book----------------------------------------
@@ -302,6 +304,126 @@ public class AdministrativeService {
 		}
 	}
 
+	public List<Publisher> readAllPublishers() throws Exception {
+		ConnectionUtil c = new ConnectionUtil();
+		Connection conn = c.createConnection();
 
+		try {
+			PublisherDAO pdao = new PublisherDAO(conn);
+			List<Publisher> allPublishers = pdao.readAll();
+			conn.commit();//not sure if needed
+			return allPublishers;
+		} catch (Exception e) {
+			e.printStackTrace();
+			conn.rollback();//not sure if needed
+			return null;
+		} finally {
+			conn.close();
+		}
+	}
+
+	public Publisher readOnePublisher(int publisherId) throws Exception {
+		ConnectionUtil c = new ConnectionUtil();
+		Connection conn = c.createConnection();
+
+		try {
+			PublisherDAO pdao = new PublisherDAO(conn);
+			Publisher publisher = pdao.readOne(publisherId);
+			conn.commit();//not sure if needed
+			return publisher;
+		} catch (Exception e) {//not a valid bookId
+			e.printStackTrace();
+			conn.rollback();//not sure if needed
+			return null;
+		} finally {
+			conn.close();
+		}
+	}
+	
+	//-------------------------------LibraryBranch----------------------------------
+	public void createLibraryBranch(LibraryBranch libraryBranch) throws Exception {
+		checkLibraryBranchAnd(libraryBranch, "create");
+	}
+
+	public void updateLibraryBranch(LibraryBranch libraryBranch) throws Exception {
+		checkLibraryBranchAnd(libraryBranch, "update");
+	}
+
+	public void deleteLibraryBranch(LibraryBranch libraryBranch) throws Exception {
+		checkLibraryBranchAnd(libraryBranch, "delete");
+	}
+	
+	
+	private void checkLibraryBranchAnd(LibraryBranch librryBranch, String action) throws Exception,
+	SQLException {
+		ConnectionUtil c = new ConnectionUtil();
+		Connection conn = c.createConnection();
+		try {
+			if (librryBranch == null || librryBranch.getBranchName() == null
+					|| librryBranch.getBranchName().length() == 0
+					|| librryBranch.getBranchName().length() > 45) {
+				throw new Exception(
+						"Library branch name cannot be empty or more than 45 Chars");
+			}else if(librryBranch == null || librryBranch.getBranchAddress() == null
+					|| librryBranch.getBranchAddress().length() == 0
+					|| librryBranch.getBranchAddress().length() > 45){
+				throw new Exception(
+						"Library Branch address cannot be empty or more than 45 Chars");
+			}else {
+				LibraryBranchDAO lbdao = new LibraryBranchDAO(conn);
+				if(action.equals("create")){
+					lbdao.create(librryBranch);
+				}else if(action.equals("update")){
+					lbdao.update(librryBranch);
+				}else if(action.equals("delete")){
+					lbdao.delete(librryBranch);
+				}
+				conn.commit();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			conn.rollback();
+		} finally {
+			conn.close();
+		}
+	}
+	
+	public List<LibraryBranch> readAllLibraryBranchs() throws Exception {
+		ConnectionUtil c = new ConnectionUtil();
+		Connection conn = c.createConnection();
+
+		try {
+			LibraryBranchDAO lbdao = new LibraryBranchDAO(conn);
+			List<LibraryBranch> allLibraryBranches = lbdao.readAll();
+			conn.commit();//not sure if needed
+			return allLibraryBranches;
+		} catch (Exception e) {
+			e.printStackTrace();
+			conn.rollback();//not sure if needed
+			return null;
+		} finally {
+			conn.close();
+		}
+	}
+
+	public LibraryBranch readOneLibraryBranch(int branchId) throws Exception {
+		ConnectionUtil c = new ConnectionUtil();
+		Connection conn = c.createConnection();
+
+		try {
+			LibraryBranchDAO lbdao = new LibraryBranchDAO(conn);
+			LibraryBranch libraryBranch = lbdao.readOne(branchId);
+			conn.commit();//not sure if needed
+			return libraryBranch;
+		} catch (Exception e) {//not a valid bookId
+			e.printStackTrace();
+			conn.rollback();//not sure if needed
+			return null;
+		} finally {
+			conn.close();
+		}
+	}
+	
+	//------------------------------------------------Borrower------------------------------------------------
 
 }

@@ -26,14 +26,14 @@ public class LibraryBranchDAO extends BaseDAO{
 		save("update tbl_library_branch set branchName = ?, branchAddress = ? where branchId = ?",
 				new Object[] { libraryBranch.getBranchName(), libraryBranch.getBranchAddress(), libraryBranch.getBranchId() });
 		
-		for(Entry<Book, Integer> entry : libraryBranch.getBookCopies().entrySet()){
-			BookCopiesDAO bcdao = new BookCopiesDAO(getConnection());
-			BookCopies bcs = new BookCopies();
-			bcs.setBookId(entry.getKey().getBookId());
-			bcs.setBranchId(libraryBranch.getBranchId());
-			bcs.setNoOfCopies(entry.getValue());
-			bcdao.update(bcs);
-		}
+//		for(Entry<Book, Integer> entry : libraryBranch.getBookCopies().entrySet()){
+//			BookCopiesDAO bcdao = new BookCopiesDAO(getConnection());
+//			BookCopies bcs = new BookCopies();
+//			bcs.setBookId(entry.getKey().getBookId());
+//			bcs.setBranchId(libraryBranch.getBranchId());
+//			bcs.setNoOfCopies(entry.getValue());
+//			bcdao.update(bcs);
+//		}
 	}
 
 	public void delete(LibraryBranch libraryBranch) throws Exception {
