@@ -37,22 +37,32 @@ public class AdministrativeService {
 	private void checkAuthorAnd(Author author, String action) throws Exception, SQLException {
 		ConnectionUtil c = new ConnectionUtil();
 		Connection conn = c.createConnection();
+		AuthorDAO adao = new AuthorDAO(conn);
+		
 		try {
-			if (author == null || author.getAuthorName() == null
+			if(action.equals("delete")){
+				if(author == null){
+					throw new Exception("The Author parameter cant be null");
+				}else{
+					adao.delete(author);
+					conn.commit();
+				}
+			}else if (author == null || author.getAuthorName() == null
 					|| author.getAuthorName().length() == 0
 					|| author.getAuthorName().length() > 45) {
 				throw new Exception(
 						"Author Name cannot be empty or more than 45 Chars");
 			} else {
-				AuthorDAO adao = new AuthorDAO(conn);
 				if(action.equals("create")){
 					adao.create(author);
 				}else if(action.equals("update")){
-					adao.update(author);
-				}else if(action.equals("delete")){
-					adao.delete(author);
+					if(adao.readOne(author.getAuthorId()) == null){
+						throw new Exception(
+								"The author you are trying to update does not exist");
+					}else{
+						adao.update(author);
+					}
 				}
-
 				conn.commit();
 			}
 		} catch (Exception e) {
@@ -100,7 +110,7 @@ public class AdministrativeService {
 	}
 
 
-	//--------------------------------------Genre------------------------------------//
+	//--------------------------------------Genre(not needed as a service)------------------------------------//
 	public void createGenre(Genre genre) throws Exception {
 		checkGenreAnd(genre, "create");
 	}
@@ -116,20 +126,32 @@ public class AdministrativeService {
 	private void checkGenreAnd(Genre genre, String action) throws Exception, SQLException {
 		ConnectionUtil c = new ConnectionUtil();
 		Connection conn = c.createConnection();
+		GenreDAO gdao = new GenreDAO(conn);
+		
 		try {
-			if (genre == null || genre.getGenreName() == null
+			if(action.equals("delete")){
+				if(genre == null){
+					throw new Exception("The Genre parameter can't be null");
+				}else{
+					gdao.delete(genre);
+					conn.commit();
+				}
+				
+			}else if (genre == null || genre.getGenreName() == null
 					|| genre.getGenreName().length() == 0
 					|| genre.getGenreName().length() > 45) {
 				throw new Exception(
 						"Genre Name cannot be empty or more than 45 Chars");
 			} else {
-				GenreDAO gdao = new GenreDAO(conn);
 				if(action.equals("create")){
 					gdao.create(genre);
 				}else if(action.equals("update")){
-					gdao.update(genre);
-				}else if(action.equals("delete")){
-					gdao.delete(genre);
+					if(gdao.readOne(genre.getGenreId()) == null){
+						throw new Exception(
+								"The genre you are trying to update is null");
+					}else{
+						gdao.update(genre);
+					}
 				}
 				conn.commit();
 			}
@@ -194,20 +216,30 @@ public class AdministrativeService {
 	private void checkBookAnd(Book book, String action) throws Exception, SQLException {
 		ConnectionUtil c = new ConnectionUtil();
 		Connection conn = c.createConnection();
+		BookDAO bdao = new BookDAO(conn);
+		
 		try {
-			if (book == null || book.getTitle() == null
+			if(action.equals("delete")){
+				if(book == null){
+					throw new Exception("The book parameter can't be null");
+				}else{
+					bdao.delete(book);
+					conn.commit();
+				}
+			}else if (book == null || book.getTitle() == null
 					|| book.getTitle().length() == 0
 					|| book.getTitle().length() > 45) {
 				throw new Exception(
 						"Book title cannot be empty or more than 45 Chars");
 			} else {
-				BookDAO bdao = new BookDAO(conn);
 				if(action.equals("create")){
 					bdao.create(book);
 				}else if(action.equals("update")){
-					bdao.update(book);
-				}else if(action.equals("delete")){
-					bdao.delete(book);
+					if(bdao.readOne(book.getBookId()) == null){
+						throw new Exception("The book you are trying to update does not exist");
+					}else{
+						bdao.update(book);
+					}
 				}
 				conn.commit();
 			}
@@ -272,8 +304,18 @@ public class AdministrativeService {
 	SQLException {
 		ConnectionUtil c = new ConnectionUtil();
 		Connection conn = c.createConnection();
+		PublisherDAO pdao = new PublisherDAO(conn);
+		
 		try {
-			if (publisher == null || publisher.getPublisherName() == null
+			if(action.equals("delete")){
+				if(publisher == null){
+					throw new Exception("The Publisher parameter can't be null");
+				}else{
+					pdao.delete(publisher);
+					conn.commit();
+				}
+				
+			}else if (publisher == null || publisher.getPublisherName() == null
 					|| publisher.getPublisherName().length() == 0
 					|| publisher.getPublisherName().length() > 45) {
 				throw new Exception(
@@ -290,13 +332,14 @@ public class AdministrativeService {
 						"Publisher phone cannot be empty or more than 45 Chars");
 
 			}else {
-				PublisherDAO pdao = new PublisherDAO(conn);
 				if(action.equals("create")){
 					pdao.create(publisher);
 				}else if(action.equals("update")){
-					pdao.update(publisher);
-				}else if(action.equals("delete")){
-					pdao.delete(publisher);
+					if(pdao.readOne(publisher.getPublisherId()) == null){
+						throw new Exception("The publisher you are trying to update does not exist");
+					}else{
+						pdao.update(publisher);
+					}	
 				}
 				conn.commit();
 			}
@@ -343,7 +386,7 @@ public class AdministrativeService {
 			conn.close();
 		}
 	}
-	
+
 	//-------------------------------LibraryBranch----------------------------------
 	public void createLibraryBranch(LibraryBranch libraryBranch) throws Exception {
 		checkLibraryBranchAnd(libraryBranch, "create");
@@ -356,37 +399,44 @@ public class AdministrativeService {
 	public void deleteLibraryBranch(LibraryBranch libraryBranch) throws Exception {
 		checkLibraryBranchAnd(libraryBranch, "delete");
 	}
-	
-	
-	private void checkLibraryBranchAnd(LibraryBranch librryBranch, String action) throws Exception,
+
+
+	private void checkLibraryBranchAnd(LibraryBranch libraryBranch, String action) throws Exception,
 	SQLException {
 		ConnectionUtil c = new ConnectionUtil();
 		Connection conn = c.createConnection();
 		LibraryBranchDAO lbdao = new LibraryBranchDAO(conn);
-		
-		
-		
+
+
 		try {
 			if(action.equals("delete")){
-				lbdao.delete(librryBranch);
-			}
-			
-			if (librryBranch == null || librryBranch.getBranchName() == null
-					|| librryBranch.getBranchName().length() == 0
-					|| librryBranch.getBranchName().length() > 45) {
+				if(libraryBranch == null){
+					throw new Exception("The LibraryBranch parameter can't be null");
+				}else{
+					lbdao.delete(libraryBranch);
+					conn.commit();
+				}
+				
+			}else if (libraryBranch == null || libraryBranch.getBranchName() == null
+					|| libraryBranch.getBranchName().length() == 0
+					|| libraryBranch.getBranchName().length() > 45) {
 				throw new Exception(
 						"Library branch name cannot be empty or more than 45 Chars");
-			}else if(librryBranch == null || librryBranch.getBranchAddress() == null
-					|| librryBranch.getBranchAddress().length() == 0
-					|| librryBranch.getBranchAddress().length() > 45){
+			}else if(libraryBranch == null || libraryBranch.getBranchAddress() == null
+					|| libraryBranch.getBranchAddress().length() == 0
+					|| libraryBranch.getBranchAddress().length() > 45){
 				throw new Exception(
 						"Library Branch address cannot be empty or more than 45 Chars");
 			}else {
-				
+
 				if(action.equals("create")){
-					lbdao.create(librryBranch);
+					lbdao.create(libraryBranch);
 				}else if(action.equals("update")){
-					lbdao.update(librryBranch);
+					if(lbdao.readOne(libraryBranch.getBranchId()) == null){
+						throw new Exception("The library branch you are trying to update does not exist");
+					}else{
+						lbdao.update(libraryBranch);
+					}
 				}
 				conn.commit();
 			}
@@ -397,43 +447,43 @@ public class AdministrativeService {
 			conn.close();
 		}
 	}
+
+		public List<LibraryBranch> readAllLibraryBranchs() throws Exception {
+			ConnectionUtil c = new ConnectionUtil();
+			Connection conn = c.createConnection();
 	
-//	public List<LibraryBranch> readAllLibraryBranchs() throws Exception {
-//		ConnectionUtil c = new ConnectionUtil();
-//		Connection conn = c.createConnection();
-//
-//		try {
-//			LibraryBranchDAO lbdao = new LibraryBranchDAO(conn);
-//			List<LibraryBranch> allLibraryBranches = lbdao.readAll();
-//			conn.commit();//not sure if needed
-//			return allLibraryBranches;
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			conn.rollback();//not sure if needed
-//			return null;
-//		} finally {
-//			conn.close();
-//		}
-//	}
-//
-//	public LibraryBranch readOneLibraryBranch(int branchId) throws Exception {
-//		ConnectionUtil c = new ConnectionUtil();
-//		Connection conn = c.createConnection();
-//
-//		try {
-//			LibraryBranchDAO lbdao = new LibraryBranchDAO(conn);
-//			LibraryBranch libraryBranch = lbdao.readOne(branchId);
-//			conn.commit();//not sure if needed
-//			return libraryBranch;
-//		} catch (Exception e) {//not a valid bookId
-//			e.printStackTrace();
-//			conn.rollback();//not sure if needed
-//			return null;
-//		} finally {
-//			conn.close();
-//		}
-//	}
+			try {
+				LibraryBranchDAO lbdao = new LibraryBranchDAO(conn);
+				List<LibraryBranch> allLibraryBranches = lbdao.readAll();
+				conn.commit();//not sure if needed
+				return allLibraryBranches;
+			} catch (Exception e) {
+				e.printStackTrace();
+				conn.rollback();//not sure if needed
+				return null;
+			} finally {
+				conn.close();
+			}
+		}
 	
+		public LibraryBranch readOneLibraryBranch(int branchId) throws Exception {
+			ConnectionUtil c = new ConnectionUtil();
+			Connection conn = c.createConnection();
+	
+			try {
+				LibraryBranchDAO lbdao = new LibraryBranchDAO(conn);
+				LibraryBranch libraryBranch = lbdao.readOne(branchId);
+				conn.commit();//not sure if needed
+				return libraryBranch;
+			} catch (Exception e) {//not a valid bookId
+				e.printStackTrace();
+				conn.rollback();//not sure if needed
+				return null;
+			} finally {
+				conn.close();
+			}
+		}
+
 	//------------------------------------------------Borrower------------------------------------------------
 
 	public void createBorrower(Borrower borrower) throws Exception {
@@ -446,19 +496,27 @@ public class AdministrativeService {
 		checkBorrowerAnd(borrower, "delete");
 	}
 
-			
+
 	private void checkBorrowerAnd(Borrower borrower, String action) throws Exception,
 	SQLException {
 		ConnectionUtil c = new ConnectionUtil();
 		Connection conn = c.createConnection();
 		BorrowerDAO bdao = new BorrowerDAO(conn);
-		
-		 if(action.equals("delete")){
-				bdao.delete(borrower);
-		 }
-		
+
+		if(action.equals("delete")){
+			bdao.delete(borrower);
+		}
+
 		try {
-			if (borrower == null || borrower.getName() == null
+			if(action.equals("delete")){
+				if(borrower == null){
+					throw new Exception("The Borrower parameter can't be null");
+				}else{
+					bdao.delete(borrower);
+					conn.commit();
+				}
+
+			}else if (borrower == null || borrower.getName() == null
 					|| borrower.getName().length() == 0
 					|| borrower.getName().length() > 45) {
 				throw new Exception(
@@ -477,7 +535,11 @@ public class AdministrativeService {
 				if(action.equals("create")){
 					bdao.create(borrower);
 				}else if(action.equals("update")){
-					bdao.update(borrower);
+					if(bdao.readOne(borrower.getCardNo()) == null){
+						throw new Exception("The borrower you are trying to update does not exist");
+					}else{
+						bdao.update(borrower);
+					}
 				}
 				conn.commit();
 			}
@@ -488,7 +550,7 @@ public class AdministrativeService {
 			conn.close();
 		}
 	}
-	
+
 	public List<Borrower> readAllBorrower() throws Exception {
 		ConnectionUtil c = new ConnectionUtil();
 		Connection conn = c.createConnection();
@@ -524,7 +586,7 @@ public class AdministrativeService {
 			conn.close();
 		}
 	}
-//-------------------------------------------Book Loans----------------------------------	
+	//-------------------------------------------Book Loans----------------------------------	
 	public void createBookLoan(BookLoan bookLoan) throws Exception {
 		checkBookLoanAnd(bookLoan, "create");
 	}
@@ -535,29 +597,39 @@ public class AdministrativeService {
 		checkBookLoanAnd(bookLoan, "delete");
 	}
 
-			
+
 	private void checkBookLoanAnd(BookLoan bookLoan, String action) throws Exception,
 	SQLException {
 		ConnectionUtil c = new ConnectionUtil();
 		Connection conn = c.createConnection();
-		BookLoanDAO bdao = new BookLoanDAO(conn);
-		
-		if(action.equals("delete")){
-			bdao.delete(bookLoan);
-		}
-		
+		BookLoanDAO bldao = new BookLoanDAO(conn);
+
+
+
 		try {
-			if (bookLoan == null || bookLoan.getDateOut() == null
+			if(action.equals("delete")){
+				if(bookLoan == null){
+					throw new Exception("The BookLoan parameter cant be null");
+				}else{
+					bldao.delete(bookLoan);
+					conn.commit();
+				}
+			}else if (bookLoan == null || bookLoan.getDateOut() == null
 					|| bookLoan.getDueDate() == null
 					|| bookLoan.getDateOut().after(bookLoan.getDueDate())) {
 				throw new Exception(
 						"The due date of the book most happen after the date out of the book");
 			}else {
-				
+
 				if(action.equals("create")){
-					bdao.create(bookLoan);
+					bldao.create(bookLoan);
 				}else if(action.equals("update")){
-					bdao.update(bookLoan);
+					if(bldao.readOne(bookLoan.getBook().getBookId(), bookLoan.getBorrower().getCardNo(), bookLoan.getLibraryBranch().getBranchId()) == null){
+						throw new Exception("The BookLoan you are trying to update does not exist");
+					}else{
+						bldao.update(bookLoan);
+					}
+						
 				}
 				conn.commit();
 			}
@@ -568,7 +640,7 @@ public class AdministrativeService {
 			conn.close();
 		}
 	}
-	
+
 	public List<BookLoan> readAllBookLoans() throws Exception {
 		ConnectionUtil c = new ConnectionUtil();
 		Connection conn = c.createConnection();
