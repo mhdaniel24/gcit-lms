@@ -32,7 +32,14 @@ public class LibraryBranchDAO extends BaseDAO{
 //			bcs.setBookId(entry.getKey().getBookId());
 //			bcs.setBranchId(libraryBranch.getBranchId());
 //			bcs.setNoOfCopies(entry.getValue());
-//			bcdao.update(bcs);
+//			
+//			BookCopies check = bcdao.readOne(bcs.getBookId(), bcs.getBranchId());
+//			if(check == null){
+//				bcdao.create(bcs);
+//			}else{
+//				bcdao.update(bcs);
+//			}
+//			
 //		}
 	}
 
