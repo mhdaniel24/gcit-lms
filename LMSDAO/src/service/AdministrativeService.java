@@ -587,15 +587,15 @@ public class AdministrativeService {
 		}
 	}
 	//-------------------------------------------Book Loans----------------------------------	
-	public void createBookLoan(BookLoan bookLoan) throws Exception {
-		checkBookLoanAnd(bookLoan, "create");
-	}
+//	public void createBookLoan(BookLoan bookLoan) throws Exception {
+//		checkBookLoanAnd(bookLoan, "create");
+//	}
 	public void updateBookLoan(BookLoan bookLoan) throws Exception {
 		checkBookLoanAnd(bookLoan, "update");
 	}
-	public void deleteBookLoan(BookLoan bookLoan) throws Exception {
-		checkBookLoanAnd(bookLoan, "delete");
-	}
+//	public void deleteBookLoan(BookLoan bookLoan) throws Exception {
+//		checkBookLoanAnd(bookLoan, "delete");
+//	}
 
 
 	private void checkBookLoanAnd(BookLoan bookLoan, String action) throws Exception,
