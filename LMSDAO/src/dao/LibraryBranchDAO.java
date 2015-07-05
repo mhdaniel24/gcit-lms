@@ -52,14 +52,14 @@ public class LibraryBranchDAO extends BaseDAO{
 		int branchId = saveWithID("insert into tbl_library_branch (branchName, branchAddress) values(?,?)",
 				new Object[] { libraryBranch.getBranchName(), libraryBranch.getBranchAddress()});
 		
-		for(Entry<Book, Integer> entry : libraryBranch.getBookCopies().entrySet()){
-			BookCopiesDAO bcdao = new BookCopiesDAO(getConnection());
-			BookCopies bcs = new BookCopies();
-			bcs.setBookId(entry.getKey().getBookId());
-			bcs.setBranchId(branchId);
-			bcs.setNoOfCopies(entry.getValue());
-			bcdao.create(bcs);
-		}
+//		for(Entry<Book, Integer> entry : libraryBranch.getBookCopies().entrySet()){
+//			BookCopiesDAO bcdao = new BookCopiesDAO(getConnection());
+//			BookCopies bcs = new BookCopies();
+//			bcs.setBookId(entry.getKey().getBookId());
+//			bcs.setBranchId(branchId);
+//			bcs.setNoOfCopies(entry.getValue());
+//			bcdao.create(bcs);
+//		}
 	}
 	
 	public List<LibraryBranch> readAll() throws Exception{
