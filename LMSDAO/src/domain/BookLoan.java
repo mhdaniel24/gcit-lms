@@ -1,11 +1,11 @@
 package domain;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 public class BookLoan {
-	Date dateOut;
-	Date dateIn;
-	Date dueDate;
+	Timestamp dateOut;
+	Timestamp dateIn;
+	Timestamp dueDate;
 	
 	private Book book;
 	private LibraryBranch libraryBranch;
@@ -13,37 +13,37 @@ public class BookLoan {
 	/**
 	 * @return the dateOut
 	 */
-	public Date getDateOut() {
+	public Timestamp getDateOut() {
 		return dateOut;
 	}
 	/**
 	 * @param dateOut the dateOut to set
 	 */
-	public void setDateOut(Date dateOut) {
+	public void setDateOut(Timestamp dateOut) {
 		this.dateOut = dateOut;
 	}
 	/**
 	 * @return the dateIn
 	 */
-	public Date getDateIn() {
+	public Timestamp getDateIn() {
 		return dateIn;
 	}
 	/**
 	 * @param dateIn the dateIn to set
 	 */
-	public void setDateIn(Date dateIn) {
+	public void setDateIn(Timestamp dateIn) {
 		this.dateIn = dateIn;
 	}
 	/**
 	 * @return the dueDate
 	 */
-	public Date getDueDate() {
+	public Timestamp getDueDate() {
 		return dueDate;
 	}
 	/**
 	 * @param dueDate the dueDate to set
 	 */
-	public void setDueDate(Date dueDate) {
+	public void setDueDate(Timestamp dueDate) {
 		this.dueDate = dueDate;
 	}
 	/**

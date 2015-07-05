@@ -2,6 +2,7 @@ package service;
 
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map.Entry;
@@ -78,10 +79,10 @@ public class BorrowerService {
 				bookLoan.setBook(book);
 				bookLoan.setBorrower(borrower);
 				bookLoan.setLibraryBranch(libBranch);
-				bookLoan.setDateOut(new Date(System.currentTimeMillis()));
+				bookLoan.setDateOut(new Timestamp(System.currentTimeMillis()));
 				Calendar cal = Calendar.getInstance();
-				cal.add(Calendar.DAY_OF_YEAR, +7);
-				bookLoan.setDueDate(new Date(cal.getTimeInMillis()));
+				cal.add(Calendar.DAY_OF_YEAR, 7);
+				bookLoan.setDueDate(new Timestamp(cal.getTimeInMillis()));
 				loandao.create(bookLoan);
 				
 

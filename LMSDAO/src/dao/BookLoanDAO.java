@@ -39,7 +39,7 @@ public class BookLoanDAO extends BaseDAO{
 	}
 
 	public List<BookLoan> readAll() throws Exception{
-		return (List<BookLoan>) read("select * from tbl_book_loan", null);
+		return (List<BookLoan>) read("select * from tbl_book_loans", null);
 		
 	}
 
@@ -61,9 +61,9 @@ public class BookLoanDAO extends BaseDAO{
 		
 		while(rs.next()){
 			BookLoan bl = new BookLoan();
-			bl.setDateIn(rs.getDate("dateIn"));
-			bl.setDateOut(rs.getDate("dateOut"));
-			bl.setDueDate(rs.getDate("dueDate"));
+			bl.setDateIn(rs.getTimestamp("dateIn"));
+			bl.setDateOut(rs.getTimestamp("dateOut"));
+			bl.setDueDate(rs.getTimestamp("dueDate"));
 			
 			bl.setBook(bookdao.readOne(rs.getInt("bookId")));
 			bl.setBorrower(borrowerdao.readOne(rs.getInt("cardNo")));
@@ -80,21 +80,21 @@ public class BookLoanDAO extends BaseDAO{
 		
 		while(rs.next()){
 			BookLoan bl = new BookLoan();
-			bl.setDateIn(rs.getDate("dateIn"));
-			bl.setDateOut(rs.getDate("dateOut"));
-			bl.setDueDate(rs.getDate("dueDate"));
+			bl.setDateIn(rs.getTimestamp("dateIn"));
+			bl.setDateOut(rs.getTimestamp("dateOut"));
+			bl.setDueDate(rs.getTimestamp("dueDate"));
 			
-//			Book b = new Book();
-//			b.setBookId(rs.getInt("bookId"));
-//			bl.setBook(b);
-//			
-//			LibraryBranch lb = new LibraryBranch();
-//			lb.setBranchId(rs.getInt("branchId"));
-//			bl.setLibraryBranch(lb);
-//			
-//			Borrower bo = new Borrower();
-//			bo.setCardNo(rs.getInt("cardNo"));
-//			bl.setBorrower(bo);
+			Book b = new Book();
+			b.setBookId(rs.getInt("bookId"));
+			bl.setBook(b);
+			
+			LibraryBranch lb = new LibraryBranch();
+			lb.setBranchId(rs.getInt("branchId"));
+			bl.setLibraryBranch(lb);
+			
+			Borrower bo = new Borrower();
+			bo.setCardNo(rs.getInt("cardNo"));
+			bl.setBorrower(bo);
 			
 			bookLoans.add(bl);
 		}
