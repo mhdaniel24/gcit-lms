@@ -47,7 +47,6 @@ public class BorrowerService {
 		try{
 			LibraryBranch libBranch = lbdao.readOne(branchId);
 
-			//make sure that the branchId maps a branch
 			if(libBranch == null){
 				throw new Exception(
 						"The branch id provided does not match any branch");
@@ -62,8 +61,8 @@ public class BorrowerService {
 			}
 
 			if(book != null && libBranch.getBookCopies().get(book) > 0){
+				
 				Borrower borrower = borrowerdao.readOne(cardNo);
-
 				if(borrower == null){
 					throw new Exception(
 							"The  card number provided does not match any borrower");
