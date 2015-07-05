@@ -54,7 +54,7 @@ public class GenreDAO extends BaseDAO{
 			g.setGenreId(rs.getInt("genre_id"));
 			g.setGenreName(rs.getString("genre_name"));
 			@SuppressWarnings("unchecked")
-			List<Book> books = (List<Book>) bDao.readFirstLevel("select * from tbl_books where bookId In"
+			List<Book> books = (List<Book>) bDao.readFirstLevel("select * from tbl_book where bookId In"
 					+ "(select bookId from tbl_book_genres where genre_id=?)", new Object[] {rs.getInt("genre_id")});
 			g.setBooks(books);
 			

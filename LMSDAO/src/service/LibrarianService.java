@@ -89,7 +89,7 @@ public class LibrarianService {
 	}
 	
 	//another method to implement this update is to update the entire branch in the branch update
-	public void modifyNumbCopiesOfBookinBranch(int branchId, int bookId, int newNumbCopies) throws Exception{
+	public void updateNumbCopies(int branchId, int bookId, int newNumbCopies) throws Exception{
 		ConnectionUtil c = new ConnectionUtil();
 		Connection conn = c.createConnection();
 		BookCopiesDAO bcdao = new BookCopiesDAO(conn);
