@@ -67,7 +67,7 @@ public class BookLoanDAO extends BaseDAO{
 			
 			bl.setBook(bookdao.readOne(rs.getInt("bookId")));
 			bl.setBorrower(borrowerdao.readOne(rs.getInt("cardNo")));
-			bl.setLibraryBranch(lbranchdao.readOne(rs.getInt("cardNo")));
+			bl.setLibraryBranch(lbranchdao.readOne(rs.getInt("branchId")));
 			
 			bookLoans.add(bl);
 		}
