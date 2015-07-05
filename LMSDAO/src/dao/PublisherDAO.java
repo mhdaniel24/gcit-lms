@@ -15,12 +15,12 @@ public class PublisherDAO extends BaseDAO{
 	}
 
 	public void create(Publisher publisher) throws Exception {
-		save("insert into tbl_publisher (publisherName, publisherAddress, publisherPhone) values(?, ?, ?)",
+		int pubId = saveWithID("insert into tbl_publisher (publisherName, publisherAddress, publisherPhone) values(?, ?, ?)",
 				new Object[] { publisher.getPublisherName(), publisher.getPublisherAddress(), publisher.getPublisherPhone() });
 		//TODO: add the books that belong to it
 		for(Book b: publisher.getBooks()){
 			save("update tbl_book set pubId = ? where bookId = ?", 
-				new Object[]{publisher.getPublisherId(), b.getBookId()});
+				new Object[]{pubId, b.getBookId()});
 		}
 	}
 
