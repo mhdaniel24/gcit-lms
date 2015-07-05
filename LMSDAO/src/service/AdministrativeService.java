@@ -209,7 +209,7 @@ public class AdministrativeService {
 		checkBookAnd(book, "update");
 	}
 
-	public void delteBook(Book book) throws Exception {
+	public void deleteBook(Book book) throws Exception {
 		checkBookAnd(book, "delete");
 	}
 
@@ -233,6 +233,10 @@ public class AdministrativeService {
 						"Book title cannot be empty or more than 45 Chars");
 			} else {
 				if(action.equals("create")){
+					if(book.getAuthors() == null || book.getGenres() == null){
+						//TODO: not sure if throw the exception or just initialize them both
+						throw new Exception("BookAuthors and Genres can't be null");
+					}
 					bdao.create(book);
 				}else if(action.equals("update")){
 					if(bdao.readOne(book.getBookId()) == null){

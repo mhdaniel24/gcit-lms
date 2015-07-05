@@ -52,6 +52,7 @@ public class LibraryBranchDAO extends BaseDAO{
 		int branchId = saveWithID("insert into tbl_library_branch (branchName, branchAddress) values(?,?)",
 				new Object[] { libraryBranch.getBranchName(), libraryBranch.getBranchAddress()});
 		
+//		This job belongs to the librarian not the Administrator	
 //		for(Entry<Book, Integer> entry : libraryBranch.getBookCopies().entrySet()){
 //			BookCopiesDAO bcdao = new BookCopiesDAO(getConnection());
 //			BookCopies bcs = new BookCopies();
