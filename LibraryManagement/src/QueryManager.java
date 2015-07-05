@@ -199,8 +199,12 @@ public class QueryManager {
 		//columnsOfInterest.add("branchId");
 		columnsOfInterest.add("bookId");
 
-
-		HashMap<String, ArrayList<String>> data = executeSelectQuery("SELECT * FROM tbl_book_loans WHERE bookId = "+loan.getBookId()+" AND branchId = " + loan.getBranchId() + " AND cardNo = " + loan.getCardNo(), columnsOfInterest, new ArrayList<String>());
+		ArrayList<String> vals = new ArrayList<String>();
+		vals.add(loan.getBookId());
+		vals.add(loan.getBranchId());
+		vals.add(loan.getCardNo());
+		
+		HashMap<String, ArrayList<String>> data = executeSelectQuery("SELECT * FROM tbl_book_loans WHERE bookId = ? AND branchId = ? AND cardNo = ?", columnsOfInterest, vals);
 
 		if(data.get("bookId").size() == 0){
 			return false;
@@ -211,13 +215,26 @@ public class QueryManager {
 	}
 	public void addNewLoan(Loan loan)
 	{
-		String query = "INSERT INTO tbl_book_loans VALUES ("+loan.getBookId() +", " + loan.getBranchId() + ", " + loan.getCardNo() + ", '" + loan.getDateOutAsString()+"', '" + loan.getDueDateAsString() +"', NULL)";
+		ArrayList<String> vals = new ArrayList<String>();
+		vals.add(loan.getBookId());
+		vals.add(loan.getBranchId());
+		vals.add(loan.getCardNo());
+		vals.add(loan.getDateOutAsString());
+		vals.add(loan.getDueDateAsString());
+		
+		
+		String query = "INSERT INTO tbl_book_loans VALUES (?,?,?,?,?)";
 		executeUpdateQuery(query, new ArrayList<String>());
 	}
 	public void deleteLoan(Loan loan)
 	{
-		String query = "DELETE FROM tbl_book_loans WHERE bookId = "+loan.getBookId() + " AND branchId = " + loan.getBranchId() +" AND cardNo = " + loan.getCardNo();
-		executeUpdateQuery(query, new ArrayList<String>());
+		ArrayList<String> vals = new ArrayList<String>();
+		vals.add(loan.getBookId());
+		vals.add(loan.getBranchId());
+		vals.add(loan.getCardNo());
+		
+		String query = "DELETE FROM tbl_book_loans WHERE bookId = ? AND branchId = ? AND cardNo = ?";
+		executeUpdateQuery(query, vals);
 	}
 	public ArrayList<Book> getAllBooks()
 	{
@@ -704,8 +721,6 @@ public class QueryManager {
 	}
 
 
-	//	public void deleteBookAndAuthor(Book b, Author a){
-	//		deleteAuthor(a);
-	//		deleteBook(b);
-	//	}
+	
+	
 }
