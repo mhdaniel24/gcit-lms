@@ -68,7 +68,7 @@ public class LibraryBranchDAO extends BaseDAO{
 	}
 	
 	public LibraryBranch readOne(int branchId) throws Exception {
-		List<LibraryBranch> libraryBranches = (List<LibraryBranch>) read("select * from tbl_library_branch",
+		List<LibraryBranch> libraryBranches = (List<LibraryBranch>) read("select * from tbl_library_branch where branchId = ?",
 				new Object[] {branchId});
 		if(libraryBranches!=null && libraryBranches.size()>0){
 			return libraryBranches.get(0);

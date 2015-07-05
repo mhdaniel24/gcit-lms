@@ -109,16 +109,14 @@ public class BorrowerService {
 		//make sure that the book id actually maps a book
 		ConnectionUtil c = new ConnectionUtil();
 		Connection conn = c.createConnection();
+		LibraryBranchDAO lbdao = new LibraryBranchDAO(conn);
+		BookDAO bdao = new BookDAO(conn);
+		BookCopiesDAO bcdao = new BookCopiesDAO(conn);
+		BorrowerDAO borrowerdao = new BorrowerDAO(conn);
+		BookLoanDAO loandao = new BookLoanDAO(conn);
 		
 		try{
-			LibraryBranchDAO lbdao = new LibraryBranchDAO(conn);
-			BookDAO bdao = new BookDAO(conn);
-			BookCopiesDAO bcdao = new BookCopiesDAO(conn);
-			BorrowerDAO borrowerdao = new BorrowerDAO(conn);
-			BookLoanDAO loandao = new BookLoanDAO(conn);
-
 			LibraryBranch libBranch = lbdao.readOne(branchId);
-
 			if(libBranch == null){
 				throw new Exception(
 						"The provided branch id does not match any branch");
@@ -148,7 +146,6 @@ public class BorrowerService {
 			
 			
 			BookCopies bc = new BookCopies();
-
 			bc.setBookId(book.getBookId());
 			bc.setBranchId(libBranch.getBranchId());
 			
