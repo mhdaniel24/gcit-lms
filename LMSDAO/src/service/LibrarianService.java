@@ -3,6 +3,7 @@ package service;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map.Entry;
 
 import dao.BookCopiesDAO;
 import dao.BookDAO;
@@ -34,27 +35,31 @@ public class LibrarianService {
 	}
 
 
-	public void updateLibraryBranch(LibraryBranch librryBranch) throws Exception,
+	public void updateLibraryBranch(LibraryBranch libraryBranch) throws Exception,
 	SQLException {
 		ConnectionUtil c = new ConnectionUtil();
 		Connection conn = c.createConnection();
 
 		try {
 
-			if (librryBranch == null || librryBranch.getBranchName() == null
-					|| librryBranch.getBranchName().length() == 0
-					|| librryBranch.getBranchName().length() > 45) {
+			if (libraryBranch == null || libraryBranch.getBranchName() == null
+					|| libraryBranch.getBranchName().length() == 0
+					|| libraryBranch.getBranchName().length() > 45) {
 				throw new Exception(
 						"Library branch name cannot be empty or more than 45 Chars");
-			}else if(librryBranch == null || librryBranch.getBranchAddress() == null
-					|| librryBranch.getBranchAddress().length() == 0
-					|| librryBranch.getBranchAddress().length() > 45){
+			}else if(libraryBranch == null || libraryBranch.getBranchAddress() == null
+					|| libraryBranch.getBranchAddress().length() == 0
+					|| libraryBranch.getBranchAddress().length() > 45){
 				throw new Exception(
 						"Library Branch address cannot be empty or more than 45 Chars");
 			}else {
 
 				LibraryBranchDAO lbdao = new LibraryBranchDAO(conn);
-				lbdao.update(librryBranch);
+				if(lbdao.readOne(libraryBranch.getBranchId()) == null){
+					throw new Exception(
+							"The Library Branch you are trying to update does not exit");
+				}
+				lbdao.update(libraryBranch);
 				conn.commit();
 			}
 		} catch (Exception e) {
@@ -84,22 +89,45 @@ public class LibrarianService {
 	}
 	
 	//another method to implement this update is to update the entire branch in the branch update
-	public void addCopiesOfBookToTheBranch(LibraryBranch libBranch, Book book, int newNumbCopies) throws Exception{
+	public void modifyNumbCopiesOfBookinBranch(int branchId, int bookId, int newNumbCopies) throws Exception{
 		ConnectionUtil c = new ConnectionUtil();
 		Connection conn = c.createConnection();
-		
 		BookCopiesDAO bcdao = new BookCopiesDAO(conn);
-		BookCopies bc = new BookCopies();
-		bc.setBookId(book.getBookId());
-		bc.setBranchId(libBranch.getBranchId());
-		bc.setNoOfCopies(newNumbCopies);
+		BookDAO bookdao = new BookDAO(conn);
+		LibraryBranchDAO branchdao = new LibraryBranchDAO(conn);
 		
-		if(libBranch.getBookCopies().containsKey(book)){
-			//just update
-			bcdao.update(bc);
-		}else{
-			//add
-			bcdao.create(bc);
+		try{
+			if(bookdao.readOne(bookId) == null){
+				throw new Exception("The book id you passed as a parameter does not match any book");
+			}
+			if(branchdao.readOne(branchId) == null){
+				throw new Exception("The branch id you passed as a parameter does not match any library branch");
+			}
+
+			BookCopies bc = new BookCopies();
+			bc.setBookId(bookId);
+			bc.setBranchId(branchId);
+			bc.setNoOfCopies(newNumbCopies);
+
+			LibraryBranch lb = branchdao.readOne(branchId);
+
+			boolean flag = false;
+			for(Entry<Book, Integer> entry : lb.getBookCopies().entrySet()){
+				if(entry.getKey().getBookId() == bookId){
+					bcdao.update(bc);
+					flag = true;
+					break;
+				}
+			}
+			if(!flag){
+				bcdao.create(bc);
+			}
+			conn.commit();
+		}catch (Exception e) {
+			e.printStackTrace();
+			conn.rollback();//not sure if needed
+		} finally {
+			conn.close();
 		}
 	}
 	
