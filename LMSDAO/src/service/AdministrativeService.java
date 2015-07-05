@@ -594,6 +594,8 @@ public class AdministrativeService {
 //	public void createBookLoan(BookLoan bookLoan) throws Exception {
 //		checkBookLoanAnd(bookLoan, "create");
 //	}
+	
+	//used for over-ride Due DAte for a Book Loan
 	public void updateBookLoan(BookLoan bookLoan) throws Exception {
 		checkBookLoanAnd(bookLoan, "update");
 	}

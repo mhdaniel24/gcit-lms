@@ -41,7 +41,7 @@ public class AuthorDAO extends BaseDAO {
 	}
 
 	public Author readOne(int authorId) throws Exception {
-		List<Author> authors = (List<Author>) read("select * from tbl_author whre authorId = ?", new Object[] {authorId});
+		List<Author> authors = (List<Author>) read("select * from tbl_author where authorId = ?", new Object[] {authorId});
 		if(authors!=null && authors.size()>0){
 			return authors.get(0);
 		}
