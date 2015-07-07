@@ -1,4 +1,4 @@
-package service;
+package com.gcit.lms.service;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -7,16 +7,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map.Entry;
 
-import dao.BookCopiesDAO;
-import dao.BookDAO;
-import dao.BookLoanDAO;
-import dao.BorrowerDAO;
-import dao.LibraryBranchDAO;
-import domain.Book;
-import domain.BookCopies;
-import domain.BookLoan;
-import domain.Borrower;
-import domain.LibraryBranch;
+import com.gcit.lms.domain.*;
+import com.gcit.lms.dao.*;
 
 public class BorrowerService {
 	

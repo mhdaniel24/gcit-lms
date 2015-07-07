@@ -1,4 +1,4 @@
-package dao;
+package com.gcit.lms.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,10 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import domain.Author;
-import domain.Book;
-
+import com.gcit.lms.domain.*;
 
 public class AuthorDAO extends BaseDAO {
 

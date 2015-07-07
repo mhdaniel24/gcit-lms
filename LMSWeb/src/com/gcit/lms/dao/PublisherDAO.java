@@ -1,13 +1,11 @@
-package dao;
+package com.gcit.lms.dao;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import domain.Author;
-import domain.Book;
-import domain.Publisher;
+import com.gcit.lms.domain.*;
 
 public class PublisherDAO extends BaseDAO{
 	public PublisherDAO(Connection conn) throws Exception {

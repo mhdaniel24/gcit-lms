@@ -1,4 +1,4 @@
-package domain;
+package com.gcit.lms.domain;
 
 import java.sql.Timestamp;
 

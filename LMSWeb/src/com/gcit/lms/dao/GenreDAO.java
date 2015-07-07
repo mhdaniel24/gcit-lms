@@ -1,12 +1,11 @@
-package dao;
+package com.gcit.lms.dao;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import domain.Book;
-import domain.Genre;
+import com.gcit.lms.domain.*;
 
 public class GenreDAO extends BaseDAO{
 	

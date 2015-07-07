@@ -1,4 +1,4 @@
-package domain;
+package com.gcit.lms.domain;
 
 public class BookCopies {
 	private int bookId;

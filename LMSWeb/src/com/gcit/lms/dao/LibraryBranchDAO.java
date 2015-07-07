@@ -1,4 +1,4 @@
-package dao;
+package com.gcit.lms.dao;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -10,11 +10,7 @@ import java.util.Map.Entry;
 
 import javax.swing.text.html.HTMLDocument.Iterator;
 
-import domain.Author;
-import domain.Book;
-import domain.BookCopies;
-import domain.Genre;
-import domain.LibraryBranch;
+import com.gcit.lms.domain.*;
 
 public class LibraryBranchDAO extends BaseDAO{
 

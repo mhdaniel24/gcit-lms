@@ -1,4 +1,4 @@
-package service;
+package com.gcit.lms.service;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

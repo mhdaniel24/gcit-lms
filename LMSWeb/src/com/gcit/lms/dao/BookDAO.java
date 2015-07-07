@@ -1,4 +1,4 @@
-package dao;
+package com.gcit.lms.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,9 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import domain.Author;
-import domain.Book;
-import domain.Genre;
+import com.gcit.lms.domain.*;
 
 //TODO: Leave this one for last because it depends on many others and it is also the most complicated one
 public class BookDAO extends BaseDAO {

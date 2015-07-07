@@ -1,4 +1,4 @@
-package dao;
+package com.gcit.lms.dao;
 
 import java.util.List;
 import java.sql.Connection;

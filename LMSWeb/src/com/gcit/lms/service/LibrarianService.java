@@ -1,16 +1,12 @@
-package service;
+package com.gcit.lms.service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map.Entry;
 
-import dao.BookCopiesDAO;
-import dao.BookDAO;
-import dao.LibraryBranchDAO;
-import domain.Book;
-import domain.BookCopies;
-import domain.LibraryBranch;
+import com.gcit.lms.domain.*;
+import com.gcit.lms.dao.*;
 
 public class LibrarianService {
 
