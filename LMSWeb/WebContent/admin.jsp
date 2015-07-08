@@ -6,4 +6,4 @@ ${result}
 <a href="viewAuthors.jsp">View Authors</a><br />
 <h3>Publishers</h3>
 <a href="addPublisher.jsp">Add Publisher</a><br />
-<a href="borrower.html">View Publisher</a><br />
+<a href="viewPublisher.jsp">View Publisher</a><br />

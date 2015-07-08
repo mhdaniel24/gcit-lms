@@ -60,10 +60,15 @@ public class AdminServlet extends HttpServlet {
 		case "viewAuthors":
 			viewAuthors(request, response);
 			break;
-		case "/deleteAuthor": {
+		case "/deleteAuthor": 
 			deleteAuthor(request, response);
 			break;
-		}
+		case "viewPublisher":
+			viewPublisher(request, response);
+			break;
+		case "/deletePublisher": 
+			deletePublisher(request, response);
+			break;
 		default:
 			break;
 		}
@@ -124,6 +129,17 @@ public class AdminServlet extends HttpServlet {
 		return null;
 	}
 	
+	private List<Publisher> viewPublisher(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		try {
+			return new AdministrativeService().readAllPublishers();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	private void deleteAuthor(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		String authorId = request.getParameter("authorId");
@@ -140,6 +156,27 @@ public class AdminServlet extends HttpServlet {
 			e.printStackTrace();
 			request.setAttribute("result",
 					"Author Delete Failed because: " + e.getMessage());
+		}
+		
+		rd.forward(request, response);
+	}
+	
+	private void deletePublisher(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		String publisherId = request.getParameter("publisherId");
+		Publisher publisher = new Publisher();
+		publisher.setPublisherId(Integer.parseInt(publisherId));
+
+		RequestDispatcher rd = getServletContext().getRequestDispatcher(
+				"/viewPublisher.jsp");
+		try {
+			new AdministrativeService().deletePublisher(publisher);
+
+			request.setAttribute("result", "Publisher Deleted Succesfully!");
+		} catch (Exception e) {
+			e.printStackTrace();
+			request.setAttribute("result",
+					"Publisher Delete Failed because: " + e.getMessage());
 		}
 		
 		rd.forward(request, response);
