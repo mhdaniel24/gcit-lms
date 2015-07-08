@@ -1,6 +1,8 @@
 package com.gcit.lms.web;
 
+import java.awt.print.Book;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -18,7 +20,7 @@ import com.sun.org.apache.bcel.internal.generic.NEWARRAY;
 /**
  * Servlet implementation class AdminServlet
  */
-@WebServlet({ "/addAuthor", "/addPublisher", "/viewAuthors", "/deleteAuthor"})
+@WebServlet({ "/addAuthor", "/addPublisher", "/viewAuthors", "/deleteAuthor", "/viewPublisher", "/deletePublisher"})
 public class AdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -67,6 +69,7 @@ public class AdminServlet extends HttpServlet {
 			viewPublisher(request, response);
 			break;
 		case "/deletePublisher": 
+			System.out.println("Hereeeeeeeeeeeeeeeee");
 			deletePublisher(request, response);
 			break;
 		default:
@@ -103,6 +106,7 @@ public class AdminServlet extends HttpServlet {
 		p.setPublisherName(publisherName);
 		p.setPublisherAddress(publisherAddress);
 		p.setPublisherPhone(publisherPhone);
+		p.setBooks((List)new ArrayList<Book>());//TODO: check if this step should be taken here or in the Service
 		AdministrativeService adminService = new AdministrativeService();
 		try {
 			adminService.createPublisher(p);

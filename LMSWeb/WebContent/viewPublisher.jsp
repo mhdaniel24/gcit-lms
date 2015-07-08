@@ -7,7 +7,7 @@
 <%@include file="include.html"%>
 <script>
 	function deletePublisher(id) {
-		//document.location.href = "deleteAuthor?authorId="+id;
+		//document.location.href = "deletePublisher?publisherId="+id;
 		
 		document.getElementById("publisherId").value = id;
 		document.deleteFrm.submit();
