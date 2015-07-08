@@ -10,3 +10,6 @@ ${result}
 <h3>Borrowers</h3>
 <a href="addBorrower.jsp">Add Borrower</a><br />
 <a href="viewBorrowers.jsp">View Borrowers</a><br />
+<h3>Library Branches</h3>
+<a href="addBranch.jsp">Add Library Branch</a><br />
+<a href="viewBranches.jsp">View Library Branches</a><br />
