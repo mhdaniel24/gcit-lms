@@ -7,3 +7,6 @@ ${result}
 <h3>Publishers</h3>
 <a href="addPublisher.jsp">Add Publisher</a><br />
 <a href="viewPublisher.jsp">View Publisher</a><br />
+<h3>Borrowers</h3>
+<a href="addBorrower.jsp">Add Borrower</a><br />
+<a href="viewBorrowers.jsp">View Borrowers</a><br />

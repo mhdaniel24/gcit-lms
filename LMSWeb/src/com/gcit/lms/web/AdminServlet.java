@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.gcit.lms.domain.Author;
+import com.gcit.lms.domain.Borrower;
 import com.gcit.lms.domain.Publisher;
 import com.gcit.lms.service.AdministrativeService;
 import com.sun.org.apache.bcel.internal.generic.NEWARRAY;
@@ -20,7 +21,7 @@ import com.sun.org.apache.bcel.internal.generic.NEWARRAY;
 /**
  * Servlet implementation class AdminServlet
  */
-@WebServlet({ "/addAuthor", "/addPublisher", "/viewAuthors", "/deleteAuthor", "/viewPublisher", "/deletePublisher"})
+@WebServlet({ "/addAuthor", "/addPublisher", "/viewAuthors", "/deleteAuthor", "/viewPublisher", "/deletePublisher", "/addBorrower", "/viewBorrowers","/deleteBorrower"})
 public class AdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -54,24 +55,31 @@ public class AdminServlet extends HttpServlet {
 		case "/addAuthor":
 			createAuthor(request, response);
 			break;
-			
-		case "/addPublisher":
-			createPublisher(request, response);
-			break;
-			
 		case "viewAuthors":
 			viewAuthors(request, response);
 			break;
 		case "/deleteAuthor": 
 			deleteAuthor(request, response);
 			break;
+		case "/addPublisher":
+			createPublisher(request, response);
+			break;
 		case "viewPublisher":
 			viewPublisher(request, response);
 			break;
 		case "/deletePublisher": 
-			System.out.println("Hereeeeeeeeeeeeeeeee");
 			deletePublisher(request, response);
 			break;
+		case "/addBorrower":
+			createBorrower(request, response);
+			break;
+		case "viewBorrowers":
+			viewBorrowers(request, response);
+			break;
+		case "/deleteBorrower": 
+			deleteBorrower(request, response);
+			break;
+		
 		default:
 			break;
 		}
@@ -183,6 +191,62 @@ public class AdminServlet extends HttpServlet {
 					"Publisher Delete Failed because: " + e.getMessage());
 		}
 		
+		rd.forward(request, response);
+	}
+	
+	private void deleteBorrower(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		String borrowerId = request.getParameter("cardNo");
+		Borrower borrower = new Borrower();
+		borrower.setCardNo(Integer.parseInt(borrowerId));
+
+		RequestDispatcher rd = getServletContext().getRequestDispatcher(
+				"/viewPublisher.jsp");
+		try {
+			new AdministrativeService().deleteBorrower(borrower);
+
+			request.setAttribute("result", "Borrower Deleted Succesfully!");
+		} catch (Exception e) {
+			e.printStackTrace();
+			request.setAttribute("result",
+					"Borrower Delete Failed because: " + e.getMessage());
+		}
+		
+		rd.forward(request, response);
+	}
+	
+	private List<Borrower> viewBorrowers(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		try {
+			return new AdministrativeService().readAllBorrower();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	private void createBorrower(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		String name = request.getParameter("name");
+		String address = request.getParameter("address");
+		String phone = request.getParameter("phone");
+		Borrower b = new Borrower();
+		b.setAddress(address);
+		b.setPhone(phone);
+		b.setName(name);
+		AdministrativeService adminService = new AdministrativeService();
+		try {
+			adminService.createBorrower(b);
+			request.setAttribute("result", "Borrower added Successfully");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			request.setAttribute("result",
+					"Borrower add failed " + e.getMessage());
+		}
+		RequestDispatcher rd = getServletContext().getRequestDispatcher(
+				"/admin.jsp");
 		rd.forward(request, response);
 	}
 }
