@@ -5,14 +5,12 @@
 <title>LMS</title>
 </head>
 <body>
-	<h2>Hello Admin - Welcome to GCIT Library Management System</h2>
-	<h3>Choose your action:</h3>
-	<a href="addAuthor.html">Add Author</a>
-	<br />
-	<a href="#">View Authors</a>
-	<br />
-	<a href="#">Add Books</a>
-	<br />
-	<a href="#">View Books</a>
+<form action = "AdminServlet" method = "post">
+	<h2>Hello Admin - Enter Author Details</h2>
+	<p>
+		Enter Author Name: <input type = "text" name="authorName"/>
+	</p>
+	<input type = "submit">
+</form>
 </body>
 </html>
