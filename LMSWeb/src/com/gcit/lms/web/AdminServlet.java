@@ -201,7 +201,7 @@ public class AdminServlet extends HttpServlet {
 		borrower.setCardNo(Integer.parseInt(borrowerId));
 
 		RequestDispatcher rd = getServletContext().getRequestDispatcher(
-				"/viewPublisher.jsp");
+				"/viewBorrowers.jsp");
 		try {
 			new AdministrativeService().deleteBorrower(borrower);
 

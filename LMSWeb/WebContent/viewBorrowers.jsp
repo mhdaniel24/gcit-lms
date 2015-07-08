@@ -32,7 +32,7 @@
 		<td><%out.println(b.getAddress()); %></td>
 		<td><%out.println(b.getPhone()); %></td>
 		<td><button type="button" class="btn btn-md btn-success">Edit</button></td>
-		<td><button type="button" class="btn btn-md btn-danger" onclick="javascript:deletePublisher(<%=b.getCardNo()%>);">Delete</button></td>
+		<td><button type="button" class="btn btn-md btn-danger" onclick="javascript:deleteBorrower(<%=b.getCardNo()%>);">Delete</button></td>
 	</tr>
 	<%} %>
 </table>
