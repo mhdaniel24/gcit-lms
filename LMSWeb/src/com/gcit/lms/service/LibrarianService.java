@@ -85,7 +85,7 @@ public class LibrarianService {
 	}
 	
 	//another method to implement this update is to update the entire branch in the branch update
-	public void updateNumbCopies(int branchId, int bookId, int newNumbCopies) throws Exception{
+	public void updateNumbCopies(LibraryBranch lb1, int bookId, int newNumbCopies) throws Exception{
 		ConnectionUtil c = new ConnectionUtil();
 		Connection conn = c.createConnection();
 		BookCopiesDAO bcdao = new BookCopiesDAO(conn);
@@ -96,16 +96,16 @@ public class LibrarianService {
 			if(bookdao.readOne(bookId) == null){
 				throw new Exception("The book id you passed as a parameter does not match any book");
 			}
-			if(branchdao.readOne(branchId) == null){
+			if(branchdao.readOne(lb1.getBranchId()) == null){
 				throw new Exception("The branch id you passed as a parameter does not match any library branch");
 			}
 
 			BookCopies bc = new BookCopies();
 			bc.setBookId(bookId);
-			bc.setBranchId(branchId);
+			bc.setBranchId(lb1.getBranchId());
 			bc.setNoOfCopies(newNumbCopies);
 
-			LibraryBranch lb = branchdao.readOne(branchId);
+			LibraryBranch lb = branchdao.readOne(lb1.getBranchId());
 
 			boolean flag = false;
 			for(Entry<Book, Integer> entry : lb.getBookCopies().entrySet()){

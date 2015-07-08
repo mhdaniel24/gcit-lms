@@ -30,7 +30,7 @@ public class BorrowerService {
 		}
 	}
 	
-	public void checkOutBook(int branchId, int bookId, int cardNo) throws Exception{
+	public void checkOutBook(LibraryBranch branch, Book b, Borrower bo) throws Exception{
 		ConnectionUtil c = new ConnectionUtil();
 		Connection conn = c.createConnection();
 		LibraryBranchDAO lbdao = new LibraryBranchDAO(conn);
@@ -38,7 +38,7 @@ public class BorrowerService {
 		BookLoanDAO loandao = new BookLoanDAO(conn);
 		
 		try{
-			LibraryBranch libBranch = lbdao.readOne(branchId);
+			LibraryBranch libBranch = lbdao.readOne(branch.getBranchId());
 
 			if(libBranch == null){
 				throw new Exception(
@@ -47,7 +47,7 @@ public class BorrowerService {
 
 			Book book = null;
 			for(Entry<Book, Integer> entry : libBranch.getBookCopies().entrySet()){
-				if(entry.getKey().getBookId() == bookId){
+				if(entry.getKey().getBookId() == b.getBookId()){
 					book = entry.getKey();
 					break;
 				}
@@ -55,14 +55,14 @@ public class BorrowerService {
 
 			if(book != null && libBranch.getBookCopies().get(book) > 0){
 				
-				Borrower borrower = borrowerdao.readOne(cardNo);
+				Borrower borrower = borrowerdao.readOne(bo.getCardNo());
 				if(borrower == null){
 					throw new Exception(
 							"The  card number provided does not match any borrower");
 				}
 
 				
-				if(loandao.readOne(bookId, cardNo, branchId) != null){
+				if(loandao.readOne(b.getBookId(), bo.getCardNo(), branch.getBranchId()) != null){
 					throw new Exception(
 							"This borrower already borrow this book in this library branch");
 				}
@@ -98,7 +98,7 @@ public class BorrowerService {
 		}
 	}
 	
-	public void returnBook(int branchId, int bookId, int cardNo) throws Exception{
+	public void returnBook(LibraryBranch br, Book bo, Borrower bor) throws Exception{
 		//make sure that the book id actually maps a book
 		ConnectionUtil c = new ConnectionUtil();
 		Connection conn = c.createConnection();
@@ -109,31 +109,31 @@ public class BorrowerService {
 		BookLoanDAO loandao = new BookLoanDAO(conn);
 		
 		try{
-			LibraryBranch libBranch = lbdao.readOne(branchId);
+			LibraryBranch libBranch = lbdao.readOne(br.getBranchId());
 			if(libBranch == null){
 				throw new Exception(
 						"The provided branch id does not match any branch");
 			}
 
-			Book book = bdao.readOne(bookId);
+			Book book = bdao.readOne(bo.getBookId());
 			if(book == null){
 				throw new Exception(
 						"The provided book id does not match any book");
 			}
 
-			Borrower borrower = borrowerdao.readOne(cardNo);
+			Borrower borrower = borrowerdao.readOne(bor.getCardNo());
 			if(borrower == null){
 				throw new Exception(
 						"The provided cardNo does not match any borrower");
 			}
-			if(loandao.readOne(bookId, cardNo, branchId) == null){
+			if(loandao.readOne(bo.getBookId(), bor.getCardNo(), br.getBranchId()) == null){
 				throw new Exception(
 						"This borrower has not borrow this book in this library branch");
 			}else{
 				BookLoan bl = new BookLoan();
-				bl.setBook(bdao.readOne(bookId));
-				bl.setLibraryBranch(lbdao.readOne(branchId));
-				bl.setBorrower(borrowerdao.readOne(cardNo));
+				bl.setBook(bdao.readOne(bo.getBookId()));
+				bl.setLibraryBranch(lbdao.readOne(br.getBranchId()));
+				bl.setBorrower(borrowerdao.readOne(bor.getCardNo()));
 				loandao.delete(bl);
 			}
 			
@@ -144,7 +144,7 @@ public class BorrowerService {
 			
 			boolean flag = false;
 			for(Entry<Book, Integer> entry : libBranch.getBookCopies().entrySet()){
-				if(entry.getKey().getBookId() == bookId){
+				if(entry.getKey().getBookId() == bo.getBookId()){
 					bc.setNoOfCopies(entry.getValue() + 1);
 					bcdao.update(bc);
 					flag = true;
