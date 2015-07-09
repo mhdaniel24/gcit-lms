@@ -13,3 +13,5 @@ ${result}
 <h3>Library Branches</h3>
 <a href="addBranch.jsp">Add Library Branch</a><br />
 <a href="viewBranches.jsp">View Library Branches</a><br />
+<h3>Book</h3>
+<a href="addBook.jsp">Add Book</a><br />

@@ -1,6 +1,5 @@
 package com.gcit.lms.web;
 
-import java.awt.print.Book;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.gcit.lms.domain.Author;
+import com.gcit.lms.domain.Book;
 import com.gcit.lms.domain.Borrower;
+import com.gcit.lms.domain.Genre;
 import com.gcit.lms.domain.Publisher;
 import com.gcit.lms.service.AdministrativeService;
 import com.sun.org.apache.bcel.internal.generic.NEWARRAY;
@@ -21,7 +22,7 @@ import com.sun.org.apache.bcel.internal.generic.NEWARRAY;
 /**
  * Servlet implementation class AdminServlet
  */
-@WebServlet({ "/addAuthor", "/addPublisher", "/viewAuthors", "/deleteAuthor", "/viewPublisher", "/deletePublisher", "/addBorrower", "/viewBorrowers","/deleteBorrower"})
+@WebServlet({ "/addAuthor", "/addPublisher", "/viewAuthors", "/deleteAuthor", "/viewPublisher", "/deletePublisher", "/addBorrower", "/viewBorrowers","/deleteBorrower", "/addBook"})
 public class AdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -79,7 +80,9 @@ public class AdminServlet extends HttpServlet {
 		case "/deleteBorrower": 
 			deleteBorrower(request, response);
 			break;
-		
+		case "/addBook":
+			createBook(request, response);
+			break;
 		default:
 			break;
 		}
@@ -244,6 +247,38 @@ public class AdminServlet extends HttpServlet {
 			e.printStackTrace();
 			request.setAttribute("result",
 					"Borrower add failed " + e.getMessage());
+		}
+		RequestDispatcher rd = getServletContext().getRequestDispatcher(
+				"/admin.jsp");
+		rd.forward(request, response);
+	}
+	
+	private void createBook(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		
+		String author = request.getParameter("name");
+		String title = request.getParameter("title");
+		AdministrativeService adminService = new AdministrativeService();
+		Book b = new Book();
+		b.setTitle(title);
+		List<Author> authors = new ArrayList<Author>();
+//		try {
+//			authors.add(adminService.readOneAuthor(Integer.parseInt(author.split(" ")[0])));
+//		} catch (Exception e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+		b.setAuthors(authors);
+		b.setGenres((List) new ArrayList<Genre>());
+		
+		try {
+			adminService.createBook(b);
+			request.setAttribute("result", "Book added Successfully");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			request.setAttribute("result",
+					"Book add failed " + e.getMessage());
 		}
 		RequestDispatcher rd = getServletContext().getRequestDispatcher(
 				"/admin.jsp");
