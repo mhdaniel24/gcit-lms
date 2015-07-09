@@ -32,8 +32,8 @@ public class BookDAO extends BaseDAO {
 	}
 
 	public void create(Book book) throws Exception {
-		int bookId = saveWithID("insert into tbl_book (title) values(?)",
-				new Object[] { book.getTitle()});
+		int bookId = saveWithID("insert into tbl_book (title, pubId) values(?,?)",
+				new Object[] { book.getTitle(), book.getPublisher().getPublisherId()});
 
 		for(Author a: book.getAuthors()){
 			save("insert into tbl_book_authors (bookId, authorId) values (?,?)", 

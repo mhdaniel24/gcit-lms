@@ -20,25 +20,25 @@
 			</tr>
 			<tr>
 				<td>Select the authors:</td>
-				<td><select type="text" name="author">
-				<%for(int i = 0; i < authors.size(); i++){ %>
-						<option><%out.println(authors.get(i).getAuthorId() +" "+authors.get(i).getAuthorName());%></option>
+				<td><select multiple="multiple" name="authorId">
+				<%for(Author a : authors){ %>
+						<option value=<%=a.getAuthorId() %>><%out.println(a.getAuthorName());%></option>
 				<%} %>
 				</select></td>
 			</tr>
 			<tr>
 				<td>Select the genres:</td>
-				<td><select>
-				<%for(int i = 0; i < genres.size(); i++){ %>
-						<option><%out.println(genres.get(i).getGenreName());%></option>
+				<td><select multiple="multiple" name="genreId">
+				<%for(Genre g : genres){ %>
+						<option value=<%=g.getGenreId()%>><%out.println(g.getGenreName());%></option>
 				<%} %>
 				</select></td>
 			</tr>
 			<tr>
 				<td>Select the Publisher</td>
-				<td><select>
-				<%for(int i = 0; i < publishers.size(); i++){ %>
-						<option><%out.println(publishers.get(i).getPublisherName());%></option>
+				<td><select name="publisherId">
+				<%for(Publisher p: publishers){ %>
+						<option value=<%=p.getPublisherId()%>><%out.println(p.getPublisherName());%></option>
 				<%} %>
 				</select></td>
 			</tr>

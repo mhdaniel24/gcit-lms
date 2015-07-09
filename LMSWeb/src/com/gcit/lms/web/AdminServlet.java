@@ -256,21 +256,49 @@ public class AdminServlet extends HttpServlet {
 	private void createBook(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		
-		String author = request.getParameter("name");
 		String title = request.getParameter("title");
+		String[] authorIds = request.getParameterValues("authorId");
+		String[] genreIds = request.getParameterValues("genreId");
+		String[] publisherIds = request.getParameterValues("publisherId");
+		
 		AdministrativeService adminService = new AdministrativeService();
 		Book b = new Book();
 		b.setTitle(title);
-		List<Author> authors = new ArrayList<Author>();
-//		try {
-//			authors.add(adminService.readOneAuthor(Integer.parseInt(author.split(" ")[0])));
-//		} catch (Exception e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
-		b.setAuthors(authors);
-		b.setGenres((List) new ArrayList<Genre>());
 		
+		List<Author> authors = new ArrayList<Author>();
+		for(int i = 0; i < authorIds.length; i++){
+			try {
+				authors.add(adminService.readOneAuthor(Integer.parseInt(authorIds[i])));
+			} catch (Exception e1) {
+				//report unsuccessful
+				e1.printStackTrace();
+			}
+		}
+		b.setAuthors(authors);
+		
+		List<Genre> genres = new ArrayList<Genre>();
+		for(int i = 0; i < genreIds.length; i++){
+			try {
+				genres.add(adminService.readOneGenre(Integer.parseInt(genreIds[i])));
+			} catch (Exception e1) {
+				//report unsuccessful
+				e1.printStackTrace();
+			}
+		}
+		
+		b.setGenres(genres);
+		
+		try {
+			Publisher p = adminService.readOnePublisher(Integer.parseInt(publisherIds[0]));
+			//System.out.println(p.getPublisherName());
+			b.setPublisher(adminService.readOnePublisher(Integer.parseInt(publisherIds[0])));
+		} catch (NumberFormatException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		try {
 			adminService.createBook(b);
 			request.setAttribute("result", "Book added Successfully");
