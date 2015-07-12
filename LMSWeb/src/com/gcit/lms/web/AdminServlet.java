@@ -25,7 +25,8 @@ import com.sun.org.apache.bcel.internal.generic.NEWARRAY;
  */
 @WebServlet({ "/addAuthor", "/addPublisher", "/viewAuthors", "/deleteAuthor", "/viewPublisher", 
 	"/deletePublisher", "/addBorrower", "/viewBorrowers","/deleteBorrower", "/addBook", 
-	"/addGenre", "/editAuthor", "/deleteBranch", "/addBranch", "/deleteBook"})
+	"/addGenre", "/editAuthor", "/deleteBranch", "/addBranch", "/deleteBook", "/editBook",
+	"/editBorrower", "/editPublisher", "/editBranch"})
 public class AdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -108,11 +109,23 @@ public class AdminServlet extends HttpServlet {
 		case "/addBook":
 			createBook(request, response);
 			break;
+		case "/editBook":
+			editBook(request, response);
+			break;
 		case "/addGenre":
 			createGenre(request, response);
 			break;
 		case "/addBranch":
 			createBranch(request, response);
+			break;
+		case "/editBorrower":
+			editBorrower(request, response);
+			break;
+		case "/editPublisher":
+			editPublisher(request, response);
+			break;
+		case "/editBranch":
+			editBranch(request, response);
 			break;
 		default:
 			break;
@@ -458,5 +471,148 @@ public class AdminServlet extends HttpServlet {
 		RequestDispatcher rd = getServletContext().getRequestDispatcher(
 				"/admin.jsp");
 		rd.forward(request, response);
+	}
+	
+	private void editBook(HttpServletRequest request,
+			HttpServletResponse response) {
+		String bookTitle = request.getParameter("bookTitle");
+		int bookId = Integer.parseInt(request.getParameter("bookId"));
+		Book b = new Book();
+		b.setTitle(bookTitle);
+		b.setBookId(bookId);
+		AdministrativeService adminService = new AdministrativeService();
+		try {
+			adminService.updateBook(b);
+			request.setAttribute("result", "Book updated Successfully");
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			request.setAttribute("result",
+					"Book update failed " + e.getMessage());
+		}
+		RequestDispatcher rd = getServletContext().getRequestDispatcher(
+				"/viewBooks.jsp");
+		try {
+			rd.forward(request, response);
+		} catch (ServletException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private void editBorrower(HttpServletRequest request,
+			HttpServletResponse response) {
+		int cardNo = Integer.parseInt(request.getParameter("cardNo"));
+		String name = request.getParameter("name");
+		String address = request.getParameter("address");
+		String phone = request.getParameter("phone");
+		
+		
+		Borrower b = new Borrower();
+		b.setCardNo(cardNo);
+		b.setName(name);
+		b.setAddress(address);
+		b.setPhone(phone);
+		
+		AdministrativeService adminService = new AdministrativeService();
+		try {
+			adminService.updateBorrower(b);
+			request.setAttribute("result", "Borrower updated Successfully");
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			request.setAttribute("result",
+					"Borrower update failed " + e.getMessage());
+		}
+		RequestDispatcher rd = getServletContext().getRequestDispatcher(
+				"/viewBorrowers.jsp");
+		try {
+			rd.forward(request, response);
+		} catch (ServletException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private void editPublisher(HttpServletRequest request,
+			HttpServletResponse response) {
+		int publisherId = Integer.parseInt(request.getParameter("publisherId"));
+		String publisherName = request.getParameter("publisherName");
+		String publisherAddress = request.getParameter("publisherAddress");
+		String publisherPhone = request.getParameter("publisherPhone");
+		
+		
+		Publisher p = new Publisher();
+		p.setPublisherId(publisherId);
+		p.setPublisherAddress(publisherAddress);
+		p.setPublisherName(publisherName);
+		p.setPublisherPhone(publisherPhone);
+		
+		AdministrativeService adminService = new AdministrativeService();
+		try {
+			adminService.updatePublisher(p);
+			request.setAttribute("result", "Publisher updated Successfully");
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			request.setAttribute("result",
+					"Publisher update failed " + e.getMessage());
+		}
+		RequestDispatcher rd = getServletContext().getRequestDispatcher(
+				"/viewPublisher.jsp");
+		try {
+			rd.forward(request, response);
+		} catch (ServletException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private void editBranch(HttpServletRequest request,
+			HttpServletResponse response) {
+		int branchId = Integer.parseInt(request.getParameter("branchId"));
+		String branchName = request.getParameter("branchName");
+		String branchAddress = request.getParameter("branchAddress");
+		
+		
+		LibraryBranch lb = new LibraryBranch();
+		lb.setBranchAddress(branchAddress);
+		lb.setBranchId(branchId);
+		lb.setBranchName(branchName);
+		
+		AdministrativeService adminService = new AdministrativeService();
+		try {
+			adminService.updateLibraryBranch(lb);
+			request.setAttribute("result", "Library Branch updated Successfully");
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			request.setAttribute("result",
+					"Library Branch update failed " + e.getMessage());
+		}
+		RequestDispatcher rd = getServletContext().getRequestDispatcher(
+				"/viewBranches.jsp");
+		try {
+			rd.forward(request, response);
+		} catch (ServletException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

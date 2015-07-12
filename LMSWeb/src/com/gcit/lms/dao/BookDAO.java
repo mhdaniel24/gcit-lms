@@ -21,8 +21,8 @@ public class BookDAO extends BaseDAO {
 	//publisher also if a publisher is deleted the book's publisher becomes null. 
 	//So I am giving the ability in update to modify that null value
 	public void update(Book book) throws Exception {
-		save("update tbl_book set title = ?, pubId = ? where bookId = ?",
-				new Object[] { book.getTitle(), book.getPublisher().getPublisherId(),book.getBookId() });
+		save("update tbl_book set title = ? where bookId = ?",
+				new Object[] { book.getTitle(), book.getBookId() });
 
 	}
 

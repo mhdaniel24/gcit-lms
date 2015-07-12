@@ -22,8 +22,16 @@
 		<td><%out.println(b.getName()); %></td>
 		<td><%out.println(b.getAddress()); %></td>
 		<td><%out.println(b.getPhone()); %></td>
-		<td><button type="button" class="btn btn-md btn-success">Edit</button></td>
+		<td><button type="button" class="btn btn-md btn-success" data-toggle="modal" data-target="#myModal1" href="editBorrower.jsp?cardNo=<%=b.getCardNo()%>">Edit</button></td>
 		<td><button type="button" class="btn btn-md btn-danger" onclick="javascript:location.href='deleteBorrower?cardNo=<%=b.getCardNo()%>';">Delete</button></td>
 	</tr>
 	<%} %>
 </table>
+
+
+<div id="myModal1" class="modal fade" tabindex="-1" role="dialog"
+	aria-labelledby="myLargeModalLabel">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content"></div>
+	</div>
+</div>
