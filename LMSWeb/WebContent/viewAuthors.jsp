@@ -5,15 +5,6 @@
 	List<Author> authors = adminService.readAllAuthors();
 %>
 <%@include file="include.html"%>
-<script>
-	function deleteAuthor(id) {
-		//document.location.href = "deleteAuthor?authorId="+id;
-		
-		document.getElementById("authorId").value = id;
-		document.deleteFrm.submit();
-	}
-
-</script>
 
 <table class="table">
 
@@ -27,12 +18,16 @@
 	<tr>
 		<td><%out.println(a.getAuthorId()); %></td>
 		<td><%out.println(a.getAuthorName()); %></td>
-		<td><button type="button" class="btn btn-md btn-success">Edit</button></td>
-		<td><button type="button" class="btn btn-md btn-danger" onclick="javascript:deleteAuthor(<%=a.getAuthorId()%>);">Delete</button></td>
+		<td><button type="button" class="btn btn-md btn-success" data-toggle="modal" data-target="#myModal1" href="editAuthor.jsp?authorId=<%=a.getAuthorId()%>">Edit</button></td>
+		<td><button type="button" class="btn btn-md btn-danger" onclick="javascript:location.href='deleteAuthor?authorId=<%=a.getAuthorId()%>';">Delete</button></td>
 	</tr>
 	<%} %>
 </table>
 
-<form action="deleteAuthor" method="post" name="deleteFrm">
-	<input type="hidden" name="authorId" id="authorId"/>
-</form>
+
+<div id="myModal1" class="modal fade" tabindex="-1" role="dialog"
+	aria-labelledby="myLargeModalLabel">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content"></div>
+	</div>
+</div>

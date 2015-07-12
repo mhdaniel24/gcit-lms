@@ -15,6 +15,7 @@ import com.gcit.lms.domain.Author;
 import com.gcit.lms.domain.Book;
 import com.gcit.lms.domain.Borrower;
 import com.gcit.lms.domain.Genre;
+import com.gcit.lms.domain.LibraryBranch;
 import com.gcit.lms.domain.Publisher;
 import com.gcit.lms.service.AdministrativeService;
 import com.sun.org.apache.bcel.internal.generic.NEWARRAY;
@@ -22,7 +23,9 @@ import com.sun.org.apache.bcel.internal.generic.NEWARRAY;
 /**
  * Servlet implementation class AdminServlet
  */
-@WebServlet({ "/addAuthor", "/addPublisher", "/viewAuthors", "/deleteAuthor", "/viewPublisher", "/deletePublisher", "/addBorrower", "/viewBorrowers","/deleteBorrower", "/addBook"})
+@WebServlet({ "/addAuthor", "/addPublisher", "/viewAuthors", "/deleteAuthor", "/viewPublisher", 
+	"/deletePublisher", "/addBorrower", "/viewBorrowers","/deleteBorrower", "/addBook", 
+	"/addGenre", "/editAuthor", "/deleteBranch", "/addBranch", "/deleteBook"})
 public class AdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -40,6 +43,34 @@ public class AdminServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		String reqUrl = request.getRequestURI().substring(
+				request.getContextPath().length(),
+				request.getRequestURI().length());
+		switch (reqUrl) {
+		case "/deleteAuthor":
+			deleteAuthor(request, response);
+			break;
+		case "/pageAuthors":
+			//pageAuthors(request, response);
+			break;
+		case "/searchAuthors":
+			//searchAuthors(request, response);
+			break;
+		case "/deleteBorrower": 
+			deleteBorrower(request, response);
+			break;
+		case "/deletePublisher": 
+			deletePublisher(request, response);
+			break;
+		case "/deleteBranch": 
+			deleteBranch(request, response);
+			break;
+		case "/deleteBook": 
+			deleteBook(request, response);
+			break;
+		default:
+			break;
+		}
 		
 	}
 
@@ -59,8 +90,8 @@ public class AdminServlet extends HttpServlet {
 		case "viewAuthors":
 			viewAuthors(request, response);
 			break;
-		case "/deleteAuthor": 
-			deleteAuthor(request, response);
+		case "/editAuthor":
+			editAuthor(request, response);
 			break;
 		case "/addPublisher":
 			createPublisher(request, response);
@@ -68,20 +99,20 @@ public class AdminServlet extends HttpServlet {
 		case "viewPublisher":
 			viewPublisher(request, response);
 			break;
-		case "/deletePublisher": 
-			deletePublisher(request, response);
-			break;
 		case "/addBorrower":
 			createBorrower(request, response);
 			break;
 		case "viewBorrowers":
 			viewBorrowers(request, response);
 			break;
-		case "/deleteBorrower": 
-			deleteBorrower(request, response);
-			break;
 		case "/addBook":
 			createBook(request, response);
+			break;
+		case "/addGenre":
+			createGenre(request, response);
+			break;
+		case "/addBranch":
+			createBranch(request, response);
 			break;
 		default:
 			break;
@@ -106,6 +137,37 @@ public class AdminServlet extends HttpServlet {
 		RequestDispatcher rd = getServletContext().getRequestDispatcher(
 				"/admin.jsp");
 		rd.forward(request, response);
+	}
+	
+	private void editAuthor(HttpServletRequest request,
+			HttpServletResponse response) {
+		String authorName = request.getParameter("authorName");
+		int authorId = Integer.parseInt(request.getParameter("authorId"));
+		Author a = new Author();
+		a.setAuthorName(authorName);
+		a.setAuthorId(authorId);
+		AdministrativeService adminService = new AdministrativeService();
+		try {
+			adminService.updateAuthor(a);
+			request.setAttribute("result", "Author updated Successfully");
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			request.setAttribute("result",
+					"Author update failed " + e.getMessage());
+		}
+		RequestDispatcher rd = getServletContext().getRequestDispatcher(
+				"/viewAuthors.jsp");
+		try {
+			rd.forward(request, response);
+		} catch (ServletException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	private void createPublisher(HttpServletRequest request,
@@ -307,6 +369,91 @@ public class AdminServlet extends HttpServlet {
 			e.printStackTrace();
 			request.setAttribute("result",
 					"Book add failed " + e.getMessage());
+		}
+		RequestDispatcher rd = getServletContext().getRequestDispatcher(
+				"/admin.jsp");
+		rd.forward(request, response);
+	}
+	
+	private void createGenre(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		String genreName = request.getParameter("genreName");
+		Genre g = new Genre();
+		g.setGenreName(genreName);
+		AdministrativeService adminService = new AdministrativeService();
+		try {
+			adminService.createGenre(g);
+			request.setAttribute("result", "Genre Added Successfully");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			request.setAttribute("result",
+					"Genre add failed " + e.getMessage());
+		}
+		RequestDispatcher rd = getServletContext().getRequestDispatcher(
+				"/admin.jsp");
+		rd.forward(request, response);
+	}
+	
+	private void deleteBranch(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		String branchId = request.getParameter("branchId");
+		LibraryBranch branch = new LibraryBranch();
+		branch.setBranchId(Integer.parseInt(branchId));
+
+		RequestDispatcher rd = getServletContext().getRequestDispatcher(
+				"/viewBranches.jsp");
+		try {
+			new AdministrativeService().deleteLibraryBranch(branch);
+
+			request.setAttribute("result", "Branch Deleted Succesfully!");
+		} catch (Exception e) {
+			e.printStackTrace();
+			request.setAttribute("result",
+					"Branch Delete Failed because: " + e.getMessage());
+		}
+		
+		rd.forward(request, response);
+	}
+	
+	private void deleteBook(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		String bookId = request.getParameter("bookId");
+		Book book = new Book();
+		book.setBookId(Integer.parseInt(bookId));
+
+		RequestDispatcher rd = getServletContext().getRequestDispatcher(
+				"/viewBooks.jsp");
+		try {
+			new AdministrativeService().deleteBook(book);
+
+			request.setAttribute("result", "Book Deleted Succesfully!");
+		} catch (Exception e) {
+			e.printStackTrace();
+			request.setAttribute("result",
+					"Book Delete Failed because: " + e.getMessage());
+		}
+		
+		rd.forward(request, response);
+	}
+	
+	private void createBranch(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		String branchName = request.getParameter("branchName");
+		String branchAddress = request.getParameter("branchAddress");
+		LibraryBranch libraryBranch = new LibraryBranch();
+		libraryBranch.setBranchAddress(branchAddress);
+		libraryBranch.setBranchName(branchName);
+		
+		AdministrativeService adminService = new AdministrativeService();
+		try {
+			adminService.createLibraryBranch(libraryBranch);
+			request.setAttribute("result", "Library Branch Added Successfully");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			request.setAttribute("result",
+					"Library Branch add failed " + e.getMessage());
 		}
 		RequestDispatcher rd = getServletContext().getRequestDispatcher(
 				"/admin.jsp");

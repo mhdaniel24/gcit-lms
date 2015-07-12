@@ -5,15 +5,6 @@
 	List<Publisher> publishers = adminService.readAllPublishers();
 %>
 <%@include file="include.html"%>
-<script>
-	function deletePublisher(id) {
-		//document.location.href = "deletePublisher?publisherId="+id;
-		
-		document.getElementById("publisherId").value = id;
-		document.deleteFrm.submit();
-	}
-
-</script>
 
 <table class="table">
 
@@ -32,11 +23,7 @@
 		<td><%out.println(p.getPublisherAddress()); %></td>
 		<td><%out.println(p.getPublisherPhone()); %></td>
 		<td><button type="button" class="btn btn-md btn-success">Edit</button></td>
-		<td><button type="button" class="btn btn-md btn-danger" onclick="javascript:deletePublisher(<%=p.getPublisherId()%>);">Delete</button></td>
+		<td><button type="button" class="btn btn-md btn-danger" onclick="javascript:location.href='deletePublisher?publisherId=<%=p.getPublisherId()%>';">Delete</button></td>
 	</tr>
 	<%} %>
 </table>
-
-<form action="deletePublisher" method="post" name="deleteFrm">
-	<input type="hidden" name="publisherId" id="publisherId"/>
-</form>

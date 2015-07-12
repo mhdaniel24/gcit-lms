@@ -72,7 +72,11 @@ public class BookDAO extends BaseDAO {
 			Book b = new Book();
 			b.setBookId(rs.getInt("bookId"));
 			b.setTitle(rs.getString("title"));
+			if(rs.getInt("pubId") == 0){
+				b.setPublisher(null);
+			}else{
 			b.setPublisher(pdao.readOne(rs.getInt("pubId")));
+			}
 			@SuppressWarnings("unchecked")
 			List<Author> authors = (List<Author>) aDao.readFirstLevel("select * from tbl_author where authorId In"
 					+ "(select authorId from tbl_book_authors where bookId=?)", new Object[] {rs.getInt("bookId")});

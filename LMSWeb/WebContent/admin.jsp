@@ -14,4 +14,9 @@ ${result}
 <a href="addBranch.jsp">Add Library Branch</a><br />
 <a href="viewBranches.jsp">View Library Branches</a><br />
 <h3>Book</h3>
+<a href="viewBooks.jsp">View Books</a><br />
 <a href="addBook.jsp">Add Book</a><br />
+<h3>Genre</h3>
+<a href="addGenre.jsp">Add Genre</a><br />
+<h3>Book Loan</h3>
+<a href="#">Change Book Loan Due Date</a><br />

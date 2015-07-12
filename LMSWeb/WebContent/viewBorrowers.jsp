@@ -5,15 +5,6 @@
 	List<Borrower> borrowers = adminService.readAllBorrower();
 %>
 <%@include file="include.html"%>
-<script>
-	function deleteBorrower(id) {
-		//document.location.href = "deletePublisher?publisherId="+id;
-		
-		document.getElementById("cardNo").value = id;
-		document.deleteFrm.submit();
-	}
-
-</script>
 
 <table class="table">
 
@@ -32,11 +23,7 @@
 		<td><%out.println(b.getAddress()); %></td>
 		<td><%out.println(b.getPhone()); %></td>
 		<td><button type="button" class="btn btn-md btn-success">Edit</button></td>
-		<td><button type="button" class="btn btn-md btn-danger" onclick="javascript:deleteBorrower(<%=b.getCardNo()%>);">Delete</button></td>
+		<td><button type="button" class="btn btn-md btn-danger" onclick="javascript:location.href='deleteBorrower?cardNo=<%=b.getCardNo()%>';">Delete</button></td>
 	</tr>
 	<%} %>
 </table>
-
-<form action="deleteBorrower" method="post" name="deleteFrm">
-	<input type="hidden" name="cardNo" id="cardNo"/>
-</form>

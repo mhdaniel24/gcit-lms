@@ -1,19 +1,15 @@
 <%@include file="include.html"%>
-<form action="addPublisher" method="post">
+<form action="addBranch" method="post">
 	<body>
-		<h2>Hello Admin - Enter Publisher Details</h2>
+		<h2>Hello Admin - Enter Library Branch Details</h2>
 		<table class="table">
 			<tr>
-				<td>Enter Publisher Name:</td>
-				<td><input type="text" name="publisherName" /></td>
+				<td>Enter Branch Name:</td>
+				<td><input type="text" name="branchName" /></td>
 			</tr>
 			<tr>
-				<td>Enter Publisher Address:</td>
-				<td><input type="text" name="publisherAddress" /></td>
-			</tr>
-			<tr>
-				<td>Enter Publisher Phone:</td>
-				<td><input type="text" name="publisherPhone" /></td>
+				<td>Enter Branch Address:</td>
+				<td><input type="text" name="branchAddress" /></td>
 			</tr>
 		</table>
 		<input type="submit">
