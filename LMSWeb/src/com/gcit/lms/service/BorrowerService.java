@@ -3,8 +3,11 @@ package com.gcit.lms.service;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import com.gcit.lms.domain.*;
@@ -164,5 +167,82 @@ public class BorrowerService {
 			conn.close();
 		}
 	}
+	
+	public Borrower readOneBorrower(int borrowerId) throws Exception {
+		ConnectionUtil c = new ConnectionUtil();
+		Connection conn = c.createConnection();
+
+		try {
+			BorrowerDAO bdao = new BorrowerDAO(conn);
+			Borrower borrower = bdao.readOne(borrowerId);
+			conn.commit();//not sure if needed
+			return borrower;
+		} catch (Exception e) {//not a valid bookId
+			e.printStackTrace();
+			conn.rollback();//not sure if needed
+			return null;
+		} finally {
+			conn.close();
+		}
+	}
+	
+	public List<BookLoan> readAllLoansOfBorrower(Borrower borrower) throws Exception {
+		ConnectionUtil c = new ConnectionUtil();
+		Connection conn = c.createConnection();
+
+		try {
+			BookLoanDAO bookLoandao = new BookLoanDAO(conn);
+			BorrowerDAO borrowerdao = new BorrowerDAO(conn);
+			BookDAO bookdao = new BookDAO(conn);
+			
+			LibraryBranchDAO lbdao = new LibraryBranchDAO(conn);
+			
+			List<BookLoan> allLoans = bookLoandao.readAll();
+			List<BookLoan> borrowerLoans = new ArrayList<BookLoan>();
+			for(BookLoan bl : allLoans){
+				if(bl.getBorrower().getCardNo() == borrower.getCardNo()){
+					borrowerLoans.add(bl);
+				}
+			}
+			conn.commit();//not sure if needed
+			return borrowerLoans;
+		} catch (Exception e) {//not a valid bookId
+			e.printStackTrace();
+			conn.rollback();//not sure if needed
+			return null;
+		} finally {
+			conn.close();
+		}
+	}
+	public List<Book> getBooksToBeBorrowedInBranch(LibraryBranch lb){
+		List<Book> books = new ArrayList<Book>();
+		for(Map.Entry<Book, Integer> entry: lb.getBookCopies().entrySet()){
+			if(entry.getValue() > 0){
+				books.add(entry.getKey());
+			}
+		}
+		return books;
+		
+	}
+	
+	public LibraryBranch readOneLibraryBranch(int branchId) throws Exception {
+		ConnectionUtil c = new ConnectionUtil();
+		Connection conn = c.createConnection();
+
+		try {
+			LibraryBranchDAO lbdao = new LibraryBranchDAO(conn);
+			LibraryBranch libraryBranch = lbdao.readOne(branchId);
+			conn.commit();//not sure if needed
+			return libraryBranch;
+		} catch (Exception e) {//not a valid bookId
+			e.printStackTrace();
+			conn.rollback();//not sure if needed
+			return null;
+		} finally {
+			conn.close();
+		}
+	}
+	
+	
 	
 }

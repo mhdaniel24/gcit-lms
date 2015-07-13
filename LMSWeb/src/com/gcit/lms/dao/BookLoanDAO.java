@@ -80,14 +80,17 @@ public class BookLoanDAO extends BaseDAO{
 			bl.setDateOut(rs.getTimestamp("dateOut"));
 			bl.setDueDate(rs.getTimestamp("dueDate"));
 			
+			//BookDAO bookdao = new BookDAO(getConnection());
 			Book b = new Book();
 			b.setBookId(rs.getInt("bookId"));
 			bl.setBook(b);
 			
+			//LibraryBranchDAO lbdao = new LibraryBranchDAO(getConnection());
 			LibraryBranch lb = new LibraryBranch();
 			lb.setBranchId(rs.getInt("branchId"));
 			bl.setLibraryBranch(lb);
 			
+			//BorrowerDAO bdao = new BorrowerDAO(getConnection());
 			Borrower bo = new Borrower();
 			bo.setCardNo(rs.getInt("cardNo"));
 			bl.setBorrower(bo);
