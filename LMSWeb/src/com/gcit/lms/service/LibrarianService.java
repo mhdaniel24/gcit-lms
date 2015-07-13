@@ -12,6 +12,24 @@ public class LibrarianService {
 
 
 
+	public LibraryBranch readOneLibraryBranch(int branchId) throws Exception {
+		ConnectionUtil c = new ConnectionUtil();
+		Connection conn = c.createConnection();
+
+		try {
+			LibraryBranchDAO lbdao = new LibraryBranchDAO(conn);
+			LibraryBranch libraryBranch = lbdao.readOne(branchId);
+			conn.commit();//not sure if needed
+			return libraryBranch;
+		} catch (Exception e) {//not a valid bookId
+			e.printStackTrace();
+			conn.rollback();//not sure if needed
+			return null;
+		} finally {
+			conn.close();
+		}
+	}
+	
 	public List<LibraryBranch> readAllLibraryBranchs() throws Exception {
 		ConnectionUtil c = new ConnectionUtil();
 		Connection conn = c.createConnection();
