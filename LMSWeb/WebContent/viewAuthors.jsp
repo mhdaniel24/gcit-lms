@@ -2,11 +2,35 @@
 <%@page import="java.util.List"%>
 <%@page import="com.gcit.lms.domain.Author"%>
 <%AdministrativeService adminService = new AdministrativeService();
-	List<Author> authors = adminService.readAllAuthors();
+	List<Author> authors = null;
+	if (request.getAttribute("authors") != null) {
+		authors = (List<Author>) request.getAttribute("authors");
+	} else {
+		authors = adminService.readAllAuthors();
+	}
 %>
 <%@include file="include.html"%>
+<script>
+	function searchAuthors(){
+		$.ajax({
+			  url: "searchAuthors",
+			  data: {
+				  searchString: $('#searchString').val()
+			  }
+			}).done(function(data) {
+				$('#authorsTable').html(data);
+			});
+	}
+</script>
+${result}
 
-<table class="table">
+<form action="searchAuthors" method="post">
+	<input type="text" class="col-md-8" id="searchString" name="searchString"
+		placeholder="Enter title name to search"><input type="button"
+		value="Search!" onclick="javascript:searchAuthors();">
+</form>
+
+<table class="table" id="authorsTable">
 
 	<tr>
 		<th>Author ID</th>

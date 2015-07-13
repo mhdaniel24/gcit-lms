@@ -26,7 +26,7 @@ import com.sun.org.apache.bcel.internal.generic.NEWARRAY;
 @WebServlet({ "/addAuthor", "/addPublisher", "/viewAuthors", "/deleteAuthor", "/viewPublisher", 
 	"/deletePublisher", "/addBorrower", "/viewBorrowers","/deleteBorrower", "/addBook", 
 	"/addGenre", "/editAuthor", "/deleteBranch", "/addBranch", "/deleteBook", "/editBook",
-	"/editBorrower", "/editPublisher", "/editBranch"})
+	"/editBorrower", "/editPublisher", "/editBranch", "/searchAuthors"})
 public class AdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -55,7 +55,7 @@ public class AdminServlet extends HttpServlet {
 			//pageAuthors(request, response);
 			break;
 		case "/searchAuthors":
-			//searchAuthors(request, response);
+			searchAuthors(request, response);
 			break;
 		case "/deleteBorrower": 
 			deleteBorrower(request, response);
@@ -127,6 +127,10 @@ public class AdminServlet extends HttpServlet {
 		case "/editBranch":
 			editBranch(request, response);
 			break;
+		case "/searchAuthors":
+			System.out.println("Search Author from post");
+			searchAuthors(request, response);
+			break;
 		default:
 			break;
 		}
@@ -142,7 +146,6 @@ public class AdminServlet extends HttpServlet {
 			adminService.createAuthor(a);
 			request.setAttribute("result", "Author Added Successfully");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			request.setAttribute("result",
 					"Author add failed " + e.getMessage());
@@ -151,6 +154,8 @@ public class AdminServlet extends HttpServlet {
 				"/admin.jsp");
 		rd.forward(request, response);
 	}
+	
+	
 	
 	private void editAuthor(HttpServletRequest request,
 			HttpServletResponse response) {
@@ -398,7 +403,6 @@ public class AdminServlet extends HttpServlet {
 			adminService.createGenre(g);
 			request.setAttribute("result", "Genre Added Successfully");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			request.setAttribute("result",
 					"Genre add failed " + e.getMessage());
@@ -612,6 +616,26 @@ public class AdminServlet extends HttpServlet {
 			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private void searchAuthors(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		String searchString = request.getParameter("searchString");
+		try {
+			List<Author> authors =  new AdministrativeService().searchAuthors(searchString);
+			request.setAttribute("authors", authors);
+			StringBuilder str = new StringBuilder();
+			str.append("<tr><th>Author ID</th><th>Author Name</th><th>Edit Author</th><th>Delete Author</th></tr>");
+			for(Author a: authors){
+				str.append("<tr><td>"+a.getAuthorId()+"</td><td>"+a.getAuthorName()+"</td><td><button type='button' "
+						+ "class='btn btn-md btn-success' data-toggle='modal' data-target='#myModal1' href='editAuthor.jsp?authorId="+a.getAuthorId()+"'>"
+								+ "Edit</button></td><td><button type='button' class='btn btn-md btn-danger' onclick='javascript:location.href="
+								+ "'deleteAuthor?authorId="+a.getAuthorId()+"'>Delete</button></td></tr>");
+			}
+			response.getWriter().write(str.toString());
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

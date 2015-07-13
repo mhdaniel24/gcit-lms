@@ -45,6 +45,11 @@ public class AuthorDAO extends BaseDAO {
 		return null;
 	}
 
+	public List<Author> readByAuthorName(String searchString) throws Exception{
+		searchString = "%"+searchString+"%";
+		return (List<Author>) read("select * from tbl_author where authorName like ?", new Object[] {searchString});
+	}
+	
 	@Override
 	public List<Author> extractData(ResultSet rs) throws Exception {
 		List<Author> authors =  new ArrayList<Author>();

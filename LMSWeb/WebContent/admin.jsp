@@ -19,4 +19,13 @@ ${result}
 <h3>Genre</h3>
 <a href="addGenre.jsp">Add Genre</a><br />
 <h3>Book Loan</h3>
-<a href="#">Change Book Loan Due Date</a><br />
+<a data-toggle="modal" data-target="#myModal1" href="dateTimePicker.jsp">Change Book Loan Due Date</a>
+
+
+<div id="myModal1" class="modal fade" tabindex="-1" role="dialog"
+	aria-labelledby="myLargeModalLabel">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content"></div>
+	</div>
+</div>
+

@@ -13,6 +13,7 @@ public class AdministrativeService {
 		checkAuthorAnd(author, "create");
 	}
 
+	
 	public void deleteAuthor(Author author) throws Exception{
 		checkAuthorAnd(author, "delete");
 	}
@@ -668,6 +669,13 @@ public class AdministrativeService {
 		} finally {
 			conn.close();
 		}
+	}
+	
+	public List<Author> searchAuthors(String searchString) throws Exception{
+		ConnectionUtil c = new ConnectionUtil();
+		Connection conn = c.createConnection();
+		AuthorDAO adao = new AuthorDAO(conn);
+		return adao.readByAuthorName(searchString);
 	}
 }
 
